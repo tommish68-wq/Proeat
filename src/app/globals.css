@@ -1,0 +1,204 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #faf8f3;
+  --surface: #ffffff;
+  --card: #ffffff;
+  --sand: #f1eae0;
+  --sand-deep: #e4d9c8;
+  --ink: #14201a;
+  --muted: #5c6b62;
+  --leaf: #1f7a4d;
+  --leaf-deep: #0e3b2e;
+  --leaf-dark: #0a2e22;
+  --leaf-mid: #2e9e68;
+  --leaf-soft: #e6f0e9;
+  --leaf-faint: #f2f7f3;
+  --gold: #b99a5f;
+  --line: #e8e1d4;
+  --shadow: 20 32 26;
+  /* Palette dataviz — validée CVD/contraste (protéines, glucides, lipides) */
+  --viz-protein: #1f7a4d;
+  --viz-carbs: #c8802f;
+  --viz-fat: #3f6fae;
+  --viz-grid: #eee8db;
+}
+
+.dark {
+  --background: #0b1310;
+  --surface: #101c16;
+  --card: #14231c;
+  --sand: #182720;
+  --sand-deep: #1e2f27;
+  --ink: #eef0e9;
+  --muted: #93a89b;
+  --leaf: #3aa76d;
+  --leaf-deep: #7fc9a2;
+  --leaf-dark: #dbeee2;
+  --leaf-mid: #46b97c;
+  --leaf-soft: #1b3229;
+  --leaf-faint: #14231c;
+  --gold: #cfb37e;
+  --line: #22362c;
+  --shadow: 0 0 0;
+  --viz-protein: #2e9e68;
+  --viz-carbs: #c8802f;
+  --viz-fat: #4a7fb5;
+  --viz-grid: #1d3128;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-sand: var(--sand);
+  --color-sand-deep: var(--sand-deep);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-leaf: var(--leaf);
+  --color-leaf-deep: var(--leaf-deep);
+  --color-leaf-dark: var(--leaf-dark);
+  --color-leaf-mid: var(--leaf-mid);
+  --color-leaf-soft: var(--leaf-soft);
+  --color-leaf-faint: var(--leaf-faint);
+  --color-gold: var(--gold);
+  --color-line: var(--line);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+::selection {
+  background: var(--leaf);
+  color: #fff;
+}
+
+/* ---------- Cartes & surfaces ---------- */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  box-shadow: 0 1px 2px rgb(var(--shadow) / 0.04), 0 8px 24px rgb(var(--shadow) / 0.05);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease,
+    border-color 0.3s ease, background-color 0.35s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 2px 4px rgb(var(--shadow) / 0.05), 0 20px 48px rgb(var(--shadow) / 0.1);
+  border-color: color-mix(in srgb, var(--leaf) 30%, var(--line));
+}
+
+/* ---------- Skeleton loading ---------- */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--sand) 70%, var(--surface));
+  border-radius: 0.75rem;
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--surface) 60%, transparent),
+    transparent
+  );
+  animation: shimmer 1.6s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ---------- Halo tropical en fond de hero ---------- */
+.hero-glow {
+  background:
+    radial-gradient(60rem 32rem at 85% -10%, color-mix(in srgb, var(--leaf) 14%, transparent), transparent 60%),
+    radial-gradient(50rem 30rem at -10% 20%, color-mix(in srgb, var(--sand-deep) 55%, transparent), transparent 65%);
+}
+
+/* ---------- Scrollbar discrète ---------- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+/* ---------- Focus accessible ---------- */
+:focus-visible {
+  outline: 2px solid var(--leaf);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ---------- Champs de formulaire ---------- */
+.field {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 0.875rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.9375rem;
+  color: var(--ink);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.field:hover {
+  border-color: color-mix(in srgb, var(--leaf) 35%, var(--line));
+}
+
+.field:focus {
+  outline: none;
+  border-color: var(--leaf);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--leaf) 18%, transparent);
+}
+
+/* ---------- Puce segmentée ---------- */
+.chip {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.chip:hover {
+  border-color: color-mix(in srgb, var(--leaf) 40%, var(--line));
+  color: var(--ink);
+}
+
+.chip[data-active="true"] {
+  background: var(--leaf-deep);
+  border-color: var(--leaf-deep);
+  color: #fff;
+}
+
+.dark .chip[data-active="true"] {
+  background: var(--leaf);
+  border-color: var(--leaf);
+  color: #08130d;
+}
