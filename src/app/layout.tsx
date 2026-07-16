@@ -18,16 +18,16 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://prohit.app"),
+  metadataBase: new URL("https://proeat.app"),
   title: {
-    default: "ProHit — Musculation, nutrition & bien-être",
-    template: "%s · ProHit",
+    default: "ProEat — Nutrition, musculation & bien-être",
+    template: "%s · ProEat",
   },
   description:
-    "ProHit est la plateforme tout-en-un pour la musculation, la nutrition et la remise en forme : programmes sur mesure, recettes healthy, tracker de calories et suivi de progression.",
+    "ProEat est la plateforme tout-en-un pour la nutrition, la musculation et la remise en forme : calculateur de métabolisme, programmes sur mesure, recettes healthy et tracker de calories.",
   keywords: [
-    "musculation",
     "nutrition",
+    "musculation",
     "fitness",
     "calories",
     "TDEE",
@@ -36,11 +36,11 @@ export const metadata: Metadata = {
     "recettes healthy",
   ],
   openGraph: {
-    title: "ProHit — Musculation, nutrition & bien-être",
+    title: "ProEat — Nutrition, musculation & bien-être",
     description:
-      "Programmes sur mesure, recettes healthy, tracker de calories et suivi de progression. La performance, naturellement.",
-    url: "https://prohit.app",
-    siteName: "ProHit",
+      "Calculateur de métabolisme, programmes sur mesure, recettes healthy et tracker de calories. La performance, naturellement.",
+    url: "https://proeat.app",
+    siteName: "ProEat",
     locale: "fr_FR",
     type: "website",
   },
@@ -57,7 +57,7 @@ export default function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{if(localStorage.getItem("prohit-theme")==="dark")document.documentElement.classList.add("dark")}catch(e){}`,
+            __html: `try{if(localStorage.getItem("proeat-theme")==="dark")document.documentElement.classList.add("dark")}catch(e){}`,
           }}
         />
       </head>

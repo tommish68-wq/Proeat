@@ -109,7 +109,7 @@ export function seedWeights(): WeightEntry[] {
 }
 
 export const defaultProfile: Profile = {
-  name: "Athlète ProHit",
+  name: "Athlète ProEat",
   goal: "seche",
   targetKcal: 2300,
   targetProtein: 170,
@@ -121,15 +121,15 @@ export const defaultProfile: Profile = {
 };
 
 export function useProfile() {
-  return useLocalState<Profile>("prohit-profile", defaultProfile);
+  return useLocalState<Profile>("proeat-profile", defaultProfile);
 }
 
 export function useWeights() {
-  return useLocalState<WeightEntry[]>("prohit-weights", seedWeights);
+  return useLocalState<WeightEntry[]>("proeat-weights", seedWeights);
 }
 
 export function useFoodLog() {
-  return useLocalState<FoodEntry[]>("prohit-food-log", []);
+  return useLocalState<FoodEntry[]>("proeat-food-log", []);
 }
 
 export function dayTotals(entries: FoodEntry[], date: string) {

@@ -27,13 +27,24 @@ export function LogoMark({ className = "h-8 w-8" }: { className?: string }) {
   );
 }
 
-export function Logo({ compact = false }: { compact?: boolean }) {
+export function Logo({
+  compact = false,
+  onDark = false,
+}: {
+  compact?: boolean;
+  onDark?: boolean;
+}) {
   return (
     <span className="inline-flex items-center gap-2.5">
       <LogoMark />
       {!compact && (
-        <span className="font-display text-xl font-semibold tracking-tight text-ink">
-          Pro<span className="text-leaf">Hit</span>
+        <span
+          className={`font-display text-xl font-semibold tracking-tight transition-colors duration-300 ${
+            onDark ? "text-white" : "text-ink"
+          }`}
+        >
+          Pro
+          <span className={onDark ? "text-[#7fd6a6]" : "text-leaf"}>Eat</span>
         </span>
       )}
     </span>

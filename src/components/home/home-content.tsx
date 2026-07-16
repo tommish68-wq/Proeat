@@ -1,39 +1,47 @@
 "use client";
 
-import { SmartImage as Image } from "@/components/smart-image";
 import Link from "next/link";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  Activity,
   ArrowRight,
-  BookOpen,
   Calculator,
   ChevronDown,
   Dumbbell,
   Flame,
-  Leaf,
+  LayoutDashboard,
   LineChart,
   Salad,
   Sparkles,
   Star,
-  UtensilsCrossed,
 } from "lucide-react";
-import { ButtonLink, Badge, SectionHeading } from "@/components/ui";
+import { Badge, SectionHeading } from "@/components/ui";
 import { Counter, Reveal, Stagger, StaggerItem } from "@/components/motion";
+import { Orb, TiltCard } from "@/components/fx";
+import { SmartImage as Image } from "@/components/smart-image";
+import { recipes } from "@/lib/recipes";
+import { Hero } from "@/components/home/hero";
 
 /* ------------------------------------------------------------------ */
-/* Données de la landing                                               */
+/* Données                                                             */
 /* ------------------------------------------------------------------ */
 
 const stats = [
   { value: 25, suffix: "k+", label: "Membres actifs" },
   { value: 1.2, suffix: "M", label: "Repas trackés", decimals: 1 },
-  { value: 340, suffix: "+", label: "Recettes healthy" },
   { value: 4.9, suffix: "/5", label: "Note moyenne", decimals: 1 },
+  { value: 100, suffix: "%", label: "Gratuit" },
 ];
 
 const features = [
+  {
+    icon: LayoutDashboard,
+    title: "Tableau de bord",
+    description:
+      "Votre point d'entrée : calories du jour, séance, progression et accès à chaque outil en un coup d'œil.",
+    href: "/dashboard",
+    highlight: true,
+  },
   {
     icon: Calculator,
     title: "Calculateur de métabolisme",
@@ -45,14 +53,14 @@ const features = [
     icon: Dumbbell,
     title: "Programmes sur mesure",
     description:
-      "Un programme de musculation généré selon votre niveau, votre matériel et votre emploi du temps.",
+      "Un programme généré selon votre niveau, votre matériel et votre emploi du temps.",
     href: "/programme",
   },
   {
     icon: Salad,
     title: "Recettes healthy",
     description:
-      "Une bibliothèque de recettes savoureuses avec macros détaillées, filtrables par objectif.",
+      "Des recettes savoureuses avec macros détaillées — la sélection s'enrichit chaque semaine.",
     href: "/recettes",
   },
   {
@@ -66,22 +74,36 @@ const features = [
     icon: LineChart,
     title: "Suivi de progression",
     description:
-      "Poids, mensurations et performances : visualisez votre évolution sur des graphiques clairs.",
-    href: "/dashboard",
+      "Poids et performances visualisés sur des graphiques clairs, semaine après semaine.",
+    href: "/profil",
+  },
+];
+
+const steps = [
+  {
+    number: "01",
+    title: "Calculez vos besoins",
+    description:
+      "Deux minutes suffisent pour connaître votre métabolisme et vos calories cibles, selon votre objectif.",
   },
   {
-    icon: BookOpen,
-    title: "Guides d'experts",
+    number: "02",
+    title: "Recevez votre plan",
     description:
-      "E-books nutrition et musculation rédigés par des coachs pour progresser plus vite.",
-    href: "/boutique",
+      "Programme d'entraînement adapté à votre matériel et recettes alignées sur vos macros.",
+  },
+  {
+    number: "03",
+    title: "Suivez votre progression",
+    description:
+      "Trackez vos repas et votre poids : les graphiques racontent votre transformation.",
   },
 ];
 
 const testimonials = [
   {
     name: "Camille R.",
-    role: "-9 kg en 5 mois",
+    role: "−9 kg en 5 mois",
     quote:
       "Le calculateur puis le tracker ont tout changé. Pour la première fois, je comprends ce que je mange. L'interface est tellement agréable que le suivi est devenu un plaisir.",
   },
@@ -95,18 +117,18 @@ const testimonials = [
     name: "Inès M.",
     role: "Retour au sport après 3 ans",
     quote:
-      "Je cherchais quelque chose de simple et motivant. ProHit est apaisant, clair, jamais culpabilisant. Les recettes sont devenues mes repas du quotidien.",
+      "Je cherchais quelque chose de simple et motivant. ProEat est apaisant, clair, jamais culpabilisant. Les recettes sont devenues mes repas du quotidien.",
   },
 ];
 
 const faqs = [
   {
-    q: "ProHit est-il adapté aux débutants ?",
+    q: "ProEat est-il adapté aux débutants ?",
     a: "Absolument. Le générateur de programme propose des séances spécifiques débutant avec des mouvements simples, et le calculateur vous guide pas à pas pour définir vos calories. Chaque outil est pensé pour être utilisable sans aucune connaissance préalable.",
   },
   {
     q: "Les outils sont-ils gratuits ?",
-    a: "Le calculateur de métabolisme, le générateur de programme, la bibliothèque de recettes et le tracker de calories sont 100 % gratuits. Seuls les e-books et guides premium de la boutique sont payants.",
+    a: "Oui, tous les outils actuels — calculateur, générateur de programme, recettes et tracker — sont 100 % gratuits. Des contenus premium arriveront plus tard, mais l'essentiel restera gratuit.",
   },
   {
     q: "Comment sont calculées mes calories ?",
@@ -126,136 +148,13 @@ const faqs = [
 /* Sections                                                            */
 /* ------------------------------------------------------------------ */
 
-function Hero() {
-  return (
-    <section className="hero-glow relative overflow-hidden">
-      <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 pb-20 pt-16 sm:px-6 lg:grid-cols-2 lg:px-8 lg:pb-28 lg:pt-24">
-        <div>
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55 }}
-          >
-            <Badge tone="leaf">
-              <Leaf className="h-3 w-3" />
-              La performance, naturellement
-            </Badge>
-          </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.08 }}
-            className="mt-6 font-display text-4xl font-semibold leading-[1.08] tracking-tight text-ink sm:text-5xl lg:text-6xl"
-          >
-            Construisez votre
-            <span className="text-leaf"> meilleure version</span>,
-            <br />
-            un jour à la fois.
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.16 }}
-            className="mt-6 max-w-xl text-lg leading-relaxed text-muted"
-          >
-            Musculation, nutrition et remise en forme réunies dans une seule
-            plateforme. Des outils précis, une expérience apaisante, des
-            résultats durables.
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.24 }}
-            className="mt-8 flex flex-wrap items-center gap-4"
-          >
-            <ButtonLink href="/calculateur" className="px-8 py-3.5 text-base">
-              Commencer gratuitement
-              <ArrowRight className="h-4 w-4" />
-            </ButtonLink>
-            <ButtonLink
-              href="/recettes"
-              variant="secondary"
-              className="px-8 py-3.5 text-base"
-            >
-              Explorer les recettes
-            </ButtonLink>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="mt-8 flex items-center gap-2 text-sm text-muted"
-          >
-            <span className="flex">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className="h-4 w-4 fill-gold text-gold" />
-              ))}
-            </span>
-            4,9/5 par plus de 25 000 membres
-          </motion.div>
-        </div>
-
-        {/* Visuel hero : photo + carte flottante */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96, y: 24 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="relative"
-        >
-          <div className="relative aspect-[4/5] max-h-[560px] w-full overflow-hidden rounded-[2rem] border border-line shadow-2xl">
-            <Image
-              src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1000&q=80"
-              alt="Bowl healthy coloré aux légumes frais"
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-          </div>
-          <motion.div
-            animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-            className="card absolute -left-4 bottom-10 w-52 p-4 sm:-left-8"
-          >
-            <div className="flex items-center gap-2 text-xs font-medium text-muted">
-              <Flame className="h-4 w-4 text-leaf" />
-              Calories du jour
-            </div>
-            <p className="mt-1 text-2xl font-bold text-ink">
-              1 847 <span className="text-sm font-medium text-muted">/ 2 300</span>
-            </p>
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-sand">
-              <div className="h-full w-[80%] rounded-full bg-leaf" />
-            </div>
-          </motion.div>
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="card absolute -right-3 top-10 w-48 p-4 sm:-right-6"
-          >
-            <div className="flex items-center gap-2 text-xs font-medium text-muted">
-              <Activity className="h-4 w-4 text-leaf" />
-              Séance du jour
-            </div>
-            <p className="mt-1 text-sm font-semibold text-ink">
-              Push — Poussée
-            </p>
-            <p className="text-xs text-muted">6 exercices · 60 min</p>
-          </motion.div>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
 function Stats() {
   return (
-    <section className="border-y border-line bg-surface">
-      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-4 py-14 sm:px-6 lg:grid-cols-4 lg:px-8">
+    <section className="relative border-b border-line">
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-10 px-4 py-16 sm:px-6 lg:grid-cols-4 lg:px-8">
         {stats.map((s) => (
           <div key={s.label} className="text-center">
-            <p className="font-display text-4xl font-semibold text-ink">
+            <p className="font-display text-4xl font-semibold text-ink sm:text-5xl">
               <Counter to={s.value} suffix={s.suffix} decimals={s.decimals ?? 0} />
             </p>
             <p className="mt-2 text-sm text-muted">{s.label}</p>
@@ -266,85 +165,56 @@ function Stats() {
   );
 }
 
-function AppPreview() {
-  return (
-    <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-      <Reveal>
-        <SectionHeading
-          eyebrow="Aperçu"
-          title="Un espace pensé pour vous faire progresser"
-          description="Tableau de bord, tracker, programmes : chaque écran est conçu pour aller à l'essentiel et rendre la constance facile."
-        />
-      </Reveal>
-      <Reveal delay={0.15}>
-        <div className="card mt-14 overflow-hidden p-2 sm:p-3">
-          <div className="grid gap-2 sm:grid-cols-3 sm:gap-3">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-xl sm:aspect-auto sm:min-h-[320px]">
-              <Image
-                src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=75"
-                alt="Athlète s'entraînant avec des haltères"
-                fill
-                sizes="(max-width: 640px) 100vw, 33vw"
-                className="object-cover transition-transform duration-700 hover:scale-105"
-              />
-            </div>
-            <div className="relative aspect-[4/3] overflow-hidden rounded-xl sm:aspect-auto">
-              <Image
-                src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=75"
-                alt="Assiette healthy riche en légumes et protéines"
-                fill
-                sizes="(max-width: 640px) 100vw, 33vw"
-                className="object-cover transition-transform duration-700 hover:scale-105"
-              />
-            </div>
-            <div className="relative aspect-[4/3] overflow-hidden rounded-xl sm:aspect-auto">
-              <Image
-                src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=75"
-                alt="Salle de sport moderne et lumineuse"
-                fill
-                sizes="(max-width: 640px) 100vw, 33vw"
-                className="object-cover transition-transform duration-700 hover:scale-105"
-              />
-            </div>
-          </div>
-        </div>
-      </Reveal>
-    </section>
-  );
-}
-
 function Features() {
   return (
-    <section className="bg-surface py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="relative overflow-hidden py-28">
+      <Orb
+        className="blur-3xl"
+        style={{ top: "-4%", right: "-6%", width: 380, height: 380, background: "radial-gradient(circle at 40% 40%, color-mix(in srgb, var(--leaf) 22%, transparent), transparent 70%)" }}
+        duration={14}
+        dy={30}
+      />
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal>
           <SectionHeading
-            eyebrow="Fonctionnalités"
-            title="Tout ce qu'il faut pour transformer votre physique"
-            description="Six outils complémentaires, une seule plateforme. Conçus pour fonctionner ensemble et vous accompagner du premier jour jusqu'à vos objectifs."
+            eyebrow="La plateforme"
+            title="Tout part du tableau de bord"
+            description="Un espace central qui réunit vos outils du quotidien. Chaque fonctionnalité est à un clic, et de nouvelles arrivent à chaque mise à jour."
           />
         </Reveal>
-        <Stagger className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <Stagger className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((f) => (
-            <StaggerItem key={f.title}>
-              <Link
-                href={f.href}
-                className="card card-hover group block h-full p-7"
-              >
-                <div className="grid h-12 w-12 place-items-center rounded-xl bg-leaf-soft text-leaf transition-transform duration-300 group-hover:scale-110">
-                  <f.icon className="h-6 w-6" />
-                </div>
-                <h3 className="mt-5 text-lg font-semibold text-ink">
-                  {f.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">
-                  {f.description}
-                </p>
-                <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-leaf">
-                  Découvrir
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </span>
-              </Link>
+            <StaggerItem key={f.title} className="h-full">
+              <TiltCard className="h-full">
+                <Link
+                  href={f.href}
+                  className={`card shadow-deep block h-full rounded-3xl p-7 ${
+                    f.highlight
+                      ? "border-leaf/30 bg-gradient-to-br from-leaf-faint to-card"
+                      : ""
+                  }`}
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="grid h-12 w-12 place-items-center rounded-2xl bg-leaf-soft text-leaf">
+                      <f.icon className="h-6 w-6" />
+                    </div>
+                    {f.highlight && (
+                      <Badge tone="leaf">
+                        <Sparkles className="h-3 w-3" />
+                        Point d’entrée
+                      </Badge>
+                    )}
+                  </div>
+                  <h3 className="mt-5 text-lg font-semibold text-ink">{f.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">
+                    {f.description}
+                  </p>
+                  <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-leaf">
+                    Découvrir
+                    <ArrowRight className="h-4 w-4" />
+                  </span>
+                </Link>
+              </TiltCard>
             </StaggerItem>
           ))}
         </Stagger>
@@ -353,37 +223,118 @@ function Features() {
   );
 }
 
-function Testimonials() {
+function HowItWorks() {
   return (
-    <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-      <Reveal>
-        <SectionHeading
-          eyebrow="Témoignages"
-          title="Ils ont transformé leur quotidien"
-        />
-      </Reveal>
-      <Stagger className="mt-14 grid gap-5 md:grid-cols-3">
-        {testimonials.map((t) => (
-          <StaggerItem key={t.name}>
-            <figure className="card card-hover flex h-full flex-col p-7">
-              <div className="flex gap-0.5">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="h-4 w-4 fill-gold text-gold" />
-                ))}
+    <section className="noise relative overflow-hidden bg-[#0c3427] py-28">
+      <Orb
+        className="blur-3xl"
+        style={{ top: "10%", left: "-4%", width: 300, height: 300, background: "radial-gradient(circle at 40% 40%, rgba(127,214,166,0.28), transparent 70%)" }}
+        duration={12}
+        dy={26}
+      />
+      <Orb
+        className="blur-3xl"
+        style={{ bottom: "-8%", right: "0%", width: 340, height: 340, background: "radial-gradient(circle at 40% 40%, rgba(231,217,168,0.2), transparent 70%)" }}
+        duration={15}
+        dy={-28}
+        delay={1}
+      />
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <Reveal>
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#9fe0bc]">
+              Comment ça marche
+            </p>
+            <h2 className="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              Trois étapes vers votre transformation
+            </h2>
+          </div>
+        </Reveal>
+        <Stagger className="mt-16 grid gap-5 md:grid-cols-3">
+          {steps.map((s, i) => (
+            <StaggerItem key={s.number} className="h-full">
+              <div className="glass relative h-full rounded-3xl p-8">
+                <span className="text-gradient-tropical font-display text-5xl font-semibold">
+                  {s.number}
+                </span>
+                <h3 className="mt-5 text-lg font-semibold text-white">{s.title}</h3>
+                <p className="mt-2.5 text-sm leading-relaxed text-white/60">
+                  {s.description}
+                </p>
+                {i < steps.length - 1 && (
+                  <ArrowRight className="absolute -right-4 top-1/2 hidden h-5 w-5 -translate-y-1/2 text-white/25 md:block" />
+                )}
               </div>
-              <blockquote className="mt-4 flex-1 text-sm leading-relaxed text-ink">
-                « {t.quote} »
-              </blockquote>
-              <figcaption className="mt-6 flex items-center gap-3">
-                <div className="grid h-10 w-10 place-items-center rounded-full bg-leaf-deep font-display text-sm font-semibold text-white dark:bg-leaf dark:text-[#08130d]">
-                  {t.name.charAt(0)}
+            </StaggerItem>
+          ))}
+        </Stagger>
+      </div>
+    </section>
+  );
+}
+
+function RecipesShowcase() {
+  const featured = recipes.slice(0, 3);
+  return (
+    <section className="mx-auto max-w-7xl px-4 py-28 sm:px-6 lg:px-8">
+      <Reveal>
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <SectionHeading
+            align="left"
+            eyebrow="Recettes"
+            title="Manger sain n'a jamais été aussi bon"
+            description="Chaque recette affiche ses calories et ses macros. La sélection s'enrichit à chaque mise à jour."
+          />
+          <Link
+            href="/recettes"
+            className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-6 py-3 text-sm font-semibold text-ink transition-all hover:-translate-y-px hover:border-leaf/40 hover:bg-leaf-faint"
+          >
+            Toutes les recettes
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </Reveal>
+      <Stagger className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {featured.map((r) => (
+          <StaggerItem key={r.id} className="h-full">
+            <TiltCard className="h-full" max={5}>
+              <Link
+                href="/recettes"
+                className="card shadow-deep block h-full overflow-hidden rounded-3xl"
+              >
+                <div className="relative aspect-[4/3] overflow-hidden bg-sand">
+                  <Image
+                    src={r.image}
+                    alt={r.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, 33vw"
+                    className="object-cover"
+                  />
+                  <div className="absolute bottom-3 right-3">
+                    <span className="glass rounded-full px-3 py-1 text-xs font-semibold text-white">
+                      {r.kcal} kcal
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm font-semibold text-ink">{t.name}</p>
-                  <p className="text-xs text-leaf">{t.role}</p>
+                <div className="p-6">
+                  <h3 className="line-clamp-1 font-semibold text-ink">{r.title}</h3>
+                  <div className="mt-3 flex items-center gap-4 text-xs text-muted">
+                    <span className="flex items-center gap-1.5">
+                      <span className="h-2 w-2 rounded-full" style={{ background: "var(--viz-protein)" }} />
+                      <b className="text-ink">{r.protein}g</b> prot.
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="h-2 w-2 rounded-full" style={{ background: "var(--viz-carbs)" }} />
+                      <b className="text-ink">{r.carbs}g</b> gluc.
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="h-2 w-2 rounded-full" style={{ background: "var(--viz-fat)" }} />
+                      <b className="text-ink">{r.fat}g</b> lip.
+                    </span>
+                  </div>
                 </div>
-              </figcaption>
-            </figure>
+              </Link>
+            </TiltCard>
           </StaggerItem>
         ))}
       </Stagger>
@@ -391,21 +342,66 @@ function Testimonials() {
   );
 }
 
+function Testimonials() {
+  return (
+    <section className="relative overflow-hidden bg-sand/50 py-28 dark:bg-sand/30">
+      <Orb
+        className="blur-3xl"
+        style={{ top: "20%", right: "-5%", width: 320, height: 320, background: "radial-gradient(circle at 40% 40%, color-mix(in srgb, var(--gold) 25%, transparent), transparent 70%)" }}
+        duration={13}
+        dy={24}
+      />
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <Reveal>
+          <SectionHeading
+            eyebrow="Témoignages"
+            title="Ils ont transformé leur quotidien"
+          />
+        </Reveal>
+        <Stagger className="mt-16 grid gap-5 md:grid-cols-3">
+          {testimonials.map((t) => (
+            <StaggerItem key={t.name} className="h-full">
+              <TiltCard className="h-full" max={5}>
+                <figure className="glass-card shadow-deep flex h-full flex-col rounded-3xl p-7">
+                  <div className="flex gap-0.5">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-gold text-gold" />
+                    ))}
+                  </div>
+                  <blockquote className="mt-4 flex-1 text-sm leading-relaxed text-ink">
+                    « {t.quote} »
+                  </blockquote>
+                  <figcaption className="mt-6 flex items-center gap-3">
+                    <div className="grid h-10 w-10 place-items-center rounded-full bg-leaf-deep font-display text-sm font-semibold text-white dark:bg-leaf dark:text-[#08130d]">
+                      {t.name.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-ink">{t.name}</p>
+                      <p className="text-xs text-leaf">{t.role}</p>
+                    </div>
+                  </figcaption>
+                </figure>
+              </TiltCard>
+            </StaggerItem>
+          ))}
+        </Stagger>
+      </div>
+    </section>
+  );
+}
+
 function Faq() {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <section className="bg-surface py-24">
+    <section className="py-28">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <Reveal>
-          <SectionHeading
-            eyebrow="FAQ"
-            title="Questions fréquentes"
-          />
+          <SectionHeading eyebrow="FAQ" title="Questions fréquentes" />
         </Reveal>
         <div className="mt-12 space-y-3">
           {faqs.map((f, i) => (
             <Reveal key={f.q} delay={i * 0.05}>
-              <div className="card overflow-hidden">
+              <div className="card overflow-hidden rounded-2xl">
                 <button
                   onClick={() => setOpen(open === i ? null : i)}
                   aria-expanded={open === i}
@@ -443,44 +439,50 @@ function Faq() {
 
 function FinalCta() {
   return (
-    <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+    <section className="mx-auto max-w-7xl px-4 pb-28 sm:px-6 lg:px-8">
       <Reveal>
-        <div className="relative overflow-hidden rounded-[2rem] bg-leaf-dark px-6 py-20 text-center dark:bg-leaf-soft sm:px-16">
+        <div className="noise relative overflow-hidden rounded-[2.5rem] bg-[#0a2e22] px-6 py-24 text-center sm:px-16">
           <div
-            className="pointer-events-none absolute inset-0 opacity-30"
+            aria-hidden
+            className="absolute inset-0"
             style={{
               background:
-                "radial-gradient(40rem 20rem at 80% 0%, rgba(46,158,104,0.5), transparent 60%), radial-gradient(30rem 18rem at 10% 100%, rgba(185,154,95,0.35), transparent 60%)",
+                "radial-gradient(44rem 24rem at 75% -10%, rgba(46,158,104,0.4), transparent 62%), radial-gradient(32rem 20rem at 12% 110%, rgba(185,154,95,0.3), transparent 62%)",
             }}
           />
+          <Orb
+            className="blur-2xl"
+            style={{ top: "18%", left: "12%", width: 140, height: 140, background: "radial-gradient(circle at 40% 35%, rgba(159,224,188,0.35), transparent 70%)" }}
+            duration={9}
+            dy={18}
+          />
           <div className="relative">
-            <Badge tone="gold" className="bg-white/10 text-sand">
-              <Sparkles className="h-3 w-3" />
+            <span className="glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium text-white/85">
+              <Sparkles className="h-3.5 w-3.5 text-[#e7d9a8]" />
               Gratuit, sans inscription
-            </Badge>
-            <h2 className="mx-auto mt-6 max-w-2xl font-display text-3xl font-semibold tracking-tight text-white dark:text-ink sm:text-4xl">
-              Votre transformation commence aujourd’hui
+            </span>
+            <h2 className="mx-auto mt-7 max-w-2xl font-display text-3xl font-semibold tracking-tight text-white sm:text-5xl">
+              Votre transformation commence{" "}
+              <span className="text-gradient-tropical">aujourd’hui</span>
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-base text-white/70 dark:text-muted">
+            <p className="mx-auto mt-5 max-w-xl text-base text-white/60">
               Calculez vos besoins, générez votre programme et suivez vos
               premiers repas en moins de 5 minutes.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <ButtonLink
+            <div className="mt-10 flex flex-wrap justify-center gap-4">
+              <Link
+                href="/dashboard"
+                className="group inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-base font-semibold text-[#0a2e22] shadow-glow transition-all duration-300 hover:-translate-y-0.5"
+              >
+                Ouvrir mon tableau de bord
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
+              <Link
                 href="/calculateur"
-                className="bg-white px-8 py-3.5 text-base text-leaf-dark hover:bg-sand dark:bg-leaf dark:text-[#08130d]"
+                className="glass inline-flex items-center gap-2 rounded-full px-8 py-4 text-base font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/15"
               >
-                <UtensilsCrossed className="h-4 w-4" />
                 Calculer mes besoins
-              </ButtonLink>
-              <ButtonLink
-                href="/programme"
-                className="border border-white/25 bg-transparent px-8 py-3.5 text-base text-white hover:bg-white/10 dark:border-line dark:text-ink dark:hover:bg-sand"
-                variant="ghost"
-              >
-                <Dumbbell className="h-4 w-4" />
-                Générer mon programme
-              </ButtonLink>
+              </Link>
             </div>
           </div>
         </div>
@@ -494,8 +496,9 @@ export function HomeContent() {
     <>
       <Hero />
       <Stats />
-      <AppPreview />
       <Features />
+      <HowItWorks />
+      <RecipesShowcase />
       <Testimonials />
       <Faq />
       <FinalCta />

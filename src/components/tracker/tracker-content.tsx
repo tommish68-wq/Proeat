@@ -84,7 +84,7 @@ function AddMealForm({
 
   return (
     <form onSubmit={submit} className="space-y-4">
-      <Field label="Depuis une recette ProHit (optionnel)" htmlFor="recipe">
+      <Field label="Depuis une recette ProEat (optionnel)" htmlFor="recipe">
         <select
           id="recipe"
           value={recipeId}

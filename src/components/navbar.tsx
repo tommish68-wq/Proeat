@@ -8,13 +8,12 @@ import { Menu, Moon, Sun, X } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { useTheme } from "@/components/theme-provider";
 
+/* Navigation volontairement resserrée : le tableau de bord est le point
+   d'entrée vers toutes les fonctionnalités. */
 const links = [
   { href: "/dashboard", label: "Tableau de bord" },
-  { href: "/calculateur", label: "Calculateur" },
-  { href: "/programme", label: "Programme" },
   { href: "/recettes", label: "Recettes" },
   { href: "/tracker", label: "Tracker" },
-  { href: "/boutique", label: "Boutique" },
   { href: "/profil", label: "Profil" },
 ];
 
@@ -34,6 +33,10 @@ export function Navbar() {
     };
   }, []);
 
+  /* Sur l'accueil non scrollé, la navbar flotte au-dessus du hero sombre :
+     on passe en texte clair pour rester lisible. */
+  const onDark = pathname === "/" && !scrolled && !open;
+
   return (
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
@@ -43,8 +46,8 @@ export function Navbar() {
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" aria-label="ProHit — Accueil">
-          <Logo />
+        <Link href="/" aria-label="ProEat — Accueil">
+          <Logo onDark={onDark} />
         </Link>
 
         <div className="hidden items-center gap-1 lg:flex">
@@ -55,7 +58,11 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={`relative rounded-full px-3.5 py-2 text-sm font-medium transition-colors ${
-                  active ? "text-leaf-deep" : "text-muted hover:text-ink"
+                  active
+                    ? "text-leaf-deep"
+                    : onDark
+                      ? "text-white/70 hover:text-white"
+                      : "text-muted hover:text-ink"
                 }`}
               >
                 {active && (
@@ -77,7 +84,11 @@ export function Navbar() {
             aria-label={
               theme === "dark" ? "Activer le mode clair" : "Activer le mode sombre"
             }
-            className="grid h-10 w-10 place-items-center rounded-full border border-line bg-surface text-muted transition-all hover:text-ink hover:border-leaf/40 hover:scale-105 active:scale-95"
+            className={`grid h-10 w-10 place-items-center rounded-full border transition-all hover:scale-105 active:scale-95 ${
+              onDark
+                ? "border-white/20 bg-white/10 text-white/80 hover:text-white"
+                : "border-line bg-surface text-muted hover:text-ink hover:border-leaf/40"
+            }`}
           >
             {theme === "dark" ? (
               <Sun className="h-[18px] w-[18px]" />
@@ -86,8 +97,12 @@ export function Navbar() {
             )}
           </button>
           <Link
-            href="/calculateur"
-            className="hidden rounded-full bg-leaf-deep px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-leaf hover:shadow-md hover:-translate-y-px active:translate-y-0 sm:inline-flex dark:bg-leaf dark:text-[#08130d] dark:hover:bg-leaf-mid"
+            href="/dashboard"
+            className={`hidden rounded-full px-5 py-2.5 text-sm font-semibold shadow-sm transition-all hover:shadow-md hover:-translate-y-px active:translate-y-0 sm:inline-flex ${
+              onDark
+                ? "bg-white text-[#0a2e22] hover:bg-sand"
+                : "bg-leaf-deep text-white hover:bg-leaf dark:bg-leaf dark:text-[#08130d] dark:hover:bg-leaf-mid"
+            }`}
           >
             Commencer
           </Link>
@@ -95,7 +110,11 @@ export function Navbar() {
             onClick={() => setOpen(!open)}
             aria-label="Ouvrir le menu"
             aria-expanded={open}
-            className="grid h-10 w-10 place-items-center rounded-full border border-line bg-surface text-ink lg:hidden"
+            className={`grid h-10 w-10 place-items-center rounded-full border lg:hidden ${
+              onDark
+                ? "border-white/20 bg-white/10 text-white"
+                : "border-line bg-surface text-ink"
+            }`}
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -133,7 +152,7 @@ export function Navbar() {
                 </motion.div>
               ))}
               <Link
-                href="/calculateur"
+                href="/dashboard"
                 onClick={() => setOpen(false)}
                 className="mt-3 block rounded-xl bg-leaf-deep px-4 py-3 text-center text-base font-semibold text-white dark:bg-leaf dark:text-[#08130d]"
               >

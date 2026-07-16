@@ -4,7 +4,7 @@ import { ProfileContent } from "@/components/profile/profile-content";
 export const metadata: Metadata = {
   title: "Profil — Espace membre",
   description:
-    "Votre espace membre ProHit : objectifs, progression, historique de poids, badges et statistiques personnelles.",
+    "Votre espace membre ProEat : objectifs, progression, historique de poids, badges et statistiques personnelles.",
 };
 
 export default function ProfilePage() {

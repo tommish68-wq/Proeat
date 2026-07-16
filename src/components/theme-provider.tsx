@@ -33,7 +33,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       const next = prev === "dark" ? "light" : "dark";
       document.documentElement.classList.toggle("dark", next === "dark");
       try {
-        localStorage.setItem("prohit-theme", next);
+        localStorage.setItem("proeat-theme", next);
       } catch {}
       return next;
     });

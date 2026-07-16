@@ -14,9 +14,9 @@ const columns = [
   {
     title: "Ressources",
     links: [
-      { href: "/recettes", label: "Bibliothèque de recettes" },
-      { href: "/boutique", label: "E-books & guides" },
+      { href: "/recettes", label: "Recettes" },
       { href: "/profil", label: "Espace membre" },
+      { href: "/boutique", label: "Boutique", soon: true },
     ],
   },
 ];
@@ -29,7 +29,7 @@ export function Footer() {
           <div className="max-w-sm">
             <Logo />
             <p className="mt-4 text-sm leading-relaxed text-muted">
-              La plateforme tout-en-un pour la musculation, la nutrition et la
+              La plateforme tout-en-un pour la nutrition, la musculation et la
               remise en forme. La performance, naturellement.
             </p>
           </div>
@@ -44,6 +44,11 @@ export function Footer() {
                       className="text-sm text-muted transition-colors hover:text-leaf"
                     >
                       {link.label}
+                      {"soon" in link && link.soon && (
+                        <span className="ml-2 rounded-full bg-sand px-2 py-0.5 text-[10px] font-medium text-muted">
+                          Bientôt
+                        </span>
+                      )}
                     </Link>
                   </li>
                 ))}
@@ -53,7 +58,7 @@ export function Footer() {
         </div>
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-line pt-8 sm:flex-row">
           <p className="text-xs text-muted">
-            © {new Date().getFullYear()} ProHit. Tous droits réservés.
+            © {new Date().getFullYear()} ProEat. Tous droits réservés.
           </p>
           <p className="text-xs text-muted">
             Discipline · Santé · Progression

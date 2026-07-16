@@ -180,7 +180,7 @@ export function ProfileContent() {
       {
         icon: Zap,
         title: "Premier pas",
-        description: "Créer son profil ProHit",
+        description: "Créer son profil ProEat",
         earned: true,
       },
       {

@@ -5,13 +5,14 @@ import Link from "next/link";
 import { useMemo } from "react";
 import {
   ArrowRight,
+  BookOpen,
   Calculator,
   Dumbbell,
   Flame,
   Salad,
   Scale,
   Target,
-  UtensilsCrossed,
+  User,
 } from "lucide-react";
 import {
   dayTotals,
@@ -38,6 +39,17 @@ const weeklyPlan = [
 ];
 
 const goalLabels = { seche: "Sèche", maintien: "Maintien", masse: "Prise de masse" } as const;
+
+/* Le tableau de bord est le point d'entrée : chaque fonctionnalité (actuelle
+   ou à venir) est accessible depuis cette grille. */
+const hub = [
+  { icon: Calculator, label: "Calculateur", detail: "BMR, TDEE & calories cibles", href: "/calculateur" },
+  { icon: Dumbbell, label: "Programme", detail: "Séances sur mesure", href: "/programme" },
+  { icon: Salad, label: "Recettes", detail: "Idées repas & macros", href: "/recettes" },
+  { icon: Flame, label: "Tracker", detail: "Repas, macros & poids", href: "/tracker" },
+  { icon: User, label: "Profil", detail: "Objectifs & badges", href: "/profil" },
+  { icon: BookOpen, label: "Boutique", detail: "Guides d'experts", href: "/boutique", soon: true },
+];
 
 export function DashboardContent() {
   const [profile, , profileReady] = useProfile();
@@ -88,6 +100,34 @@ export function DashboardContent() {
             <Target className="h-3 w-3" />
             Objectif : {goalLabels[profile.goal]}
           </Badge>
+        </div>
+      </Reveal>
+
+      {/* -------- Hub : accès à toutes les fonctionnalités -------- */}
+      <Reveal>
+        <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+          {hub.map((h) => (
+            <Link
+              key={h.href}
+              href={h.href}
+              className={`card card-hover group relative flex flex-col gap-3 rounded-2xl p-5 ${
+                h.soon ? "opacity-75" : ""
+              }`}
+            >
+              {h.soon && (
+                <span className="absolute right-3 top-3 rounded-full bg-gold/15 px-2 py-0.5 text-[10px] font-semibold text-gold">
+                  Bientôt
+                </span>
+              )}
+              <span className="grid h-11 w-11 place-items-center rounded-xl bg-leaf-soft text-leaf transition-transform duration-300 group-hover:scale-110">
+                <h.icon className="h-5 w-5" />
+              </span>
+              <span>
+                <span className="block text-sm font-semibold text-ink">{h.label}</span>
+                <span className="mt-0.5 block text-xs text-muted">{h.detail}</span>
+              </span>
+            </Link>
+          ))}
         </div>
       </Reveal>
 
@@ -242,7 +282,7 @@ export function DashboardContent() {
           </Reveal>
 
           {/* -------- Dernières recettes -------- */}
-          <Reveal className="lg:col-span-2">
+          <Reveal className="lg:col-span-3">
             <div className="card p-7">
               <div className="flex items-center justify-between">
                 <h2 className="flex items-center gap-2 font-semibold text-ink">
@@ -282,33 +322,6 @@ export function DashboardContent() {
             </div>
           </Reveal>
 
-          {/* -------- Accès rapides -------- */}
-          <Reveal delay={0.08}>
-            <div className="card p-7">
-              <h2 className="font-semibold text-ink">Accès rapides</h2>
-              <div className="mt-5 space-y-3">
-                {(
-                  [
-                    [Calculator, "Recalculer mes besoins", "/calculateur"],
-                    [Dumbbell, "Générer un programme", "/programme"],
-                    [UtensilsCrossed, "Ajouter un repas", "/tracker"],
-                  ] as const
-                ).map(([Icon, label, href]) => (
-                  <Link
-                    key={href}
-                    href={href}
-                    className="group flex items-center gap-3 rounded-xl border border-line px-4 py-3.5 transition-all hover:border-leaf/40 hover:bg-leaf-faint"
-                  >
-                    <span className="grid h-9 w-9 place-items-center rounded-lg bg-leaf-soft text-leaf">
-                      <Icon className="h-4 w-4" />
-                    </span>
-                    <span className="flex-1 text-sm font-medium text-ink">{label}</span>
-                    <ArrowRight className="h-4 w-4 text-muted transition-transform group-hover:translate-x-1 group-hover:text-leaf" />
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </Reveal>
         </div>
       )}
     </div>

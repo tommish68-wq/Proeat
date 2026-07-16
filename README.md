@@ -1,6 +1,6 @@
-# ProHit 🌿
+# ProEat 🌿
 
-**ProHit** est une plateforme tout-en-un dédiée à la musculation, à la nutrition et à la remise en forme — une expérience premium à l'ambiance tropicale : nature, bien-être et performance.
+**ProEat** est une plateforme tout-en-un dédiée à la musculation, à la nutrition et à la remise en forme — une expérience premium à l'ambiance tropicale : nature, bien-être et performance.
 
 ## Pages
 
@@ -9,11 +9,11 @@
 | Accueil | `/` | Landing premium : hero, statistiques, fonctionnalités, témoignages, FAQ, CTA |
 | Calculateur | `/calculateur` | BMR & TDEE (Mifflin-St Jeor) + calories sèche / maintien / masse + macros |
 | Programme | `/programme` | Générateur de programme selon niveau, objectif, matériel, fréquence et durée |
-| Recettes | `/recettes` | Galerie filtrable avec macros, ingrédients et préparation détaillés |
+| Recettes | `/recettes` | Galerie filtrable (sélection de démonstration, enrichie au fil des mises à jour) |
 | Tracker | `/tracker` | Journal calories & macros, suivi du poids, graphiques d'évolution |
-| Boutique | `/boutique` | E-books nutrition/musculation, guides sèche & prise de masse |
+| Boutique | `/boutique` | Teaser « bientôt disponible » — les e-books arriveront plus tard |
 | Profil | `/profil` | Espace membre : objectifs, progression, historique, badges, statistiques |
-| Dashboard | `/dashboard` | Vue d'ensemble : calories du jour, séance, poids, recettes, accès rapides |
+| Dashboard | `/dashboard` | **Point d'entrée central** : hub vers toutes les fonctionnalités + vue du jour |
 
 ## Stack technique
 
@@ -49,6 +49,5 @@ src/
     ├── metabolism.ts     # Calculs BMR / TDEE / macros
     ├── program.ts        # Générateur de programmes (catalogue d'exercices)
     ├── recipes.ts        # Bibliothèque de recettes
-    ├── products.ts       # Catalogue boutique
     └── store.ts          # Persistance localStorage (profil, repas, poids)
 ```
