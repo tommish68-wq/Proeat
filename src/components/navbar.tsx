@@ -14,6 +14,7 @@ const links = [
   { href: "/dashboard", label: "Tableau de bord" },
   { href: "/recettes", label: "Recettes" },
   { href: "/tracker", label: "Tracker" },
+  { href: "/premium", label: "Premium" },
   { href: "/profil", label: "Profil" },
 ];
 
@@ -33,9 +34,10 @@ export function Navbar() {
     };
   }, []);
 
-  /* Sur l'accueil non scrollé, la navbar flotte au-dessus du hero sombre :
-     on passe en texte clair pour rester lisible. */
-  const onDark = pathname === "/" && !scrolled && !open;
+  /* Sur les pages ouvrant sur un bandeau sombre, la navbar flotte
+     au-dessus : on passe en texte clair pour rester lisible. */
+  const darkTopPages = ["/", "/premium"];
+  const onDark = darkTopPages.includes(pathname) && !scrolled && !open;
 
   return (
     <header

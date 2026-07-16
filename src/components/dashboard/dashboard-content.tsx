@@ -7,6 +7,7 @@ import {
   ArrowRight,
   BookOpen,
   Calculator,
+  Crown,
   Dumbbell,
   Flame,
   Salad,
@@ -129,6 +130,40 @@ export function DashboardContent() {
             </Link>
           ))}
         </div>
+      </Reveal>
+
+      {/* -------- Bandeau Premium -------- */}
+      <Reveal delay={0.05}>
+        <Link
+          href="/premium"
+          className="group relative mt-6 flex flex-wrap items-center justify-between gap-4 overflow-hidden rounded-2xl bg-[#0a2e22] px-6 py-5 transition-transform duration-300 hover:-translate-y-0.5"
+        >
+          <div
+            aria-hidden
+            className="absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(24rem 10rem at 90% 0%, rgba(185,154,95,0.35), transparent 60%), radial-gradient(20rem 10rem at 5% 100%, rgba(46,158,104,0.35), transparent 60%)",
+            }}
+          />
+          <div className="relative flex items-center gap-4">
+            <span className="grid h-11 w-11 place-items-center rounded-xl bg-gold/20 text-gold">
+              <Crown className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="font-semibold text-white">
+                Passez en Premium — dès 3,33 € / mois
+              </p>
+              <p className="text-sm text-white/60">
+                Recettes illimitées, programmes avancés, plans de repas selon vos macros.
+              </p>
+            </div>
+          </div>
+          <span className="relative inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-[#0a2e22] shadow-lg transition-transform duration-300 group-hover:translate-x-1">
+            Découvrir
+            <ArrowRight className="h-4 w-4" />
+          </span>
+        </Link>
       </Reveal>
 
       {!ready ? (
