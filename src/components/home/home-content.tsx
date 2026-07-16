@@ -21,6 +21,7 @@ import { Orb, TiltCard } from "@/components/fx";
 import { SmartImage as Image } from "@/components/smart-image";
 import { recipes } from "@/lib/recipes";
 import { Hero } from "@/components/home/hero";
+import { Promo } from "@/components/home/promo";
 
 /* ------------------------------------------------------------------ */
 /* Données                                                             */
@@ -495,6 +496,7 @@ export function HomeContent() {
   return (
     <>
       <Hero />
+      <Promo />
       <Stats />
       <Features />
       <HowItWorks />
