@@ -1,9 +1,22 @@
 "use client";
 
+import Link from "next/link";
 import { SmartImage as Image } from "@/components/smart-image";
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChefHat, Clock, Flame, Search, X } from "lucide-react";
+import {
+  ArrowRight,
+  Calculator,
+  Check,
+  ChefHat,
+  Clock,
+  Flame,
+  Heart,
+  NotebookPen,
+  Search,
+  Star,
+  X,
+} from "lucide-react";
 import {
   categoryLabels,
   recipes,
@@ -12,11 +25,108 @@ import {
   type Recipe,
   type RecipeTag,
 } from "@/lib/recipes";
+import { todayKey, useFoodLog } from "@/lib/store";
 import { Badge, SectionHeading, Skeleton } from "@/components/ui";
 import { Reveal } from "@/components/motion";
 
 const categories = Object.entries(categoryLabels) as [MealCategory, string][];
 const tags = Object.entries(tagLabels) as [RecipeTag, string][];
+
+/* Note affichée en étoiles (support des demi-valeurs par arrondi) */
+function Stars({ rating }: { rating: number }) {
+  return (
+    <span className="flex gap-0.5" aria-hidden>
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Star
+          key={i}
+          className={`h-4 w-4 ${
+            i < Math.round(rating) ? "fill-gold text-gold" : "text-line"
+          }`}
+        />
+      ))}
+    </span>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Vitrine sombre « Les favoris ProEat » — façon rayon best-sellers    */
+/* ------------------------------------------------------------------ */
+
+function Favorites({ onOpen }: { onOpen: (r: Recipe) => void }) {
+  const favorites = recipes.filter((r) => r.badge || (r.rating ?? 0) >= 4.7);
+  if (!favorites.length) return null;
+  return (
+    <section
+      aria-label="Les favoris ProEat"
+      className="noise relative mx-auto mt-14 max-w-7xl overflow-hidden rounded-[2rem] bg-[#0a2e22] px-6 py-10 sm:px-10"
+    >
+      <div
+        aria-hidden
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(38rem 20rem at 85% -10%, rgba(46,158,104,0.35), transparent 62%), radial-gradient(26rem 16rem at 0% 110%, rgba(185,154,95,0.22), transparent 62%)",
+        }}
+      />
+      <div className="relative">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#9fe0bc]">
+              <Heart className="h-3.5 w-3.5" />
+              Les favoris ProEat
+            </p>
+            <h2 className="mt-2 max-w-xl font-display text-2xl font-semibold text-white sm:text-3xl">
+              Un aperçu des favoris de la communauté
+            </h2>
+            <p className="mt-1 text-sm text-white/60">
+              Cliquez sur un plat pour la recette complète.
+            </p>
+          </div>
+          <Link
+            href="/calculateur"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#0a2e22] shadow-lg transition-all hover:-translate-y-0.5"
+          >
+            <Calculator className="h-4 w-4" />
+            Calculer mes besoins
+          </Link>
+        </div>
+
+        <div className="mt-7 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2">
+          {favorites.map((r) => (
+            <button
+              key={r.id}
+              onClick={() => onOpen(r)}
+              className="group w-60 shrink-0 snap-start overflow-hidden rounded-2xl bg-white/[0.06] text-left ring-1 ring-white/10 transition-all duration-300 hover:-translate-y-1 hover:bg-white/10 hover:ring-white/25"
+            >
+              <div className="relative aspect-[4/3] overflow-hidden bg-[#14231c]">
+                <Image
+                  src={r.image}
+                  alt={r.title}
+                  fill
+                  sizes="240px"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                {r.badge && (
+                  <span className="absolute left-2.5 top-2.5 rounded-full bg-gold px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-[#1a140a]">
+                    {r.badge}
+                  </span>
+                )}
+              </div>
+              <div className="p-4">
+                <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-white">
+                  {r.title}
+                </h3>
+                <p className="mt-2 text-xs font-semibold text-[#e0b46a]">
+                  {r.protein} g prot · {r.kcal} kcal
+                </p>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function MacroPill({ label, value, color }: { label: string; value: number; color: string }) {
   return (
@@ -50,6 +160,11 @@ function RecipeCard({ recipe, onOpen }: { recipe: Recipe; onOpen: () => void }) 
           <Badge tone="sand" className="bg-white/90 text-ink backdrop-blur dark:bg-black/60 dark:text-white">
             {categoryLabels[recipe.category]}
           </Badge>
+          {recipe.badge && (
+            <Badge tone="gold" className="bg-gold/90 text-[#1a140a]">
+              {recipe.badge}
+            </Badge>
+          )}
         </div>
         <div className="absolute bottom-3 right-3">
           <Badge tone="sand" className="bg-white/90 text-ink backdrop-blur dark:bg-black/60 dark:text-white">
@@ -77,6 +192,27 @@ function RecipeCard({ recipe, onOpen }: { recipe: Recipe; onOpen: () => void }) 
 }
 
 function RecipeModal({ recipe, onClose }: { recipe: Recipe; onClose: () => void }) {
+  const [, setLog] = useFoodLog();
+  const [added, setAdded] = useState(false);
+
+  /* L'équivalent du « panier » : la recette part dans le journal du jour */
+  const addToJournal = () => {
+    setLog((prev) => [
+      ...prev,
+      {
+        id: `${Date.now()}-${prev.length}`,
+        date: todayKey(),
+        meal: recipe.category,
+        name: recipe.title,
+        kcal: recipe.kcal,
+        protein: recipe.protein,
+        carbs: recipe.carbs,
+        fat: recipe.fat,
+      },
+    ]);
+    setAdded(true);
+  };
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     document.addEventListener("keydown", onKey);
@@ -125,6 +261,11 @@ function RecipeModal({ recipe, onClose }: { recipe: Recipe; onClose: () => void 
         <div className="p-6 sm:p-8">
           <div className="flex flex-wrap gap-2">
             <Badge tone="leaf">{categoryLabels[recipe.category]}</Badge>
+            {recipe.badge && (
+              <Badge tone="gold" className="bg-gold/15">
+                {recipe.badge}
+              </Badge>
+            )}
             {recipe.tags.map((t) => (
               <Badge key={t} tone="outline">{tagLabels[t]}</Badge>
             ))}
@@ -132,6 +273,18 @@ function RecipeModal({ recipe, onClose }: { recipe: Recipe; onClose: () => void 
           <h2 className="mt-4 font-display text-2xl font-semibold text-ink sm:text-3xl">
             {recipe.title}
           </h2>
+          {recipe.rating && (
+            <p className="mt-2 flex items-center gap-2 text-sm text-muted">
+              <Stars rating={recipe.rating} />
+              <span className="font-semibold text-ink">{recipe.rating.toLocaleString("fr-FR")}</span>
+              {recipe.reviews && <span>· {recipe.reviews} avis de membres</span>}
+            </p>
+          )}
+          {recipe.sell && (
+            <p className="mt-3 border-l-2 border-leaf pl-3 text-[15px] font-medium leading-relaxed text-ink">
+              {recipe.sell}
+            </p>
+          )}
           <div className="mt-3 flex items-center gap-4 text-sm text-muted">
             <span className="flex items-center gap-1.5">
               <Clock className="h-4 w-4" /> {recipe.time} min
@@ -161,6 +314,57 @@ function RecipeModal({ recipe, onClose }: { recipe: Recipe; onClose: () => void 
               </div>
             ))}
           </div>
+
+          {/* CTA « produit » : la recette part dans le journal du jour */}
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <button
+              onClick={addToJournal}
+              disabled={added}
+              className={`inline-flex flex-1 items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold transition-all duration-300 ${
+                added
+                  ? "bg-leaf-soft text-leaf-deep"
+                  : "bg-leaf-deep text-white shadow-sm hover:-translate-y-px hover:bg-leaf hover:shadow-md dark:bg-leaf dark:text-[#08130d]"
+              }`}
+            >
+              {added ? (
+                <>
+                  <Check className="h-4 w-4" />
+                  Ajouté à votre journal du jour
+                </>
+              ) : (
+                <>
+                  <NotebookPen className="h-4 w-4" />
+                  Ajouter à mon journal · {recipe.kcal} kcal
+                </>
+              )}
+            </button>
+            {added && (
+              <Link
+                href="/tracker"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-line bg-surface px-6 py-3.5 text-sm font-semibold text-ink transition-all hover:border-leaf/40 hover:bg-leaf-faint"
+              >
+                Voir mon journal
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            )}
+          </div>
+
+          {/* Argumentaire */}
+          {recipe.benefits && (
+            <div className="mt-6 rounded-2xl bg-leaf-faint p-5 dark:bg-leaf-soft/40">
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-leaf">
+                Pourquoi vous allez l&apos;adorer
+              </h3>
+              <ul className="mt-3 space-y-2">
+                {recipe.benefits.map((b) => (
+                  <li key={b} className="flex items-start gap-2.5 text-sm leading-relaxed text-ink">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-leaf" />
+                    {b}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <div className="mt-8 grid gap-8 sm:grid-cols-[1fr_1.4fr]">
             <div>
@@ -285,6 +489,11 @@ export function RecipesContent() {
             </div>
           </Reveal>
         </div>
+      </div>
+
+      {/* -------- Favoris (vitrine) -------- */}
+      <div className="px-4 sm:px-6 lg:px-8">
+        <Favorites onOpen={setSelected} />
       </div>
 
       {/* -------- Galerie -------- */}
