@@ -191,27 +191,55 @@ function RecipeCard({ recipe, onOpen }: { recipe: Recipe; onOpen: () => void }) 
   );
 }
 
-function RecipeModal({ recipe, onClose }: { recipe: Recipe; onClose: () => void }) {
+function RecipeModal({
+  recipe,
+  onClose,
+  onSwitch,
+}: {
+  recipe: Recipe;
+  onClose: () => void;
+  onSwitch: (r: Recipe) => void;
+}) {
   const [, setLog] = useFoodLog();
   const [added, setAdded] = useState(false);
+  const [addedPairings, setAddedPairings] = useState<string[]>([]);
 
   /* L'équivalent du « panier » : la recette part dans le journal du jour */
-  const addToJournal = () => {
+  const logRecipe = (r: Recipe) => {
     setLog((prev) => [
       ...prev,
       {
         id: `${Date.now()}-${prev.length}`,
         date: todayKey(),
-        meal: recipe.category,
-        name: recipe.title,
-        kcal: recipe.kcal,
-        protein: recipe.protein,
-        carbs: recipe.carbs,
-        fat: recipe.fat,
+        meal: r.category,
+        name: r.title,
+        kcal: r.kcal,
+        protein: r.protein,
+        carbs: r.carbs,
+        fat: r.fat,
       },
     ]);
+  };
+
+  const addToJournal = () => {
+    logRecipe(recipe);
     setAdded(true);
   };
+
+  /* Cross-sell : recettes d'un autre repas, proches par les tags puis la note */
+  const pairings = useMemo(() => {
+    return recipes
+      .filter((r) => r.id !== recipe.id && r.category !== recipe.category)
+      .map((r) => ({
+        r,
+        score:
+          r.tags.filter((t) => recipe.tags.includes(t)).length +
+          (r.rating ?? 4.4) / 5,
+      }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 2)
+      .map((x) => x.r);
+  }, [recipe]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
@@ -363,6 +391,74 @@ function RecipeModal({ recipe, onClose }: { recipe: Recipe; onClose: () => void 
                   </li>
                 ))}
               </ul>
+            </div>
+          )}
+
+          {/* Cross-sell « souvent ajoutés ensemble » */}
+          {pairings.length > 0 && (
+            <div className="mt-6">
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-leaf">
+                Souvent ajoutés ensemble
+              </h3>
+              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                {pairings.map((p) => {
+                  const pairAdded = addedPairings.includes(p.id);
+                  return (
+                    <div
+                      key={p.id}
+                      className="flex items-center gap-3 rounded-2xl border border-line p-3 transition-colors hover:border-leaf/40"
+                    >
+                      <button
+                        onClick={() => onSwitch(p)}
+                        className="relative h-16 w-20 shrink-0 overflow-hidden rounded-xl bg-sand"
+                        aria-label={`Voir la recette : ${p.title}`}
+                      >
+                        <Image
+                          src={p.image}
+                          alt=""
+                          fill
+                          sizes="80px"
+                          className="object-cover"
+                        />
+                      </button>
+                      <button
+                        onClick={() => onSwitch(p)}
+                        className="min-w-0 flex-1 text-left"
+                      >
+                        <p className="line-clamp-2 text-sm font-medium leading-snug text-ink">
+                          {p.title}
+                        </p>
+                        <p className="mt-0.5 text-xs text-muted">
+                          {categoryLabels[p.category]} · {p.protein} g prot · {p.kcal} kcal
+                        </p>
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (pairAdded) return;
+                          logRecipe(p);
+                          setAddedPairings((prev) => [...prev, p.id]);
+                        }}
+                        aria-label={
+                          pairAdded
+                            ? `${p.title} ajouté au journal`
+                            : `Ajouter ${p.title} au journal`
+                        }
+                        className={`grid h-9 w-9 shrink-0 place-items-center rounded-full transition-all ${
+                          pairAdded
+                            ? "bg-leaf-soft text-leaf-deep"
+                            : "bg-leaf-deep text-white hover:scale-105 dark:bg-leaf dark:text-[#08130d]"
+                        }`}
+                      >
+                        {pairAdded ? (
+                          <Check className="h-4 w-4" />
+                        ) : (
+                          <NotebookPen className="h-4 w-4" />
+                        )}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           )}
 
@@ -536,7 +632,12 @@ export function RecipesContent() {
 
       <AnimatePresence>
         {selected && (
-          <RecipeModal recipe={selected} onClose={() => setSelected(null)} />
+          <RecipeModal
+            key={selected.id}
+            recipe={selected}
+            onClose={() => setSelected(null)}
+            onSwitch={setSelected}
+          />
         )}
       </AnimatePresence>
     </div>
