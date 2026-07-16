@@ -22,6 +22,7 @@ import { SmartImage as Image } from "@/components/smart-image";
 import { recipes } from "@/lib/recipes";
 import { Hero } from "@/components/home/hero";
 import { Promo } from "@/components/home/promo";
+import { Training } from "@/components/home/training";
 
 /* ------------------------------------------------------------------ */
 /* Données                                                             */
@@ -500,6 +501,7 @@ export function HomeContent() {
       <Stats />
       <Features />
       <HowItWorks />
+      <Training />
       <RecipesShowcase />
       <Testimonials />
       <Faq />

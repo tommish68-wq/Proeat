@@ -1,5 +1,6 @@
 "use client";
 
+import NextImage from "next/image";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -73,6 +74,29 @@ export function ProgramContent() {
             title="Votre programme de musculation, généré en 30 secondes"
             description="Répondez à cinq questions et obtenez un plan structuré, équilibré et progressif — adapté à votre matériel et à votre emploi du temps."
           />
+        </Reveal>
+
+        {/* Bannière : l'entraînement en conditions réelles */}
+        <Reveal delay={0.05}>
+          <div className="shadow-deep relative mt-10 h-52 overflow-hidden rounded-[2rem] border border-line sm:h-64">
+            <NextImage
+              src="/images/gym-training.jpg"
+              alt="Pratiquants en pleine séance de musculation en salle"
+              fill
+              sizes="(max-width: 1280px) 100vw, 1152px"
+              priority
+              className="object-cover object-[center_35%]"
+            />
+            <div
+              aria-hidden
+              className="absolute inset-0 bg-gradient-to-r from-[#0a2e22]/75 via-[#0a2e22]/25 to-transparent"
+            />
+            <div className="absolute inset-x-6 bottom-5 sm:inset-x-10">
+              <p className="max-w-md font-display text-xl font-semibold text-white sm:text-2xl">
+                Salle, haltères ou poids du corps : votre plan s’adapte à vous.
+              </p>
+            </div>
+          </div>
         </Reveal>
 
         {/* -------- Configuration -------- */}

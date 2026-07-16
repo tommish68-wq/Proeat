@@ -30,8 +30,7 @@ const slides = [
     subtitle: "Votre plan d'entraînement complet, généré en 30 secondes",
     cta: "Générer le mien",
     href: "/programme",
-    image:
-      "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1600&q=75",
+    image: "/images/gym-ambiance.jpg",
     tint: "from-[#101c16]/85 via-[#101c16]/45",
   },
   {
