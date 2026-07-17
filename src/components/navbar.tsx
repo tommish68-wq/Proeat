@@ -38,7 +38,7 @@ export function Navbar() {
 
   /* Sur les pages ouvrant sur un bandeau sombre, la navbar flotte
      au-dessus : on passe en texte clair pour rester lisible. */
-  const darkTopPages = ["/", "/premium"];
+  const darkTopPages = ["/premium"];
   const onDark = darkTopPages.includes(pathname) && !scrolled && !open;
 
   return (
