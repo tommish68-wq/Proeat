@@ -15,6 +15,7 @@ const columns = [
     title: "Ressources",
     links: [
       { href: "/recettes", label: "Recettes" },
+      { href: "/methode", label: "La méthode" },
       { href: "/premium", label: "ProEat Premium" },
       { href: "/profil", label: "Espace membre" },
       { href: "/boutique", label: "Boutique" },

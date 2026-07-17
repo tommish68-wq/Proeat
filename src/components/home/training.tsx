@@ -22,7 +22,7 @@ const points = [
   },
 ];
 
-export function Training() {
+export function Training({ ctaHref = "/programme" }: { ctaHref?: string }) {
   return (
     <section className="mx-auto max-w-7xl px-4 py-28 sm:px-6 lg:px-8">
       <div className="grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
@@ -100,7 +100,7 @@ export function Training() {
           </div>
           <Reveal delay={0.35}>
             <Link
-              href="/programme"
+              href={ctaHref}
               className="group mt-9 inline-flex items-center gap-2 rounded-full bg-leaf-deep px-8 py-3.5 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-leaf hover:shadow-md dark:bg-leaf dark:text-[#08130d]"
             >
               Générer mon programme

@@ -1,6 +1,5 @@
 "use client";
 
-import NextImage from "next/image";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -22,7 +21,7 @@ import {
 } from "@/lib/program";
 import { Badge, Button, Field, SectionHeading, Skeleton } from "@/components/ui";
 import { Reveal } from "@/components/motion";
-import { asset } from "@/lib/asset";
+import { Training } from "@/components/home/training";
 
 const levels: { id: Level; label: string }[] = [
   { id: "debutant", label: "Débutant" },
@@ -77,32 +76,15 @@ export function ProgramContent() {
           />
         </Reveal>
 
-        {/* Bannière : l'entraînement en conditions réelles */}
-        <Reveal delay={0.05}>
-          <div className="shadow-deep relative mt-10 h-52 overflow-hidden rounded-[2rem] border border-line sm:h-64">
-            <NextImage
-              src={asset("/images/gym-training.jpg")}
-              alt="Pratiquants en pleine séance de musculation en salle"
-              fill
-              sizes="(max-width: 1280px) 100vw, 1152px"
-              priority
-              className="object-cover object-[center_35%]"
-            />
-            <div
-              aria-hidden
-              className="absolute inset-0 bg-gradient-to-r from-[#0a2e22]/75 via-[#0a2e22]/25 to-transparent"
-            />
-            <div className="absolute inset-x-6 bottom-5 sm:inset-x-10">
-              <p className="max-w-md font-display text-xl font-semibold text-white sm:text-2xl">
-                Salle, haltères ou poids du corps : votre plan s’adapte à vous.
-              </p>
-            </div>
-          </div>
-        </Reveal>
+      </div>
 
+      {/* Section entraînement (photo + arguments), déplacée de l'accueil */}
+      <Training ctaHref="#configurateur" />
+
+      <div className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
         {/* -------- Configuration -------- */}
         <Reveal delay={0.1}>
-          <div className="card mt-14 p-7">
+          <div id="configurateur" className="card scroll-mt-24 p-7">
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               <Field label="Niveau">
                 <div className="flex flex-wrap gap-2">

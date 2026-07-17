@@ -1,30 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowRight,
   Calculator,
-  ChevronDown,
   Dumbbell,
   Flame,
   LayoutDashboard,
   LineChart,
   Salad,
-  HeartHandshake,
-  Leaf,
-  ShieldCheck,
   Sparkles,
 } from "lucide-react";
 import { Badge, SectionHeading } from "@/components/ui";
 import { Counter, Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { Orb, TiltCard } from "@/components/fx";
-import { SmartImage as Image } from "@/components/smart-image";
-import { recipes } from "@/lib/recipes";
 import { Hero } from "@/components/home/hero";
 import { Promo } from "@/components/home/promo";
-import { Training } from "@/components/home/training";
 
 /* ------------------------------------------------------------------ */
 /* Données                                                             */
@@ -83,67 +74,6 @@ const features = [
   },
 ];
 
-const steps = [
-  {
-    number: "01",
-    title: "Calculez vos besoins",
-    description:
-      "Deux minutes suffisent pour connaître votre métabolisme et vos calories cibles, selon votre objectif.",
-  },
-  {
-    number: "02",
-    title: "Recevez votre plan",
-    description:
-      "Programme d'entraînement adapté à votre matériel et recettes alignées sur vos macros.",
-  },
-  {
-    number: "03",
-    title: "Suivez votre progression",
-    description:
-      "Trackez vos repas et votre poids : les graphiques racontent votre transformation.",
-  },
-];
-
-const commitments = [
-  {
-    icon: HeartHandshake,
-    title: "Jamais culpabilisant",
-    text: "Pas de compte à rebours anxiogène, pas de chantage au physique. ProEat vous aide à progresser, il ne vous juge pas.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Vos données restent à vous",
-    text: "Repas, poids, objectifs : tout est stocké sur votre appareil. Rien n'est vendu, rien n'est partagé — jamais.",
-  },
-  {
-    icon: Leaf,
-    title: "L'essentiel restera gratuit",
-    text: "Calculateur, tracker et sélection de recettes sont gratuits pour toujours. Le premium ajoute, il ne retire rien.",
-  },
-];
-
-const faqs = [
-  {
-    q: "ProEat est-il adapté aux débutants ?",
-    a: "Absolument. Le générateur de programme propose des séances spécifiques débutant avec des mouvements simples, et le calculateur vous guide pas à pas pour définir vos calories. Chaque outil est pensé pour être utilisable sans aucune connaissance préalable.",
-  },
-  {
-    q: "Les outils sont-ils gratuits ?",
-    a: "Oui, tous les outils actuels — calculateur, générateur de programme, recettes et tracker — sont 100 % gratuits. Des contenus premium arriveront plus tard, mais l'essentiel restera gratuit.",
-  },
-  {
-    q: "Comment sont calculées mes calories ?",
-    a: "Nous utilisons l'équation de Mifflin-St Jeor, la référence scientifique actuelle, combinée à votre niveau d'activité physique pour estimer votre dépense énergétique totale (TDEE), puis nous l'ajustons selon votre objectif.",
-  },
-  {
-    q: "Puis-je m'entraîner sans matériel ?",
-    a: "Oui. Le générateur de programme propose un mode « poids du corps » complet, avec des progressions adaptées pour continuer à évoluer sans salle de sport.",
-  },
-  {
-    q: "Mes données sont-elles privées ?",
-    a: "Vos données de suivi (repas, poids, progression) sont stockées localement sur votre appareil. Elles ne quittent jamais votre navigateur.",
-  },
-];
 
 /* ------------------------------------------------------------------ */
 /* Sections                                                            */
@@ -224,209 +154,6 @@ function Features() {
   );
 }
 
-function HowItWorks() {
-  return (
-    <section className="noise relative overflow-hidden bg-[#0c3427] py-28">
-      <Orb
-        className="blur-3xl"
-        style={{ top: "10%", left: "-4%", width: 300, height: 300, background: "radial-gradient(circle at 40% 40%, rgba(127,214,166,0.28), transparent 70%)" }}
-        duration={12}
-        dy={26}
-      />
-      <Orb
-        className="blur-3xl"
-        style={{ bottom: "-8%", right: "0%", width: 340, height: 340, background: "radial-gradient(circle at 40% 40%, rgba(231,217,168,0.2), transparent 70%)" }}
-        duration={15}
-        dy={-28}
-        delay={1}
-      />
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Reveal>
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#9fe0bc]">
-              Comment ça marche
-            </p>
-            <h2 className="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-              Trois étapes vers votre transformation
-            </h2>
-          </div>
-        </Reveal>
-        <Stagger className="mt-16 grid gap-5 md:grid-cols-3">
-          {steps.map((s, i) => (
-            <StaggerItem key={s.number} className="h-full">
-              <div className="glass relative h-full rounded-3xl p-8">
-                <span className="text-gradient-tropical font-display text-5xl font-semibold">
-                  {s.number}
-                </span>
-                <h3 className="mt-5 text-lg font-semibold text-white">{s.title}</h3>
-                <p className="mt-2.5 text-sm leading-relaxed text-white/60">
-                  {s.description}
-                </p>
-                {i < steps.length - 1 && (
-                  <ArrowRight className="absolute -right-4 top-1/2 hidden h-5 w-5 -translate-y-1/2 text-white/25 md:block" />
-                )}
-              </div>
-            </StaggerItem>
-          ))}
-        </Stagger>
-      </div>
-    </section>
-  );
-}
-
-function RecipesShowcase() {
-  const featured = recipes.slice(0, 3);
-  return (
-    <section className="mx-auto max-w-7xl px-4 py-28 sm:px-6 lg:px-8">
-      <Reveal>
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <SectionHeading
-            align="left"
-            eyebrow="Recettes"
-            title="Manger sain n'a jamais été aussi bon"
-            description="Chaque recette affiche ses calories et ses macros. La sélection s'enrichit à chaque mise à jour."
-          />
-          <Link
-            href="/recettes"
-            className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-6 py-3 text-sm font-semibold text-ink transition-all hover:-translate-y-px hover:border-leaf/40 hover:bg-leaf-faint"
-          >
-            Toutes les recettes
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-      </Reveal>
-      <Stagger className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {featured.map((r) => (
-          <StaggerItem key={r.id} className="h-full">
-            <TiltCard className="h-full" max={5}>
-              <Link
-                href="/recettes"
-                className="card shadow-deep block h-full overflow-hidden rounded-3xl"
-              >
-                <div className="relative aspect-[4/3] overflow-hidden bg-sand">
-                  <Image
-                    src={r.image}
-                    alt={r.title}
-                    fill
-                    sizes="(max-width: 640px) 100vw, 33vw"
-                    className="object-cover"
-                  />
-                  <div className="absolute bottom-3 right-3">
-                    <span className="glass rounded-full px-3 py-1 text-xs font-semibold text-white">
-                      {r.kcal} kcal
-                    </span>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="line-clamp-1 font-semibold text-ink">{r.title}</h3>
-                  <div className="mt-3 flex items-center gap-4 text-xs text-muted">
-                    <span className="flex items-center gap-1.5">
-                      <span className="h-2 w-2 rounded-full" style={{ background: "var(--viz-protein)" }} />
-                      <b className="text-ink">{r.protein}g</b> prot.
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <span className="h-2 w-2 rounded-full" style={{ background: "var(--viz-carbs)" }} />
-                      <b className="text-ink">{r.carbs}g</b> gluc.
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <span className="h-2 w-2 rounded-full" style={{ background: "var(--viz-fat)" }} />
-                      <b className="text-ink">{r.fat}g</b> lip.
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            </TiltCard>
-          </StaggerItem>
-        ))}
-      </Stagger>
-    </section>
-  );
-}
-
-function Commitments() {
-  return (
-    <section className="relative overflow-hidden bg-sand/50 py-28 dark:bg-sand/30">
-      <Orb
-        className="blur-3xl"
-        style={{ top: "20%", right: "-5%", width: 320, height: 320, background: "radial-gradient(circle at 40% 40%, color-mix(in srgb, var(--gold) 25%, transparent), transparent 70%)" }}
-        duration={13}
-        dy={24}
-      />
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Reveal>
-          <SectionHeading
-            eyebrow="Nos engagements"
-            title="Ce que ProEat vous promet"
-            description="Trois principes non négociables, écrits noir sur blanc dès le premier jour."
-          />
-        </Reveal>
-        <Stagger className="mt-16 grid gap-5 md:grid-cols-3">
-          {commitments.map((c) => (
-            <StaggerItem key={c.title} className="h-full">
-              <TiltCard className="h-full" max={5}>
-                <div className="glass-card shadow-deep flex h-full flex-col rounded-3xl p-7">
-                  <div className="grid h-12 w-12 place-items-center rounded-2xl bg-leaf-soft text-leaf">
-                    <c.icon className="h-6 w-6" />
-                  </div>
-                  <h3 className="mt-5 text-lg font-semibold text-ink">{c.title}</h3>
-                  <p className="mt-2.5 flex-1 text-sm leading-relaxed text-muted">{c.text}</p>
-                </div>
-              </TiltCard>
-            </StaggerItem>
-          ))}
-        </Stagger>
-      </div>
-    </section>
-  );
-}
-
-function Faq() {
-  const [open, setOpen] = useState<number | null>(0);
-  return (
-    <section className="py-28">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <Reveal>
-          <SectionHeading eyebrow="FAQ" title="Questions fréquentes" />
-        </Reveal>
-        <div className="mt-12 space-y-3">
-          {faqs.map((f, i) => (
-            <Reveal key={f.q} delay={i * 0.05}>
-              <div className="card overflow-hidden rounded-2xl">
-                <button
-                  onClick={() => setOpen(open === i ? null : i)}
-                  aria-expanded={open === i}
-                  className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
-                >
-                  <span className="font-medium text-ink">{f.q}</span>
-                  <ChevronDown
-                    className={`h-5 w-5 shrink-0 text-muted transition-transform duration-300 ${
-                      open === i ? "rotate-180 text-leaf" : ""
-                    }`}
-                  />
-                </button>
-                <AnimatePresence initial={false}>
-                  {open === i && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
-                    >
-                      <p className="px-6 pb-6 text-sm leading-relaxed text-muted">
-                        {f.a}
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function FinalCta() {
   return (
     <section className="mx-auto max-w-7xl px-4 pb-28 sm:px-6 lg:px-8">
@@ -488,11 +215,6 @@ export function HomeContent() {
       <Promo />
       <Stats />
       <Features />
-      <HowItWorks />
-      <Training />
-      <RecipesShowcase />
-      <Commitments />
-      <Faq />
       <FinalCta />
     </>
   );

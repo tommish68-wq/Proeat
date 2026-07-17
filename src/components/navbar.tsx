@@ -8,14 +8,16 @@ import { Menu, Moon, Sun, X } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { useTheme } from "@/components/theme-provider";
 
-/* Navigation volontairement resserrée : le tableau de bord est le point
-   d'entrée vers toutes les fonctionnalités. */
+/* Navigation complète : chaque univers du site est visible d'un coup d'œil. */
 const links = [
   { href: "/dashboard", label: "Tableau de bord" },
+  { href: "/calculateur", label: "Calculateur" },
+  { href: "/programme", label: "Programme" },
   { href: "/recettes", label: "Recettes" },
   { href: "/tracker", label: "Tracker" },
+  { href: "/boutique", label: "Boutique" },
   { href: "/premium", label: "Premium" },
-  { href: "/profil", label: "Profil" },
+  { href: "/methode", label: "La méthode" },
 ];
 
 export function Navbar() {
@@ -52,14 +54,14 @@ export function Navbar() {
           <Logo onDark={onDark} />
         </Link>
 
-        <div className="hidden items-center gap-1 lg:flex">
+        <div className="hidden items-center gap-0.5 xl:flex">
           {links.map((link) => {
             const active = pathname.startsWith(link.href);
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`relative rounded-full px-3.5 py-2 text-sm font-medium transition-colors ${
+                className={`relative rounded-full px-3 py-2 text-[13px] font-medium transition-colors ${
                   active
                     ? "text-leaf-deep"
                     : onDark
@@ -112,7 +114,7 @@ export function Navbar() {
             onClick={() => setOpen(!open)}
             aria-label="Ouvrir le menu"
             aria-expanded={open}
-            className={`grid h-10 w-10 place-items-center rounded-full border lg:hidden ${
+            className={`grid h-10 w-10 place-items-center rounded-full border xl:hidden ${
               onDark
                 ? "border-white/20 bg-white/10 text-white"
                 : "border-line bg-surface text-ink"
@@ -130,7 +132,7 @@ export function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="overflow-hidden border-b border-line bg-background/95 backdrop-blur-xl lg:hidden"
+            className="overflow-hidden border-b border-line bg-background/95 backdrop-blur-xl xl:hidden"
           >
             <div className="space-y-1 px-4 pb-6 pt-2">
               {links.map((link, i) => (
