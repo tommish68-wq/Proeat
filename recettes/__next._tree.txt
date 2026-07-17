@@ -1,4 +1,7 @@
-:HL["/Proeat/_next/static/chunks/393k086llrdaj.css","style"]
+:HL["/Proeat/_next/static/chunks/18b8kyece7h_j.css","style"]
 :HL["/Proeat/_next/static/media/03bda585a99c6450-s.p.32sris142tqlb.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/Proeat/_next/static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"recettes","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"AES7YFnVdVyo1vZ2c9fHL"}
+:HL["/Proeat/_next/static/media/99e609270109b47d-s.p.40sczeszzbjw1.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/Proeat/_next/static/media/9e9f04e3c37952ab-s.p.0pan85mumqyf3.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/Proeat/_next/static/media/effe91970fc4db64-s.p.0oace-s_gkfks.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"recettes","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"CevjuBIqeRs3s4WNl_uBG"}
