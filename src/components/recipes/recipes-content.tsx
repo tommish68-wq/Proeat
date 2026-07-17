@@ -14,7 +14,6 @@ import {
   Heart,
   NotebookPen,
   Search,
-  Star,
   X,
 } from "lucide-react";
 import {
@@ -32,32 +31,16 @@ import { Reveal } from "@/components/motion";
 const categories = Object.entries(categoryLabels) as [MealCategory, string][];
 const tags = Object.entries(tagLabels) as [RecipeTag, string][];
 
-/* Note affichée en étoiles (support des demi-valeurs par arrondi) */
-function Stars({ rating }: { rating: number }) {
-  return (
-    <span className="flex gap-0.5" aria-hidden>
-      {Array.from({ length: 5 }).map((_, i) => (
-        <Star
-          key={i}
-          className={`h-4 w-4 ${
-            i < Math.round(rating) ? "fill-gold text-gold" : "text-line"
-          }`}
-        />
-      ))}
-    </span>
-  );
-}
-
 /* ------------------------------------------------------------------ */
 /* Vitrine sombre « Les favoris ProEat » — façon rayon best-sellers    */
 /* ------------------------------------------------------------------ */
 
 function Favorites({ onOpen }: { onOpen: (r: Recipe) => void }) {
-  const favorites = recipes.filter((r) => r.badge || (r.rating ?? 0) >= 4.7);
+  const favorites = recipes.filter((r) => r.badge);
   if (!favorites.length) return null;
   return (
     <section
-      aria-label="Les favoris ProEat"
+      aria-label="La sélection ProEat"
       className="noise relative mx-auto mt-14 max-w-7xl overflow-hidden rounded-[2rem] bg-[#0a2e22] px-6 py-10 sm:px-10"
     >
       <div
@@ -73,10 +56,10 @@ function Favorites({ onOpen }: { onOpen: (r: Recipe) => void }) {
           <div>
             <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#9fe0bc]">
               <Heart className="h-3.5 w-3.5" />
-              Les favoris ProEat
+              La sélection ProEat
             </p>
             <h2 className="mt-2 max-w-xl font-display text-2xl font-semibold text-white sm:text-3xl">
-              Un aperçu des favoris de la communauté
+              Nos recettes préférées, à découvrir en premier
             </h2>
             <p className="mt-1 text-sm text-white/60">
               Cliquez sur un plat pour la recette complète.
@@ -234,7 +217,7 @@ function RecipeModal({
         r,
         score:
           r.tags.filter((t) => recipe.tags.includes(t)).length +
-          (r.rating ?? 4.4) / 5,
+          (r.badge ? 0.5 : 0),
       }))
       .sort((a, b) => b.score - a.score)
       .slice(0, 2)
@@ -301,13 +284,6 @@ function RecipeModal({
           <h2 className="mt-4 font-display text-2xl font-semibold text-ink sm:text-3xl">
             {recipe.title}
           </h2>
-          {recipe.rating && (
-            <p className="mt-2 flex items-center gap-2 text-sm text-muted">
-              <Stars rating={recipe.rating} />
-              <span className="font-semibold text-ink">{recipe.rating.toLocaleString("fr-FR")}</span>
-              {recipe.reviews && <span>· {recipe.reviews} avis de membres</span>}
-            </p>
-          )}
           {recipe.sell && (
             <p className="mt-3 border-l-2 border-leaf pl-3 text-[15px] font-medium leading-relaxed text-ink">
               {recipe.sell}

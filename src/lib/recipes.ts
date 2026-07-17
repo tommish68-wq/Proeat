@@ -25,11 +25,9 @@ export interface Recipe {
   ingredients: string[];
   steps: string[];
   /* Merchandising — présentation « produit » de la recette */
-  badge?: "Best-seller" | "Nouveau" | "Favori des membres";
+  badge?: "Coup de cœur" | "Nouveau" | "Sélection ProEat";
   sell?: string; // accroche commerciale affichée en fiche
   benefits?: string[]; // « pourquoi vous allez l'adorer »
-  rating?: number; // sur 5
-  reviews?: number;
 }
 
 export const categoryLabels: Record<MealCategory, string> = {
@@ -54,15 +52,13 @@ const img = (id: string) =>
 export const recipes: Recipe[] = [
   {
     id: "bowl-proteine-avoine",
-    badge: "Best-seller",
-    sell: "Le petit-déjeuner le plus ajouté au journal ProEat : 38 g de protéines, prêt avant votre café.",
+    badge: "Coup de cœur",
+    sell: "38 g de protéines prêts avant la fin de votre café : le petit-déjeuner qui lance vraiment la journée.",
     benefits: [
       "38 g de protéines pour lancer la synthèse musculaire dès le réveil",
       "Prêt en 10 minutes avec 6 ingrédients du placard",
       "Rassasiant jusqu'au déjeuner : fini le grignotage de 11 h",
     ],
-    rating: 4.9,
-    reviews: 412,
     title: "Porridge protéiné banane & beurre de cacahuète",
     category: "petit-dejeuner",
     tags: ["proteine", "vegetarien", "masse"],
@@ -110,15 +106,13 @@ export const recipes: Recipe[] = [
   },
   {
     id: "poulet-riz-brocoli",
-    badge: "Favori des membres",
+    badge: "Sélection ProEat",
     sell: "Le classique absolu de la prise de masse propre : 52 g de protéines dans une assiette qui cale vraiment.",
     benefits: [
       "52 g de protéines — l'assiette de référence des pratiquants",
       "Parfaite en batch cooking : préparez 4 portions d'un coup",
       "Macros idéales autour de l'entraînement",
     ],
-    rating: 4.8,
-    reviews: 356,
     title: "Poulet grillé, riz basmati & brocoli vapeur",
     category: "dejeuner",
     tags: ["proteine", "masse"],
@@ -220,8 +214,6 @@ export const recipes: Recipe[] = [
       "30 secondes chrono, un seul blender à laver",
       "La banane recharge le glycogène dépensé à l'entraînement",
     ],
-    rating: 4.7,
-    reviews: 268,
     title: "Shake post-training banane & flocons",
     category: "collation",
     tags: ["proteine", "vegetarien", "masse"],
@@ -283,8 +275,6 @@ export const recipes: Recipe[] = [
       "Antioxydants de l'açaï et vitamine C des fraises fraîches",
       "Prêt en 10 minutes, aussi beau que bon",
     ],
-    rating: 4.8,
-    reviews: 94,
     ingredients: [
       "100 g de purée d'açaï surgelée",
       "1 banane bien mûre congelée",
@@ -310,15 +300,13 @@ export const recipes: Recipe[] = [
     fat: 30,
     time: 15,
     image: img("photo-1528735602780-2552fd46c7af"),
-    badge: "Best-seller",
+    badge: "Coup de cœur",
     sell: "Le sandwich qui remplace un repas complet : 35 g de protéines entre deux tranches de pain de campagne.",
     benefits: [
       "35 g de protéines : poulet grillé + œufs brouillés dans le même sandwich",
       "676 kcal maîtrisées — le vrai repas de prise de masse à emporter",
       "15 minutes, zéro vaisselle au bureau",
     ],
-    rating: 4.9,
-    reviews: 187,
     ingredients: [
       "2 belles tranches de pain de campagne complet",
       "100 g de filet de poulet grillé",
@@ -344,15 +332,13 @@ export const recipes: Recipe[] = [
     fat: 18,
     time: 40,
     image: img("photo-1596097635121-14b63b7a0c19"),
-    badge: "Favori des membres",
+    badge: "Sélection ProEat",
     sell: "Le dîner végé qui n'a rien à envier à un cheat meal : fondant, coloré et complet.",
     benefits: [
       "Protéines végétales complètes : quinoa + haricots noirs",
       "Fibres et glucides complexes pour une satiété longue durée",
       "Une seule plaque au four, dressage spectaculaire",
     ],
-    rating: 4.7,
-    reviews: 142,
     ingredients: [
       "1 grosse patate douce",
       "60 g de quinoa (cru)",
@@ -384,8 +370,6 @@ export const recipes: Recipe[] = [
       "Graines de courge et pignons : magnésium et croquant",
       "10 minutes pour un brunch digne d'un café de Bali",
     ],
-    rating: 4.6,
-    reviews: 121,
     ingredients: [
       "2 tranches de pain complet au levain",
       "1 avocat mûr",
@@ -416,8 +400,6 @@ export const recipes: Recipe[] = [
       "Cacao pur et banane : le goût dessert sans le sucre ajouté",
       "5 minutes, se glisse dans une gourde pour la salle",
     ],
-    rating: 4.7,
-    reviews: 86,
     ingredients: [
       "300 ml de lait de soja",
       "1 banane congelée",

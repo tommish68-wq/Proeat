@@ -12,8 +12,10 @@ import {
   LayoutDashboard,
   LineChart,
   Salad,
+  HeartHandshake,
+  Leaf,
+  ShieldCheck,
   Sparkles,
-  Star,
 } from "lucide-react";
 import { Badge, SectionHeading } from "@/components/ui";
 import { Counter, Reveal, Stagger, StaggerItem } from "@/components/motion";
@@ -29,10 +31,10 @@ import { Training } from "@/components/home/training";
 /* ------------------------------------------------------------------ */
 
 const stats = [
-  { value: 25, suffix: "k+", label: "Membres actifs" },
-  { value: 1.2, suffix: "M", label: "Repas trackés", decimals: 1 },
-  { value: 4.9, suffix: "/5", label: "Note moyenne", decimals: 1 },
-  { value: 100, suffix: "%", label: "Gratuit" },
+  { value: 100, suffix: " %", label: "Gratuit au lancement" },
+  { value: 2, suffix: " min", label: "Pour connaître vos besoins" },
+  { value: 30, suffix: " s", label: "Pour générer un programme" },
+  { value: 0, suffix: " pub", label: "Et zéro revente de données" },
 ];
 
 const features = [
@@ -102,24 +104,21 @@ const steps = [
   },
 ];
 
-const testimonials = [
+const commitments = [
   {
-    name: "Camille R.",
-    role: "−9 kg en 5 mois",
-    quote:
-      "Le calculateur puis le tracker ont tout changé. Pour la première fois, je comprends ce que je mange. L'interface est tellement agréable que le suivi est devenu un plaisir.",
+    icon: HeartHandshake,
+    title: "Jamais culpabilisant",
+    text: "Pas de compte à rebours anxiogène, pas de chantage au physique. ProEat vous aide à progresser, il ne vous juge pas.",
   },
   {
-    name: "Thomas L.",
-    role: "+6 kg de muscle en 1 an",
-    quote:
-      "Le générateur de programme est bluffant : un vrai plan structuré en 30 secondes, adapté à mon matériel. Je progresse à chaque séance depuis 8 mois.",
+    icon: ShieldCheck,
+    title: "Vos données restent à vous",
+    text: "Repas, poids, objectifs : tout est stocké sur votre appareil. Rien n'est vendu, rien n'est partagé — jamais.",
   },
   {
-    name: "Inès M.",
-    role: "Retour au sport après 3 ans",
-    quote:
-      "Je cherchais quelque chose de simple et motivant. ProEat est apaisant, clair, jamais culpabilisant. Les recettes sont devenues mes repas du quotidien.",
+    icon: Leaf,
+    title: "L'essentiel restera gratuit",
+    text: "Calculateur, tracker et sélection de recettes sont gratuits pour toujours. Le premium ajoute, il ne retire rien.",
   },
 ];
 
@@ -157,7 +156,7 @@ function Stats() {
         {stats.map((s) => (
           <div key={s.label} className="text-center">
             <p className="font-display text-4xl font-semibold text-ink sm:text-5xl">
-              <Counter to={s.value} suffix={s.suffix} decimals={s.decimals ?? 0} />
+              <Counter to={s.value} suffix={s.suffix} />
             </p>
             <p className="mt-2 text-sm text-muted">{s.label}</p>
           </div>
@@ -344,7 +343,7 @@ function RecipesShowcase() {
   );
 }
 
-function Testimonials() {
+function Commitments() {
   return (
     <section className="relative overflow-hidden bg-sand/50 py-28 dark:bg-sand/30">
       <Orb
@@ -356,33 +355,22 @@ function Testimonials() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal>
           <SectionHeading
-            eyebrow="Témoignages"
-            title="Ils ont transformé leur quotidien"
+            eyebrow="Nos engagements"
+            title="Ce que ProEat vous promet"
+            description="Trois principes non négociables, écrits noir sur blanc dès le premier jour."
           />
         </Reveal>
         <Stagger className="mt-16 grid gap-5 md:grid-cols-3">
-          {testimonials.map((t) => (
-            <StaggerItem key={t.name} className="h-full">
+          {commitments.map((c) => (
+            <StaggerItem key={c.title} className="h-full">
               <TiltCard className="h-full" max={5}>
-                <figure className="glass-card shadow-deep flex h-full flex-col rounded-3xl p-7">
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-gold text-gold" />
-                    ))}
+                <div className="glass-card shadow-deep flex h-full flex-col rounded-3xl p-7">
+                  <div className="grid h-12 w-12 place-items-center rounded-2xl bg-leaf-soft text-leaf">
+                    <c.icon className="h-6 w-6" />
                   </div>
-                  <blockquote className="mt-4 flex-1 text-sm leading-relaxed text-ink">
-                    « {t.quote} »
-                  </blockquote>
-                  <figcaption className="mt-6 flex items-center gap-3">
-                    <div className="grid h-10 w-10 place-items-center rounded-full bg-leaf-deep font-display text-sm font-semibold text-white dark:bg-leaf dark:text-[#08130d]">
-                      {t.name.charAt(0)}
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-ink">{t.name}</p>
-                      <p className="text-xs text-leaf">{t.role}</p>
-                    </div>
-                  </figcaption>
-                </figure>
+                  <h3 className="mt-5 text-lg font-semibold text-ink">{c.title}</h3>
+                  <p className="mt-2.5 flex-1 text-sm leading-relaxed text-muted">{c.text}</p>
+                </div>
               </TiltCard>
             </StaggerItem>
           ))}
@@ -503,7 +491,7 @@ export function HomeContent() {
       <HowItWorks />
       <Training />
       <RecipesShowcase />
-      <Testimonials />
+      <Commitments />
       <Faq />
       <FinalCta />
     </>

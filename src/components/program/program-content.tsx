@@ -301,7 +301,7 @@ export function ProgramContent() {
               <div className="card mt-6 p-6">
                 <h3 className="flex items-center gap-2 text-sm font-semibold text-ink">
                   <Lightbulb className="h-4 w-4 text-gold" />
-                  Conseils du coach
+                  Les conseils ProEat
                 </h3>
                 <ul className="mt-4 grid gap-3 sm:grid-cols-2">
                   {program.tips.map((tip) => (

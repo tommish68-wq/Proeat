@@ -17,7 +17,7 @@ const columns = [
       { href: "/recettes", label: "Recettes" },
       { href: "/premium", label: "ProEat Premium" },
       { href: "/profil", label: "Espace membre" },
-      { href: "/boutique", label: "Boutique", soon: true },
+      { href: "/boutique", label: "Boutique" },
     ],
   },
 ];
@@ -45,11 +45,6 @@ export function Footer() {
                       className="text-sm text-muted transition-colors hover:text-leaf"
                     >
                       {link.label}
-                      {"soon" in link && link.soon && (
-                        <span className="ml-2 rounded-full bg-sand px-2 py-0.5 text-[10px] font-medium text-muted">
-                          Bientôt
-                        </span>
-                      )}
                     </Link>
                   </li>
                 ))}
@@ -57,13 +52,22 @@ export function Footer() {
             </div>
           ))}
         </div>
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-line pt-8 sm:flex-row">
-          <p className="text-xs text-muted">
-            © {new Date().getFullYear()} ProEat. Tous droits réservés.
+        <div className="mt-12 space-y-4 border-t border-line pt-8">
+          <p className="text-center text-xs leading-relaxed text-muted sm:text-left">
+            Les contenus ProEat (calculs, programmes, recettes) sont fournis à
+            titre informatif et ne remplacent pas l&apos;avis d&apos;un médecin
+            ou d&apos;un professionnel de santé. Consultez un professionnel
+            avant tout changement important d&apos;alimentation ou
+            d&apos;entraînement.
           </p>
-          <p className="text-xs text-muted">
-            Discipline · Santé · Progression
-          </p>
+          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+            <p className="text-xs text-muted">
+              © {new Date().getFullYear()} ProEat. Tous droits réservés.
+            </p>
+            <p className="text-xs text-muted">
+              Discipline · Santé · Progression
+            </p>
+          </div>
         </div>
       </div>
     </footer>

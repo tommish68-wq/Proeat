@@ -49,7 +49,7 @@ const hub = [
   { icon: Salad, label: "Recettes", detail: "Idées repas & macros", href: "/recettes" },
   { icon: Flame, label: "Tracker", detail: "Repas, macros & poids", href: "/tracker" },
   { icon: User, label: "Profil", detail: "Objectifs & badges", href: "/profil" },
-  { icon: BookOpen, label: "Boutique", detail: "Guides d'experts", href: "/boutique", soon: true },
+  { icon: BookOpen, label: "Boutique", detail: "Guides d'experts", href: "/boutique" },
 ];
 
 export function DashboardContent() {
@@ -111,15 +111,8 @@ export function DashboardContent() {
             <Link
               key={h.href}
               href={h.href}
-              className={`card card-hover group relative flex flex-col gap-3 rounded-2xl p-5 ${
-                h.soon ? "opacity-75" : ""
-              }`}
+              className="card card-hover group relative flex flex-col gap-3 rounded-2xl p-5"
             >
-              {h.soon && (
-                <span className="absolute right-3 top-3 rounded-full bg-gold/15 px-2 py-0.5 text-[10px] font-semibold text-gold">
-                  Bientôt
-                </span>
-              )}
               <span className="grid h-11 w-11 place-items-center rounded-xl bg-leaf-soft text-leaf transition-transform duration-300 group-hover:scale-110">
                 <h.icon className="h-5 w-5" />
               </span>

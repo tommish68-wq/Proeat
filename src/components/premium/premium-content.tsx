@@ -35,7 +35,7 @@ const premiumFeatures = [
   "Programmes illimités & progressions avancées",
   "Plans de repas générés selon vos macros",
   "Statistiques détaillées & historique complet",
-  "Tous les futurs e-books de la boutique inclus",
+  "Tous les e-books de la boutique inclus",
   "Accès prioritaire aux nouveautés",
   "Badge doré de membre fondateur",
 ];
