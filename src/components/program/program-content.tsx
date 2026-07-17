@@ -22,6 +22,7 @@ import {
 } from "@/lib/program";
 import { Badge, Button, Field, SectionHeading, Skeleton } from "@/components/ui";
 import { Reveal } from "@/components/motion";
+import { asset } from "@/lib/asset";
 
 const levels: { id: Level; label: string }[] = [
   { id: "debutant", label: "Débutant" },
@@ -80,7 +81,7 @@ export function ProgramContent() {
         <Reveal delay={0.05}>
           <div className="shadow-deep relative mt-10 h-52 overflow-hidden rounded-[2rem] border border-line sm:h-64">
             <NextImage
-              src="/images/gym-training.jpg"
+              src={asset("/images/gym-training.jpg")}
               alt="Pratiquants en pleine séance de musculation en salle"
               fill
               sizes="(max-width: 1280px) 100vw, 1152px"

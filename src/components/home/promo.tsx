@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Pause, Play } from "lucide-react";
 import { SmartImage as Image } from "@/components/smart-image";
+import { asset } from "@/lib/asset";
 
 /* ------------------------------------------------------------------ */
 /* Carrousel promotionnel plein cadre, inspiré des grands sites        */
@@ -30,7 +31,7 @@ const slides = [
     subtitle: "Votre plan d'entraînement complet, généré en 30 secondes",
     cta: "Générer le mien",
     href: "/programme",
-    image: "/images/gym-ambiance.jpg",
+    image: asset("/images/gym-ambiance.jpg"),
     tint: "from-[#101c16]/85 via-[#101c16]/45",
   },
   {

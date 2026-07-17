@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle2, Dumbbell, Timer } from "lucide-react";
 import { Reveal } from "@/components/motion";
 import { Floaty } from "@/components/fx";
+import { asset } from "@/lib/asset";
 
 const points = [
   {
@@ -30,7 +31,7 @@ export function Training() {
           <div className="relative">
             <div className="shadow-deep relative aspect-[4/3] overflow-hidden rounded-[2rem] border border-line">
               <Image
-                src="/images/gym-training.jpg"
+                src={asset("/images/gym-training.jpg")}
                 alt="Membres ProEat en pleine séance de musculation : rowing haltère, développé couché et poulie"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
