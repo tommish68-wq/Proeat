@@ -14,7 +14,7 @@ export function LogoMark({ className = "h-8 w-8" }: { className?: string }) {
       />
       <path
         d="M20 31c-1-5.5-1-13 0-19"
-        stroke="#0a2e22"
+        stroke="#22453c"
         strokeWidth="1.4"
         strokeLinecap="round"
       />
@@ -44,7 +44,7 @@ export function Logo({
           }`}
         >
           Pro
-          <span className={onDark ? "text-[#7fd6a6]" : "text-leaf"}>Eat</span>
+          <span className={onDark ? "text-[#8daa91]" : "text-leaf"}>Eat</span>
         </span>
       )}
     </span>

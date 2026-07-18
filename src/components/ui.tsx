@@ -5,7 +5,7 @@ import type { ComponentProps, ReactNode } from "react";
 
 const buttonStyles = {
   primary:
-    "bg-leaf-deep text-white hover:bg-leaf dark:bg-leaf dark:text-[#08130d] dark:hover:bg-leaf-mid shadow-sm hover:shadow-md",
+    "bg-leaf-deep text-white hover:bg-leaf dark:bg-leaf dark:text-[#141a17] dark:hover:bg-leaf-mid shadow-sm hover:shadow-md",
   secondary:
     "border border-line bg-surface text-ink hover:border-leaf/40 hover:bg-leaf-faint",
   ghost: "text-muted hover:text-ink hover:bg-sand",

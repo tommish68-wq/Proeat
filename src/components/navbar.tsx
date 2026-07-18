@@ -104,8 +104,8 @@ export function Navbar() {
             href="/dashboard"
             className={`hidden rounded-full px-5 py-2.5 text-sm font-semibold shadow-sm transition-all hover:shadow-md hover:-translate-y-px active:translate-y-0 sm:inline-flex ${
               onDark
-                ? "bg-white text-[#0a2e22] hover:bg-sand"
-                : "bg-leaf-deep text-white hover:bg-leaf dark:bg-leaf dark:text-[#08130d] dark:hover:bg-leaf-mid"
+                ? "bg-white text-[#22453c] hover:bg-sand"
+                : "bg-leaf-deep text-white hover:bg-leaf dark:bg-leaf dark:text-[#141a17] dark:hover:bg-leaf-mid"
             }`}
           >
             Commencer
@@ -158,7 +158,7 @@ export function Navbar() {
               <Link
                 href="/dashboard"
                 onClick={() => setOpen(false)}
-                className="mt-3 block rounded-xl bg-leaf-deep px-4 py-3 text-center text-base font-semibold text-white dark:bg-leaf dark:text-[#08130d]"
+                className="mt-3 block rounded-xl bg-leaf-deep px-4 py-3 text-center text-base font-semibold text-white dark:bg-leaf dark:text-[#141a17]"
               >
                 Commencer
               </Link>

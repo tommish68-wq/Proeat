@@ -247,7 +247,7 @@ export function ProfileContent() {
           <Reveal>
             <div className="card p-7 text-center">
               <div className="relative mx-auto h-24 w-24">
-                <div className="grid h-24 w-24 place-items-center rounded-full bg-gradient-to-br from-leaf-deep to-leaf font-display text-3xl font-semibold text-white dark:from-leaf dark:to-leaf-mid dark:text-[#08130d]">
+                <div className="grid h-24 w-24 place-items-center rounded-full bg-gradient-to-br from-leaf-deep to-leaf font-display text-3xl font-semibold text-white dark:from-leaf dark:to-leaf-mid dark:text-[#141a17]">
                   {profile.name.trim().charAt(0).toUpperCase() || "P"}
                 </div>
                 <span className="absolute -bottom-1 -right-1 grid h-8 w-8 place-items-center rounded-full border-2 border-card bg-gold text-white">

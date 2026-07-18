@@ -88,16 +88,16 @@ export function MethodeContent() {
   return (
     <div>
       {/* ---------- Étapes ---------- */}
-      <section className="noise relative overflow-hidden bg-[#0c3427] py-24">
+      <section className="noise relative overflow-hidden bg-[#26493f] py-24">
         <Orb
           className="blur-3xl"
-          style={{ top: "10%", left: "-4%", width: 300, height: 300, background: "radial-gradient(circle at 40% 40%, rgba(127,214,166,0.28), transparent 70%)" }}
+          style={{ top: "10%", left: "-4%", width: 300, height: 300, background: "radial-gradient(circle at 40% 40%, rgba(141,170,145,0.28), transparent 70%)" }}
           duration={12}
           dy={26}
         />
         <Orb
           className="blur-3xl"
-          style={{ bottom: "-8%", right: "0%", width: 340, height: 340, background: "radial-gradient(circle at 40% 40%, rgba(231,217,168,0.2), transparent 70%)" }}
+          style={{ bottom: "-8%", right: "0%", width: 340, height: 340, background: "radial-gradient(circle at 40% 40%, rgba(221,210,178,0.2), transparent 70%)" }}
           duration={15}
           dy={-28}
           delay={1}
@@ -105,7 +105,7 @@ export function MethodeContent() {
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <div className="mx-auto max-w-2xl text-center">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#9fe0bc]">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#b9d0bd]">
                 La méthode ProEat
               </p>
               <h1 className="font-display text-3xl font-semibold tracking-tight text-white sm:text-5xl">
@@ -131,7 +131,7 @@ export function MethodeContent() {
                     </p>
                     <Link
                       href={s.href}
-                      className="group mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-[#9fe0bc]"
+                      className="group mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-[#b9d0bd]"
                     >
                       {s.cta}
                       <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -220,7 +220,7 @@ export function MethodeContent() {
             <div className="mt-12 text-center">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 rounded-full bg-leaf-deep px-8 py-3.5 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-leaf dark:bg-leaf dark:text-[#08130d]"
+                className="inline-flex items-center gap-2 rounded-full bg-leaf-deep px-8 py-3.5 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-leaf dark:bg-leaf dark:text-[#141a17]"
               >
                 Commencer maintenant
                 <ArrowRight className="h-4 w-4" />

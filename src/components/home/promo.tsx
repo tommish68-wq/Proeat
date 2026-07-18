@@ -22,7 +22,7 @@ const slides = [
     href: "/recettes",
     image:
       "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1600&q=75",
-    tint: "from-[#0a2e22]/85 via-[#0a2e22]/45",
+    tint: "from-[#22453c]/90 via-[#22453c]/60",
   },
   {
     id: "programme",
@@ -32,7 +32,7 @@ const slides = [
     cta: "Générer le mien",
     href: "/programme",
     image: asset("/images/gym-ambiance.jpg"),
-    tint: "from-[#101c16]/85 via-[#101c16]/45",
+    tint: "from-[#1d3a32]/90 via-[#1d3a32]/60",
   },
   {
     id: "seche",
@@ -43,7 +43,7 @@ const slides = [
     href: "/calculateur",
     image:
       "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=75",
-    tint: "from-[#0c3427]/85 via-[#0c3427]/45",
+    tint: "from-[#26493f]/90 via-[#26493f]/60",
   },
 ];
 
@@ -89,7 +89,7 @@ export function Promo() {
               transition={{ duration: 0.7, ease: [0.21, 0.47, 0.32, 0.98] }}
               className="absolute inset-0"
             >
-              <div className="absolute inset-0 bg-sand">
+              <div className="absolute inset-0 bg-[#26493f]">
                 <Image
                   src={slide.image}
                   alt=""
@@ -97,6 +97,7 @@ export function Promo() {
                   sizes="(max-width: 1280px) 100vw, 1216px"
                   className="object-cover"
                   priority={index === 0}
+                  fallbackTone="dark"
                 />
               </div>
               <div
@@ -128,7 +129,7 @@ export function Promo() {
                 </p>
                 <Link
                   href={slide.href}
-                  className="group mt-7 inline-flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-bold uppercase tracking-wide text-[#0a2e22] shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl active:translate-y-0"
+                  className="group mt-7 inline-flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-bold uppercase tracking-wide text-[#22453c] shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl active:translate-y-0"
                 >
                   {slide.cta}
                   <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -176,26 +177,27 @@ export function Promo() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
-        className="shadow-deep relative mt-6 overflow-hidden rounded-[2rem] border border-line bg-[#101c16]"
+        className="shadow-deep relative mt-6 overflow-hidden rounded-[2rem] border border-line bg-[#1d3a32]"
       >
         <div className="grid items-center sm:grid-cols-[0.9fr_1.1fr]">
           <div className="relative aspect-[16/10] sm:aspect-auto sm:self-stretch">
-            <div className="absolute inset-0 bg-sand">
+            <div className="absolute inset-0 bg-[#26493f]">
               <Image
                 src="https://images.unsplash.com/photo-1571115177098-24ec42ed204d?auto=format&fit=crop&w=1200&q=75"
                 alt="Porridge protéiné aux fruits rouges"
                 fill
                 sizes="(max-width: 640px) 100vw, 45vw"
                 className="object-cover"
+                fallbackTone="dark"
               />
             </div>
             <div
-              className="absolute inset-0 bg-gradient-to-t from-[#101c16] via-transparent to-transparent sm:bg-gradient-to-r sm:from-transparent sm:via-transparent sm:to-[#101c16]"
+              className="absolute inset-0 bg-gradient-to-t from-[#1d3a32] via-transparent to-transparent sm:bg-gradient-to-r sm:from-transparent sm:via-transparent sm:to-[#1d3a32]"
               aria-hidden
             />
           </div>
           <div className="px-7 pb-10 pt-2 text-center sm:px-12 sm:py-14 sm:text-left">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#9fe0bc]">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#b9d0bd]">
               Recette du moment
             </p>
             <h3 className="mt-3 font-sans text-3xl font-black uppercase leading-none tracking-tight text-white sm:text-4xl">
@@ -207,7 +209,7 @@ export function Promo() {
             </p>
             <Link
               href="/recettes"
-              className="group mt-7 inline-flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-bold uppercase tracking-wide text-[#0a2e22] shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl active:translate-y-0"
+              className="group mt-7 inline-flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-bold uppercase tracking-wide text-[#22453c] shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl active:translate-y-0"
             >
               Essayer
               <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />

@@ -5,6 +5,32 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { asset } from "@/lib/asset";
+import { Floaty, Orb } from "@/components/fx";
+
+/* Feuille abstraite flottante — clin d'œil organique dans la grille */
+function LeafShape({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 48 48"
+      aria-hidden
+      className={`pointer-events-none ${className}`}
+      fill="none"
+    >
+      <path
+        d="M24 44C12 39 6 29 6 16 6 10 8 5 10 2c14 2 26 10 30 22 2.5 7.5.5 15-4 20-4-.5-9-1-12 0Z"
+        fill="var(--leaf-mid)"
+        opacity="0.35"
+      />
+      <path
+        d="M24 44C15 32 14 18 18 6"
+        stroke="var(--leaf-deep)"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        opacity="0.5"
+      />
+    </svg>
+  );
+}
 
 /* ------------------------------------------------------------------ */
 /* Hero éditorial athlétique : grille apparente, typographie poster    */
@@ -62,6 +88,17 @@ export function Hero() {
           aria-hidden
           className="pointer-events-none absolute inset-y-0 left-1/2 hidden w-px bg-line lg:block"
         />
+
+        {/* Touches organiques : sphère sauge diffuse + feuille flottante */}
+        <Orb
+          className="blur-3xl"
+          style={{ top: "6%", right: "-4%", width: 300, height: 300, background: "radial-gradient(circle at 40% 40%, rgba(141,170,145,0.35), transparent 70%)" }}
+          duration={13}
+          dy={24}
+        />
+        <Floaty duration={7} dy={-10} className="absolute right-[46%] top-10 hidden lg:block">
+          <LeafShape className="h-10 w-10 rotate-12" />
+        </Floaty>
 
         <div className="grid gap-10 py-14 lg:grid-cols-2 lg:gap-0 lg:py-20">
           {/* ---------- Colonne texte ---------- */}

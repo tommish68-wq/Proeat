@@ -158,24 +158,24 @@ function FinalCta() {
   return (
     <section className="mx-auto max-w-7xl px-4 pb-28 sm:px-6 lg:px-8">
       <Reveal>
-        <div className="noise relative overflow-hidden rounded-[2.5rem] bg-[#0a2e22] px-6 py-24 text-center sm:px-16">
+        <div className="noise relative overflow-hidden rounded-[2.5rem] bg-[#22453c] px-6 py-24 text-center sm:px-16">
           <div
             aria-hidden
             className="absolute inset-0"
             style={{
               background:
-                "radial-gradient(44rem 24rem at 75% -10%, rgba(46,158,104,0.4), transparent 62%), radial-gradient(32rem 20rem at 12% 110%, rgba(185,154,95,0.3), transparent 62%)",
+                "radial-gradient(44rem 24rem at 75% -10%, rgba(141,170,145,0.4), transparent 62%), radial-gradient(32rem 20rem at 12% 110%, rgba(160,137,90,0.3), transparent 62%)",
             }}
           />
           <Orb
             className="blur-2xl"
-            style={{ top: "18%", left: "12%", width: 140, height: 140, background: "radial-gradient(circle at 40% 35%, rgba(159,224,188,0.35), transparent 70%)" }}
+            style={{ top: "18%", left: "12%", width: 140, height: 140, background: "radial-gradient(circle at 40% 35%, rgba(185,208,189,0.35), transparent 70%)" }}
             duration={9}
             dy={18}
           />
           <div className="relative">
             <span className="glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium text-white/85">
-              <Sparkles className="h-3.5 w-3.5 text-[#e7d9a8]" />
+              <Sparkles className="h-3.5 w-3.5 text-[#ddd2b2]" />
               Gratuit, sans inscription
             </span>
             <h2 className="mx-auto mt-7 max-w-2xl font-display text-3xl font-semibold tracking-tight text-white sm:text-5xl">
@@ -189,7 +189,7 @@ function FinalCta() {
             <div className="mt-10 flex flex-wrap justify-center gap-4">
               <Link
                 href="/dashboard"
-                className="group inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-base font-semibold text-[#0a2e22] shadow-glow transition-all duration-300 hover:-translate-y-0.5"
+                className="group inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-base font-semibold text-[#22453c] shadow-glow transition-all duration-300 hover:-translate-y-0.5"
               >
                 Ouvrir mon tableau de bord
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />

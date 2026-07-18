@@ -41,20 +41,20 @@ function Favorites({ onOpen }: { onOpen: (r: Recipe) => void }) {
   return (
     <section
       aria-label="La sélection ProEat"
-      className="noise relative mx-auto mt-14 max-w-7xl overflow-hidden rounded-[2rem] bg-[#0a2e22] px-6 py-10 sm:px-10"
+      className="noise relative mx-auto mt-14 max-w-7xl overflow-hidden rounded-[2rem] bg-[#22453c] px-6 py-10 sm:px-10"
     >
       <div
         aria-hidden
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(38rem 20rem at 85% -10%, rgba(46,158,104,0.35), transparent 62%), radial-gradient(26rem 16rem at 0% 110%, rgba(185,154,95,0.22), transparent 62%)",
+            "radial-gradient(38rem 20rem at 85% -10%, rgba(141,170,145,0.35), transparent 62%), radial-gradient(26rem 16rem at 0% 110%, rgba(160,137,90,0.22), transparent 62%)",
         }}
       />
       <div className="relative">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#9fe0bc]">
+            <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#b9d0bd]">
               <Heart className="h-3.5 w-3.5" />
               La sélection ProEat
             </p>
@@ -67,7 +67,7 @@ function Favorites({ onOpen }: { onOpen: (r: Recipe) => void }) {
           </div>
           <Link
             href="/calculateur"
-            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#0a2e22] shadow-lg transition-all hover:-translate-y-0.5"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#22453c] shadow-lg transition-all hover:-translate-y-0.5"
           >
             <Calculator className="h-4 w-4" />
             Calculer mes besoins
@@ -81,7 +81,7 @@ function Favorites({ onOpen }: { onOpen: (r: Recipe) => void }) {
               onClick={() => onOpen(r)}
               className="group w-60 shrink-0 snap-start overflow-hidden rounded-2xl bg-white/[0.06] text-left ring-1 ring-white/10 transition-all duration-300 hover:-translate-y-1 hover:bg-white/10 hover:ring-white/25"
             >
-              <div className="relative aspect-[4/3] overflow-hidden bg-[#14231c]">
+              <div className="relative aspect-[4/3] overflow-hidden bg-[#212724]">
                 <Image
                   src={r.image}
                   alt={r.title}
@@ -99,7 +99,7 @@ function Favorites({ onOpen }: { onOpen: (r: Recipe) => void }) {
                 <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-white">
                   {r.title}
                 </h3>
-                <p className="mt-2 text-xs font-semibold text-[#e0b46a]">
+                <p className="mt-2 text-xs font-semibold text-[#c9b280]">
                   {r.protein} g prot · {r.kcal} kcal
                 </p>
               </div>
@@ -327,7 +327,7 @@ function RecipeModal({
               className={`inline-flex flex-1 items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold transition-all duration-300 ${
                 added
                   ? "bg-leaf-soft text-leaf-deep"
-                  : "bg-leaf-deep text-white shadow-sm hover:-translate-y-px hover:bg-leaf hover:shadow-md dark:bg-leaf dark:text-[#08130d]"
+                  : "bg-leaf-deep text-white shadow-sm hover:-translate-y-px hover:bg-leaf hover:shadow-md dark:bg-leaf dark:text-[#141a17]"
               }`}
             >
               {added ? (
@@ -422,7 +422,7 @@ function RecipeModal({
                         className={`grid h-9 w-9 shrink-0 place-items-center rounded-full transition-all ${
                           pairAdded
                             ? "bg-leaf-soft text-leaf-deep"
-                            : "bg-leaf-deep text-white hover:scale-105 dark:bg-leaf dark:text-[#08130d]"
+                            : "bg-leaf-deep text-white hover:scale-105 dark:bg-leaf dark:text-[#141a17]"
                         }`}
                       >
                         {pairAdded ? (

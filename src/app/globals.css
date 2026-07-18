@@ -3,50 +3,50 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #faf8f3;
+  --background: #faf9f6;
   --surface: #ffffff;
   --card: #ffffff;
-  --sand: #f1eae0;
-  --sand-deep: #e4d9c8;
-  --ink: #14201a;
-  --muted: #5c6b62;
-  --leaf: #1f7a4d;
-  --leaf-deep: #0e3b2e;
-  --leaf-dark: #0a2e22;
-  --leaf-mid: #2e9e68;
-  --leaf-soft: #e6f0e9;
-  --leaf-faint: #f2f7f3;
-  --gold: #b99a5f;
-  --line: #e8e1d4;
-  --shadow: 20 32 26;
+  --sand: #f0e9da;
+  --sand-deep: #e8ddc7;
+  --ink: #2b2b2b;
+  --muted: #5f6b63;
+  --leaf: #3e7263;
+  --leaf-deep: #2f5d50;
+  --leaf-dark: #22453c;
+  --leaf-mid: #8daa91;
+  --leaf-soft: #e4ebe4;
+  --leaf-faint: #f2f5f1;
+  --gold: #a0895a;
+  --line: #e5dece;
+  --shadow: 34 46 40;
   /* Palette dataviz — validée CVD/contraste (protéines, glucides, lipides) */
-  --viz-protein: #1f7a4d;
+  --viz-protein: #1f7d56;
   --viz-carbs: #c8802f;
   --viz-fat: #3f6fae;
-  --viz-grid: #eee8db;
+  --viz-grid: #ece6d8;
 }
 
 .dark {
-  --background: #0b1310;
-  --surface: #101c16;
-  --card: #14231c;
-  --sand: #182720;
-  --sand-deep: #1e2f27;
-  --ink: #eef0e9;
-  --muted: #93a89b;
-  --leaf: #3aa76d;
-  --leaf-deep: #7fc9a2;
-  --leaf-dark: #dbeee2;
-  --leaf-mid: #46b97c;
-  --leaf-soft: #1b3229;
-  --leaf-faint: #14231c;
-  --gold: #cfb37e;
-  --line: #22362c;
+  --background: #161a18;
+  --surface: #1c211e;
+  --card: #212724;
+  --sand: #262c28;
+  --sand-deep: #2c332e;
+  --ink: #ecedea;
+  --muted: #9aa69d;
+  --leaf: #7fa98c;
+  --leaf-deep: #a9c4ad;
+  --leaf-dark: #dfe8e0;
+  --leaf-mid: #8daa91;
+  --leaf-soft: #2a3630;
+  --leaf-faint: #212724;
+  --gold: #c2af85;
+  --line: #2e352f;
   --shadow: 0 0 0;
-  --viz-protein: #2e9e68;
+  --viz-protein: #359970;
   --viz-carbs: #c8802f;
   --viz-fat: #4a7fb5;
-  --viz-grid: #1d3128;
+  --viz-grid: #2b322d;
 }
 
 @theme inline {
@@ -216,12 +216,12 @@ body {
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.08),
     0 12px 40px rgb(6 24 16 / 0.5),
-    0 0 80px rgb(46 158 104 / 0.18);
+    0 0 80px rgb(141 170 145 / 0.22);
 }
 
 /* ---------- Texte en dégradé tropical (hero sombre) ---------- */
 .text-gradient-tropical {
-  background: linear-gradient(100deg, #9fe0bc 0%, #5fc08c 45%, #e7d9a8 100%);
+  background: linear-gradient(100deg, #b9d0bd 0%, #8daa91 45%, #ddd2b2 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -279,5 +279,5 @@ body {
 .dark .chip[data-active="true"] {
   background: var(--leaf);
   border-color: var(--leaf);
-  color: #08130d;
+  color: #141a17;
 }
