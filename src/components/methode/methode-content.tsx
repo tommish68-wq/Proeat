@@ -88,16 +88,16 @@ export function MethodeContent() {
   return (
     <div>
       {/* ---------- Étapes ---------- */}
-      <section className="noise relative overflow-hidden bg-[#26493f] py-24">
+      <section className="noise relative overflow-hidden bg-[#30505c] py-24">
         <Orb
           className="blur-3xl"
-          style={{ top: "10%", left: "-4%", width: 300, height: 300, background: "radial-gradient(circle at 40% 40%, rgba(141,170,145,0.28), transparent 70%)" }}
+          style={{ top: "10%", left: "-4%", width: 300, height: 300, background: "radial-gradient(circle at 40% 40%, rgba(94,124,116,0.28), transparent 70%)" }}
           duration={12}
           dy={26}
         />
         <Orb
           className="blur-3xl"
-          style={{ bottom: "-8%", right: "0%", width: 340, height: 340, background: "radial-gradient(circle at 40% 40%, rgba(221,210,178,0.2), transparent 70%)" }}
+          style={{ bottom: "-8%", right: "0%", width: 340, height: 340, background: "radial-gradient(circle at 40% 40%, rgba(217,197,165,0.2), transparent 70%)" }}
           duration={15}
           dy={-28}
           delay={1}
@@ -105,7 +105,7 @@ export function MethodeContent() {
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <div className="mx-auto max-w-2xl text-center">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#b9d0bd]">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#d9c5a5]">
                 La méthode ProEat
               </p>
               <h1 className="font-display text-3xl font-semibold tracking-tight text-white sm:text-5xl">
@@ -131,7 +131,7 @@ export function MethodeContent() {
                     </p>
                     <Link
                       href={s.href}
-                      className="group mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-[#b9d0bd]"
+                      className="group mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-[#c6d6d3]"
                     >
                       {s.cta}
                       <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -145,7 +145,7 @@ export function MethodeContent() {
       </section>
 
       {/* ---------- Engagements ---------- */}
-      <section className="relative overflow-hidden bg-sand/50 py-24 dark:bg-sand/30">
+      <section className="relative overflow-hidden bg-sand/50 py-24">
         <Orb
           className="blur-3xl"
           style={{ top: "20%", right: "-5%", width: 320, height: 320, background: "radial-gradient(circle at 40% 40%, color-mix(in srgb, var(--gold) 25%, transparent), transparent 70%)" }}
@@ -220,7 +220,7 @@ export function MethodeContent() {
             <div className="mt-12 text-center">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 rounded-full bg-leaf-deep px-8 py-3.5 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-leaf dark:bg-leaf dark:text-[#141a17]"
+                className="inline-flex items-center gap-2 rounded-full bg-leaf-deep px-8 py-3.5 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-leaf"
               >
                 Commencer maintenant
                 <ArrowRight className="h-4 w-4" />

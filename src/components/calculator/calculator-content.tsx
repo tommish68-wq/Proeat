@@ -252,7 +252,7 @@ export function CalculatorContent() {
                             ["Lipides", result.macros[goal].fat, "var(--viz-fat)"],
                           ] as const
                         ).map(([label, grams, color]) => (
-                          <div key={label} className="rounded-xl bg-sand/60 p-4 dark:bg-sand">
+                          <div key={label} className="rounded-xl bg-sand/60 p-4">
                             <span
                               className="mx-auto block h-2 w-8 rounded-full"
                               style={{ background: color }}

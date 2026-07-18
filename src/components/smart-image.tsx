@@ -22,13 +22,13 @@ export function SmartImage({ fallbackTone = "light", ...props }: SmartImageProps
         aria-hidden="true"
         className={`absolute inset-0 grid place-items-center ${
           fallbackTone === "dark"
-            ? "bg-gradient-to-br from-[#2f5d50] via-[#26493f] to-[#1d3a32]"
+            ? "bg-gradient-to-br from-[#34555e] via-[#30505c] to-[#22383f]"
             : "bg-gradient-to-br from-leaf-soft via-sand to-sand-deep"
         }`}
       >
         <Leaf
           className={`h-10 w-10 ${
-            fallbackTone === "dark" ? "text-[#8daa91]/50" : "text-leaf/40"
+            fallbackTone === "dark" ? "text-[#9db4ae]/50" : "text-leaf/40"
           }`}
         />
       </div>

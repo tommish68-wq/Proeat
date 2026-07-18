@@ -4,9 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, Moon, Sun, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Logo } from "@/components/logo";
-import { useTheme } from "@/components/theme-provider";
 
 /* Navigation complète : chaque univers du site est visible d'un coup d'œil. */
 const links = [
@@ -22,7 +21,6 @@ const links = [
 
 export function Navbar() {
   const pathname = usePathname();
-  const { theme, toggle } = useTheme();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -83,29 +81,12 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={toggle}
-            aria-label={
-              theme === "dark" ? "Activer le mode clair" : "Activer le mode sombre"
-            }
-            className={`grid h-10 w-10 place-items-center rounded-full border transition-all hover:scale-105 active:scale-95 ${
-              onDark
-                ? "border-white/20 bg-white/10 text-white/80 hover:text-white"
-                : "border-line bg-surface text-muted hover:text-ink hover:border-leaf/40"
-            }`}
-          >
-            {theme === "dark" ? (
-              <Sun className="h-[18px] w-[18px]" />
-            ) : (
-              <Moon className="h-[18px] w-[18px]" />
-            )}
-          </button>
           <Link
             href="/dashboard"
             className={`hidden rounded-full px-5 py-2.5 text-sm font-semibold shadow-sm transition-all hover:shadow-md hover:-translate-y-px active:translate-y-0 sm:inline-flex ${
               onDark
-                ? "bg-white text-[#22453c] hover:bg-sand"
-                : "bg-leaf-deep text-white hover:bg-leaf dark:bg-leaf dark:text-[#141a17] dark:hover:bg-leaf-mid"
+                ? "bg-white text-[#2a454f] hover:bg-sand"
+                : "bg-leaf-deep text-white hover:bg-leaf"
             }`}
           >
             Commencer
@@ -158,7 +139,7 @@ export function Navbar() {
               <Link
                 href="/dashboard"
                 onClick={() => setOpen(false)}
-                className="mt-3 block rounded-xl bg-leaf-deep px-4 py-3 text-center text-base font-semibold text-white dark:bg-leaf dark:text-[#141a17]"
+                className="mt-3 block rounded-xl bg-leaf-deep px-4 py-3 text-center text-base font-semibold text-white"
               >
                 Commencer
               </Link>

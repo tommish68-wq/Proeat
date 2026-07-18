@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
-import { Anton, Bricolage_Grotesque, IBM_Plex_Mono, Instrument_Sans } from "next/font/google";
+import { Anton, Fraunces, IBM_Plex_Mono, Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 
-const instrument = Instrument_Sans({
+const inter = Inter({
   variable: "--font-body",
   subsets: ["latin"],
   display: "swap",
 });
 
-const bricolage = Bricolage_Grotesque({
+const fraunces = Fraunces({
   variable: "--font-display-face",
   subsets: ["latin"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -67,22 +67,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `try{if(localStorage.getItem("proeat-theme")==="dark")document.documentElement.classList.add("dark")}catch(e){}`,
-          }}
-        />
-      </head>
+    <html lang="fr">
       <body
-        className={`${instrument.variable} ${bricolage.variable} ${anton.variable} ${plexMono.variable} min-h-screen flex flex-col antialiased`}
+        className={`${inter.variable} ${fraunces.variable} ${anton.variable} ${plexMono.variable} min-h-screen flex flex-col antialiased`}
       >
-        <ThemeProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </ThemeProvider>
+        <Navbar />
+        <main className="flex-1">{children}</main>
+        <Footer />
       </body>
     </html>
   );

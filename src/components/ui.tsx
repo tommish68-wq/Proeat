@@ -5,7 +5,7 @@ import type { ComponentProps, ReactNode } from "react";
 
 const buttonStyles = {
   primary:
-    "bg-leaf-deep text-white hover:bg-leaf dark:bg-leaf dark:text-[#141a17] dark:hover:bg-leaf-mid shadow-sm hover:shadow-md",
+    "bg-leaf-deep text-white hover:bg-leaf shadow-sm hover:shadow-md",
   secondary:
     "border border-line bg-surface text-ink hover:border-leaf/40 hover:bg-leaf-faint",
   ghost: "text-muted hover:text-ink hover:bg-sand",
@@ -87,7 +87,7 @@ export function SectionHeading({
       className={`max-w-2xl ${align === "center" ? "mx-auto text-center" : ""}`}
     >
       {eyebrow && (
-        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-leaf">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-gold">
           {eyebrow}
         </p>
       )}

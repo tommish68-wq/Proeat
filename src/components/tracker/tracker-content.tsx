@@ -295,7 +295,7 @@ export function TrackerContent() {
             <div className="card p-7">
               <h2 className="font-semibold text-ink">Journal du jour</h2>
               {todayEntries.length === 0 ? (
-                <p className="mt-6 rounded-xl bg-sand/50 p-6 text-center text-sm text-muted dark:bg-sand">
+                <p className="mt-6 rounded-xl bg-sand/50 p-6 text-center text-sm text-muted">
                   Aucun repas enregistré aujourd’hui. Ajoutez votre premier
                   repas pour commencer le suivi.
                 </p>

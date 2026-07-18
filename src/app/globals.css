@@ -2,51 +2,33 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ------------------------------------------------------------------ */
+/* Nordic Botanical — palette scandinave désaturée.                    */
+/* --bg #FAFBF8 · --surface #D7DAD3 · --primary #34555E                */
+/* --secondary #5E7C74 · --accent #A37B4D                              */
+/* ------------------------------------------------------------------ */
 :root {
-  --background: #faf9f6;
+  --background: #fafbf8;
   --surface: #ffffff;
   --card: #ffffff;
-  --sand: #f0e9da;
-  --sand-deep: #e8ddc7;
-  --ink: #2b2b2b;
-  --muted: #5f6b63;
-  --leaf: #3e7263;
-  --leaf-deep: #2f5d50;
-  --leaf-dark: #22453c;
-  --leaf-mid: #8daa91;
-  --leaf-soft: #e4ebe4;
-  --leaf-faint: #f2f5f1;
-  --gold: #a0895a;
-  --line: #e5dece;
-  --shadow: 34 46 40;
-  /* Palette dataviz — validée CVD/contraste (protéines, glucides, lipides) */
-  --viz-protein: #1f7d56;
-  --viz-carbs: #c8802f;
-  --viz-fat: #3f6fae;
-  --viz-grid: #ece6d8;
-}
-
-.dark {
-  --background: #161a18;
-  --surface: #1c211e;
-  --card: #212724;
-  --sand: #262c28;
-  --sand-deep: #2c332e;
-  --ink: #ecedea;
-  --muted: #9aa69d;
-  --leaf: #7fa98c;
-  --leaf-deep: #a9c4ad;
-  --leaf-dark: #dfe8e0;
-  --leaf-mid: #8daa91;
-  --leaf-soft: #2a3630;
-  --leaf-faint: #212724;
-  --gold: #c2af85;
-  --line: #2e352f;
-  --shadow: 0 0 0;
-  --viz-protein: #359970;
-  --viz-carbs: #c8802f;
-  --viz-fat: #4a7fb5;
-  --viz-grid: #2b322d;
+  --sand: #e8eae4;
+  --sand-deep: #d7dad3;
+  --ink: #34555e;
+  --muted: #4f6a62;
+  --leaf: #587570;
+  --leaf-deep: #34555e;
+  --leaf-dark: #263f47;
+  --leaf-mid: #9db4ae;
+  --leaf-soft: #e2e9e6;
+  --leaf-faint: #f1f4f2;
+  --gold: #a37b4d;
+  --line: #e0e3dc;
+  --shadow: 42 58 63;
+  /* Palette dataviz (protéines, glucides, lipides) — libellés directs */
+  --viz-protein: #34555e;
+  --viz-carbs: #a37b4d;
+  --viz-fat: #4a7d62;
+  --viz-grid: #e7eae3;
 }
 
 @theme inline {
@@ -66,7 +48,7 @@
   --color-gold: var(--gold);
   --color-line: var(--line);
   --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-display-face), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-face), Georgia, "Times New Roman", serif;
   --font-poster: var(--font-anton), "Arial Narrow", Impact, sans-serif;
   --font-tech: var(--font-plex-mono), ui-monospace, monospace;
 }
@@ -215,13 +197,13 @@ body {
 .shadow-glow {
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.08),
-    0 12px 40px rgb(6 24 16 / 0.5),
-    0 0 80px rgb(141 170 145 / 0.22);
+    0 12px 40px rgb(12 24 28 / 0.5),
+    0 0 80px rgb(94 124 116 / 0.22);
 }
 
-/* ---------- Texte en dégradé tropical (hero sombre) ---------- */
+/* ---------- Texte en dégradé nordique (bandeaux pétrole) ---------- */
 .text-gradient-tropical {
-  background: linear-gradient(100deg, #b9d0bd 0%, #8daa91 45%, #ddd2b2 100%);
+  background: linear-gradient(100deg, #c6d6d3 0%, #9db4ae 45%, #d9c5a5 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -274,10 +256,4 @@ body {
   background: var(--leaf-deep);
   border-color: var(--leaf-deep);
   color: #fff;
-}
-
-.dark .chip[data-active="true"] {
-  background: var(--leaf);
-  border-color: var(--leaf);
-  color: #141a17;
 }

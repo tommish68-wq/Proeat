@@ -45,7 +45,7 @@ export function Training({ ctaHref = "/programme" }: { ctaHref?: string }) {
             {/* Carte flottante : la séance en cours */}
             <Floaty duration={5.5} className="absolute -right-3 top-6 sm:-right-6">
               <div className="glass shadow-deep flex items-center gap-3 rounded-2xl px-4 py-3">
-                <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#6f9681]/30 text-[#b9d0bd]">
+                <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#6f9681]/30 text-[#c6d6d3]">
                   <Dumbbell className="h-4 w-4" />
                 </span>
                 <div>
@@ -58,7 +58,7 @@ export function Training({ ctaHref = "/programme" }: { ctaHref?: string }) {
             </Floaty>
             <Floaty duration={6.5} delay={1} dy={-12} className="absolute -left-3 bottom-6 sm:-left-6">
               <div className="glass shadow-deep flex items-center gap-3 rounded-2xl px-4 py-3">
-                <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#a0895a]/25 text-[#ddd2b2]">
+                <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#a0895a]/25 text-[#d9c5a5]">
                   <Timer className="h-4 w-4" />
                 </span>
                 <div>
@@ -101,7 +101,7 @@ export function Training({ ctaHref = "/programme" }: { ctaHref?: string }) {
           <Reveal delay={0.35}>
             <Link
               href={ctaHref}
-              className="group mt-9 inline-flex items-center gap-2 rounded-full bg-leaf-deep px-8 py-3.5 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-leaf hover:shadow-md dark:bg-leaf dark:text-[#141a17]"
+              className="group mt-9 inline-flex items-center gap-2 rounded-full bg-leaf-deep px-8 py-3.5 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-leaf hover:shadow-md"
             >
               Générer mon programme
               <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />

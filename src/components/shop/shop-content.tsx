@@ -32,7 +32,7 @@ function ProductCard({ product, onBuy }: { product: Product; onBuy: () => void }
       className="card card-hover flex h-full flex-col overflow-hidden"
     >
       {/* Couverture stylisée de l'e-book */}
-      <div className="relative flex aspect-[16/9] items-center justify-center overflow-hidden bg-gradient-to-br from-leaf-dark via-leaf-deep to-leaf dark:from-leaf-soft dark:via-sand-deep dark:to-sand">
+      <div className="relative flex aspect-[16/9] items-center justify-center overflow-hidden bg-gradient-to-br from-leaf-dark via-leaf-deep to-leaf">
         <div
           className="absolute inset-0 opacity-20"
           style={{
@@ -40,15 +40,15 @@ function ProductCard({ product, onBuy }: { product: Product; onBuy: () => void }
               "radial-gradient(18rem 10rem at 85% 10%, rgba(255,255,255,0.35), transparent 60%)",
           }}
         />
-        <div className="relative flex h-28 w-20 flex-col items-center justify-between rounded-lg border border-white/20 bg-white/10 p-2 shadow-2xl backdrop-blur-sm transition-transform duration-500 group-hover:scale-105 dark:border-black/10 dark:bg-black/10">
+        <div className="relative flex h-28 w-20 flex-col items-center justify-between rounded-lg border border-white/20 bg-white/10 p-2 shadow-2xl backdrop-blur-sm transition-transform duration-500 group-hover:scale-105">
           <span className="text-2xl">{product.emoji}</span>
-          <span className="text-center text-[8px] font-semibold uppercase leading-tight tracking-wider text-white dark:text-ink">
+          <span className="text-center text-[8px] font-semibold uppercase leading-tight tracking-wider text-white">
             ProEat
           </span>
         </div>
         {product.bestseller && (
           <span className="absolute left-3 top-3">
-            <Badge tone="gold" className="bg-gold/90 text-white dark:text-[#1a140a]">
+            <Badge tone="gold" className="bg-gold/90 text-white">
               <Sparkles className="h-3 w-3" />
               Recommandé
             </Badge>

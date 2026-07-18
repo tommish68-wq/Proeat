@@ -129,14 +129,14 @@ export function DashboardContent() {
       <Reveal delay={0.05}>
         <Link
           href="/premium"
-          className="group relative mt-6 flex flex-wrap items-center justify-between gap-4 overflow-hidden rounded-2xl bg-[#22453c] px-6 py-5 transition-transform duration-300 hover:-translate-y-0.5"
+          className="group relative mt-6 flex flex-wrap items-center justify-between gap-4 overflow-hidden rounded-2xl bg-[#2a454f] px-6 py-5 transition-transform duration-300 hover:-translate-y-0.5"
         >
           <div
             aria-hidden
             className="absolute inset-0"
             style={{
               background:
-                "radial-gradient(24rem 10rem at 90% 0%, rgba(160,137,90,0.35), transparent 60%), radial-gradient(20rem 10rem at 5% 100%, rgba(141,170,145,0.35), transparent 60%)",
+                "radial-gradient(24rem 10rem at 90% 0%, rgba(163,123,77,0.35), transparent 60%), radial-gradient(20rem 10rem at 5% 100%, rgba(94,124,116,0.35), transparent 60%)",
             }}
           />
           <div className="relative flex items-center gap-4">
@@ -152,7 +152,7 @@ export function DashboardContent() {
               </p>
             </div>
           </div>
-          <span className="relative inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-[#22453c] shadow-lg transition-transform duration-300 group-hover:translate-x-1">
+          <span className="relative inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-[#2a454f] shadow-lg transition-transform duration-300 group-hover:translate-x-1">
             Découvrir
             <ArrowRight className="h-4 w-4" />
           </span>
@@ -229,7 +229,7 @@ export function DashboardContent() {
                 <Dumbbell className="h-5 w-5 text-leaf" />
                 Entraînement du jour
               </h2>
-              <div className="mt-5 flex-1 rounded-2xl bg-gradient-to-br from-leaf-dark to-leaf-deep p-6 text-white dark:from-leaf-soft dark:to-sand-deep dark:text-ink">
+              <div className="mt-5 flex-1 rounded-2xl bg-gradient-to-br from-leaf-dark to-leaf-deep p-6 text-white">
                 <p className="text-xs uppercase tracking-wider opacity-70">
                   {new Date().toLocaleDateString("fr-FR", { weekday: "long" })}
                 </p>
@@ -269,7 +269,7 @@ export function DashboardContent() {
                 {weightSeries.length > 1 ? (
                   <LineChart data={weightSeries} unit=" kg" height={230} />
                 ) : (
-                  <p className="rounded-xl bg-sand/50 p-8 text-center text-sm text-muted dark:bg-sand">
+                  <p className="rounded-xl bg-sand/50 p-8 text-center text-sm text-muted">
                     Enregistrez au moins deux pesées dans le tracker pour voir
                     votre courbe d’évolution.
                   </p>

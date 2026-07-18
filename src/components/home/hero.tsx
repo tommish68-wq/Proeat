@@ -92,7 +92,7 @@ export function Hero() {
         {/* Touches organiques : sphère sauge diffuse + feuille flottante */}
         <Orb
           className="blur-3xl"
-          style={{ top: "6%", right: "-4%", width: 300, height: 300, background: "radial-gradient(circle at 40% 40%, rgba(141,170,145,0.35), transparent 70%)" }}
+          style={{ top: "6%", right: "-4%", width: 300, height: 300, background: "radial-gradient(circle at 40% 40%, rgba(94,124,116,0.35), transparent 70%)" }}
           duration={13}
           dy={24}
         />
@@ -105,7 +105,7 @@ export function Hero() {
           <div className="lg:pr-12">
             <motion.p
               {...fadeUp(0)}
-              className="font-tech text-xs uppercase tracking-[0.18em] text-leaf"
+              className="font-tech text-xs uppercase tracking-[0.18em] text-gold"
             >
               01 / Nutrition · Musculation · Bien-être
             </motion.p>
@@ -132,18 +132,18 @@ export function Hero() {
               résultats durables.
             </motion.p>
 
-            {/* CTA rectangulaires nets */}
+            {/* CTA pilule — pétrole plein / pierre en contour */}
             <motion.div {...fadeUp(0.24)} className="mt-9 flex flex-wrap gap-3">
               <Link
                 href="/dashboard"
-                className="group inline-flex items-center gap-3 border-2 border-ink bg-ink px-7 py-4 font-tech text-xs font-medium uppercase tracking-[0.16em] text-background transition-colors duration-200 hover:bg-leaf-deep hover:border-leaf-deep dark:hover:bg-leaf dark:hover:border-leaf"
+                className="group inline-flex items-center gap-3 rounded-full bg-leaf-deep px-7 py-4 font-tech text-xs font-medium uppercase tracking-[0.16em] text-white transition-colors duration-200 hover:bg-leaf-dark"
               >
                 Commencer gratuitement
                 <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </Link>
               <Link
                 href="/recettes"
-                className="inline-flex items-center gap-3 border-2 border-ink px-7 py-4 font-tech text-xs font-medium uppercase tracking-[0.16em] text-ink transition-colors duration-200 hover:bg-ink hover:text-background"
+                className="inline-flex items-center gap-3 rounded-full border border-sand-deep bg-sand/50 px-7 py-4 font-tech text-xs font-medium uppercase tracking-[0.16em] text-leaf-deep transition-colors duration-200 hover:bg-sand-deep"
               >
                 Voir les recettes
               </Link>
