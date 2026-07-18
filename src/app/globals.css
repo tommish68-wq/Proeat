@@ -65,8 +65,8 @@
   --color-leaf-faint: var(--leaf-faint);
   --color-gold: var(--gold);
   --color-line: var(--line);
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-face), ui-sans-serif, system-ui, sans-serif;
   --font-poster: var(--font-anton), "Arial Narrow", Impact, sans-serif;
   --font-tech: var(--font-plex-mono), ui-monospace, monospace;
 }
@@ -84,15 +84,7 @@
   }
 }
 
-@keyframes marquee {
-  to {
-    transform: translateX(-50%);
-  }
-}
 
-.animate-marquee {
-  animation: marquee 24s linear infinite;
-}
 
 html {
   scroll-behavior: smooth;
@@ -101,7 +93,7 @@ html {
 body {
   background: var(--background);
   color: var(--ink);
-  font-family: var(--font-sans);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   transition: background-color 0.35s ease, color 0.35s ease;
 }

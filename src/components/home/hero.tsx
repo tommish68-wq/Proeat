@@ -167,34 +167,6 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Bandeau défilant façon marque athlétique */}
-      <div
-        className="overflow-hidden border-t border-line bg-ink py-3"
-        aria-hidden
-      >
-        <div className="animate-marquee flex w-max">
-          {[0, 1].map((copy) => (
-            <span
-              key={copy}
-              className="flex shrink-0 items-center font-poster text-lg uppercase tracking-wide text-background"
-            >
-              {[
-                "Nutrition",
-                "Musculation",
-                "Progression",
-                "100 % gratuit",
-                "Recettes & macros",
-                "Zéro pub",
-              ].map((word) => (
-                <span key={word} className="flex items-center">
-                  <span className="px-6">{word}</span>
-                  <span className="text-leaf">✦</span>
-                </span>
-              ))}
-            </span>
-          ))}
-        </div>
-      </div>
     </section>
   );
 }

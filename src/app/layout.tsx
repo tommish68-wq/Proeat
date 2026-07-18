@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { Anton, Fraunces, IBM_Plex_Mono, Inter } from "next/font/google";
+import { Anton, Bricolage_Grotesque, IBM_Plex_Mono, Instrument_Sans } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 
-const inter = Inter({
-  variable: "--font-inter",
+const instrument = Instrument_Sans({
+  variable: "--font-body",
   subsets: ["latin"],
   display: "swap",
 });
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-display-face",
   subsets: ["latin"],
   display: "swap",
 });
@@ -76,7 +76,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} ${fraunces.variable} ${anton.variable} ${plexMono.variable} min-h-screen flex flex-col antialiased`}
+        className={`${instrument.variable} ${bricolage.variable} ${anton.variable} ${plexMono.variable} min-h-screen flex flex-col antialiased`}
       >
         <ThemeProvider>
           <Navbar />
