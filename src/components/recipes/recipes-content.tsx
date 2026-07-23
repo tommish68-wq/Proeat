@@ -9,6 +9,7 @@ import {
   Calculator,
   Check,
   ChefHat,
+  ChevronDown,
   Clock,
   Flame,
   Heart,
@@ -624,6 +625,14 @@ export function RecipesContent() {
   const [selected, setSelected] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<"liste" | "grille">("liste");
+  const [openCats, setOpenCats] = useState<MealCategory[]>(["petit-dejeuner"]);
+
+  const searching = query.length > 0 || activeTags.length > 0;
+
+  const toggleCat = (id: MealCategory) =>
+    setOpenCats((prev) =>
+      prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
+    );
 
   // skeleton loading à l'arrivée sur la page
   useEffect(() => {
@@ -773,13 +782,68 @@ export function RecipesContent() {
             </p>
           </div>
         ) : view === "liste" ? (
-          <motion.div layout className="mx-auto max-w-4xl space-y-3">
-            <AnimatePresence mode="popLayout">
-              {filtered.map((r) => (
-                <RecipeRow key={r.id} recipe={r} onOpen={() => setSelected(r)} />
-              ))}
-            </AnimatePresence>
-          </motion.div>
+          searching || category !== "toutes" ? (
+            /* Recherche ou filtre actif : résultats à plat, directement visibles */
+            <motion.div layout className="mx-auto max-w-4xl space-y-3">
+              <AnimatePresence mode="popLayout">
+                {filtered.map((r) => (
+                  <RecipeRow key={r.id} recipe={r} onOpen={() => setSelected(r)} />
+                ))}
+              </AnimatePresence>
+            </motion.div>
+          ) : (
+            /* Liste déroulante : une section repliable par type de repas */
+            <div className="mx-auto max-w-4xl space-y-3">
+              {categories.map(([id, label]) => {
+                const items = filtered.filter((r) => r.category === id);
+                if (!items.length) return null;
+                const open = openCats.includes(id);
+                return (
+                  <div key={id} className="card overflow-hidden">
+                    <button
+                      onClick={() => toggleCat(id)}
+                      aria-expanded={open}
+                      className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left sm:px-6"
+                    >
+                      <span className="flex items-center gap-3">
+                        <span className="font-display text-lg font-semibold text-ink">
+                          {label}
+                        </span>
+                        <span className="rounded-full bg-leaf-soft px-2.5 py-0.5 text-xs font-semibold text-leaf-deep">
+                          {items.length} recette{items.length > 1 ? "s" : ""}
+                        </span>
+                      </span>
+                      <ChevronDown
+                        className={`h-5 w-5 shrink-0 text-muted transition-transform duration-300 ${
+                          open ? "rotate-180 text-leaf" : ""
+                        }`}
+                      />
+                    </button>
+                    <AnimatePresence initial={false}>
+                      {open && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: "easeInOut" }}
+                        >
+                          <div className="space-y-2.5 px-3 pb-4 sm:px-4">
+                            {items.map((r) => (
+                              <RecipeRow
+                                key={r.id}
+                                recipe={r}
+                                onOpen={() => setSelected(r)}
+                              />
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
+            </div>
+          )
         ) : (
           <motion.div layout className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <AnimatePresence mode="popLayout">
