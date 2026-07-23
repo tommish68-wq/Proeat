@@ -612,6 +612,24 @@ function RecipeModal({
               </ol>
             </div>
           </div>
+
+          {/* Les astuces du chef */}
+          {recipe.chefTips && recipe.chefTips.length > 0 && (
+            <div className="mt-8 rounded-2xl border border-gold/25 bg-gold/10 p-5">
+              <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-[#7c5a33]">
+                <ChefHat className="h-4 w-4" />
+                Les astuces du chef
+              </h3>
+              <ul className="mt-3 space-y-2.5">
+                {recipe.chefTips.map((tip) => (
+                  <li key={tip} className="flex items-start gap-2.5 text-sm leading-relaxed text-ink">
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
+                    {tip}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </motion.div>
     </motion.div>
