@@ -12,10 +12,14 @@ import {
   Clock,
   Flame,
   Heart,
+  LayoutGrid,
   NotebookPen,
+  Rows3,
   Search,
+  UtensilsCrossed,
   X,
 } from "lucide-react";
+import { Floaty, Orb } from "@/components/fx";
 import {
   categoryLabels,
   recipes,
@@ -111,6 +115,99 @@ function Favorites({ onOpen }: { onOpen: (r: Recipe) => void }) {
   );
 }
 
+/* ------------------------------------------------------------------ */
+/* La gamme plats — cartes flottantes légèrement inclinées             */
+/* ------------------------------------------------------------------ */
+
+const floatStyles = [
+  { rotate: "-rotate-3", duration: 6.2, dy: -12, delay: 0, offset: "lg:mt-10" },
+  { rotate: "rotate-2", duration: 7.4, dy: -16, delay: 0.5, offset: "lg:mt-0" },
+  { rotate: "-rotate-1", duration: 6.8, dy: -10, delay: 1, offset: "lg:mt-16" },
+  { rotate: "rotate-3", duration: 7.9, dy: -14, delay: 0.3, offset: "lg:mt-5" },
+  { rotate: "-rotate-2", duration: 7.1, dy: -12, delay: 0.8, offset: "lg:mt-12" },
+];
+
+function FloatingDishes({ onOpen }: { onOpen: (r: Recipe) => void }) {
+  const plats = recipes
+    .filter((r) => r.category === "dejeuner" || r.category === "diner")
+    .slice(0, 5);
+  if (!plats.length) return null;
+  return (
+    <section
+      aria-label="La gamme plats"
+      className="relative mt-20 overflow-hidden bg-sand/50 py-20"
+    >
+      <Orb
+        className="blur-3xl"
+        style={{ top: "-10%", left: "-4%", width: 320, height: 320, background: "radial-gradient(circle at 40% 40%, rgba(94,124,116,0.25), transparent 70%)" }}
+        duration={13}
+        dy={26}
+      />
+      <Orb
+        className="blur-3xl"
+        style={{ bottom: "-12%", right: "-2%", width: 300, height: 300, background: "radial-gradient(circle at 40% 40%, rgba(163,123,77,0.18), transparent 70%)" }}
+        duration={15}
+        dy={-24}
+        delay={1}
+      />
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <Reveal>
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-gold">
+              <UtensilsCrossed className="h-3.5 w-3.5" />
+              La gamme plats
+            </p>
+            <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+              Des plats complets qui tiennent leurs macros
+            </h2>
+            <p className="mt-3 text-base text-muted">
+              Déjeuners et dîners pensés pour la performance : cliquez sur un
+              plat pour la recette complète.
+            </p>
+          </div>
+        </Reveal>
+        <div className="mt-14 grid grid-cols-2 items-start gap-5 sm:grid-cols-3 lg:grid-cols-5">
+          {plats.map((r, i) => {
+            const f = floatStyles[i % floatStyles.length];
+            return (
+              <Floaty
+                key={r.id}
+                duration={f.duration}
+                dy={f.dy}
+                delay={f.delay}
+                className={f.offset}
+              >
+                <button
+                  onClick={() => onOpen(r)}
+                  className={`group block w-full overflow-hidden rounded-2xl bg-card text-left shadow-deep ring-1 ring-line transition-transform duration-500 hover:rotate-0 hover:scale-[1.04] ${f.rotate}`}
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden bg-sand">
+                    <Image
+                      src={r.image}
+                      alt={r.title}
+                      fill
+                      sizes="(max-width: 640px) 50vw, 240px"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="p-3.5">
+                    <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-ink">
+                      {r.title}
+                    </h3>
+                    <p className="mt-1.5 text-xs font-semibold text-muted">
+                      {r.protein} g prot · {r.kcal} kcal
+                    </p>
+                  </div>
+                </button>
+              </Floaty>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function MacroPill({ label, value, color }: { label: string; value: number; color: string }) {
   return (
     <span className="inline-flex items-center gap-1.5 text-xs text-muted">
@@ -170,6 +267,54 @@ function RecipeCard({ recipe, onOpen }: { recipe: Recipe; onOpen: () => void }) 
           {recipe.time} min
         </div>
       </div>
+    </motion.button>
+  );
+}
+
+/* Rangée compacte — la vue liste condense le catalogue */
+function RecipeRow({ recipe, onOpen }: { recipe: Recipe; onOpen: () => void }) {
+  return (
+    <motion.button
+      layout
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.25 }}
+      onClick={onOpen}
+      className="card card-hover group flex w-full items-center gap-4 p-3 text-left sm:gap-5 sm:p-4"
+    >
+      <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-xl bg-sand sm:h-20 sm:w-28">
+        <Image
+          src={recipe.image}
+          alt=""
+          fill
+          sizes="112px"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center gap-2">
+          <h3 className="truncate font-semibold text-ink">{recipe.title}</h3>
+          {recipe.badge && (
+            <span className="hidden shrink-0 rounded-full bg-gold px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#241a10] sm:inline-flex">
+              {recipe.badge}
+            </span>
+          )}
+        </div>
+        <p className="mt-1 text-xs text-muted">
+          {categoryLabels[recipe.category]} · {recipe.time} min
+        </p>
+        <div className="mt-1.5 hidden flex-wrap items-center gap-x-4 gap-y-1 sm:flex">
+          <MacroPill label="prot." value={recipe.protein} color="var(--viz-protein)" />
+          <MacroPill label="gluc." value={recipe.carbs} color="var(--viz-carbs)" />
+          <MacroPill label="lip." value={recipe.fat} color="var(--viz-fat)" />
+        </div>
+      </div>
+      <div className="shrink-0 text-right">
+        <p className="text-sm font-bold text-ink">{recipe.kcal} kcal</p>
+        <p className="text-xs text-muted">{recipe.protein} g prot</p>
+      </div>
+      <ArrowRight className="h-4 w-4 shrink-0 text-muted transition-transform duration-300 group-hover:translate-x-1 group-hover:text-leaf" />
     </motion.button>
   );
 }
@@ -478,6 +623,7 @@ export function RecipesContent() {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState(true);
+  const [view, setView] = useState<"liste" | "grille">("liste");
 
   // skeleton loading à l'arrivée sur la page
   useEffect(() => {
@@ -566,11 +712,44 @@ export function RecipesContent() {
         <Favorites onOpen={setSelected} />
       </div>
 
-      {/* -------- Galerie -------- */}
+      {/* -------- La gamme plats (cartes flottantes) -------- */}
+      <FloatingDishes onOpen={setSelected} />
+
+      {/* -------- Catalogue -------- */}
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <p className="mb-6 text-sm text-muted" aria-live="polite">
-          {loading ? "Chargement…" : `${filtered.length} recette${filtered.length > 1 ? "s" : ""}`}
-        </p>
+        <div className="mb-6 flex items-center justify-between gap-4">
+          <p className="text-sm text-muted" aria-live="polite">
+            {loading ? "Chargement…" : `${filtered.length} recette${filtered.length > 1 ? "s" : ""}`}
+          </p>
+          <div
+            className="flex items-center gap-1 rounded-full border border-line bg-surface p-1"
+            role="group"
+            aria-label="Mode d'affichage"
+          >
+            <button
+              onClick={() => setView("liste")}
+              aria-pressed={view === "liste"}
+              aria-label="Afficher en liste"
+              className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors ${
+                view === "liste" ? "bg-leaf-deep text-white" : "text-muted hover:text-ink"
+              }`}
+            >
+              <Rows3 className="h-3.5 w-3.5" />
+              Liste
+            </button>
+            <button
+              onClick={() => setView("grille")}
+              aria-pressed={view === "grille"}
+              aria-label="Afficher en grille"
+              className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors ${
+                view === "grille" ? "bg-leaf-deep text-white" : "text-muted hover:text-ink"
+              }`}
+            >
+              <LayoutGrid className="h-3.5 w-3.5" />
+              Grille
+            </button>
+          </div>
+        </div>
         {loading ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }).map((_, i) => (
@@ -593,6 +772,14 @@ export function RecipesContent() {
               Essayez de retirer un filtre ou de modifier votre recherche.
             </p>
           </div>
+        ) : view === "liste" ? (
+          <motion.div layout className="mx-auto max-w-4xl space-y-3">
+            <AnimatePresence mode="popLayout">
+              {filtered.map((r) => (
+                <RecipeRow key={r.id} recipe={r} onOpen={() => setSelected(r)} />
+              ))}
+            </AnimatePresence>
+          </motion.div>
         ) : (
           <motion.div layout className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <AnimatePresence mode="popLayout">
