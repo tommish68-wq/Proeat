@@ -45,6 +45,8 @@ export const tagLabels: Record<RecipeTag, string> = {
   seche: "Sèche",
 };
 
+import { asset } from "@/lib/asset";
+
 const img = (id: string) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&q=75`;
 
@@ -267,7 +269,7 @@ export const recipes: Recipe[] = [
     carbs: 38,
     fat: 5,
     time: 10,
-    image: img("photo-1490474418585-ba9bad8fd0ea"),
+    image: asset("/images/recette-bowl-acai.jpg"),
     badge: "Nouveau",
     sell: "La fraîcheur d'un sorbet, les bénéfices d'un super-aliment : le bowl qui rend la sèche photogénique.",
     benefits: [
@@ -363,7 +365,7 @@ export const recipes: Recipe[] = [
     carbs: 36,
     fat: 22,
     time: 10,
-    image: img("photo-1541519227354-08fa5d50c44d"),
+    image: asset("/images/recette-avocado-toast.jpg"),
     sell: "L'iconique des brunchs, version performance : bons lipides, graines croquantes et pain complet.",
     benefits: [
       "Lipides insaturés de l'avocat pour l'équilibre hormonal",
@@ -410,6 +412,105 @@ export const recipes: Recipe[] = [
     steps: [
       "Placez tous les ingrédients dans un blender.",
       "Mixez 40 secondes jusqu'à une mousse onctueuse et servez glacé.",
+    ],
+  },
+  {
+    id: "barres-cereales-cranberries",
+    title: "Barres de céréales maison avoine & cranberries",
+    category: "collation",
+    tags: ["vegetarien", "masse"],
+    kcal: 210,
+    protein: 6,
+    carbs: 28,
+    fat: 8,
+    time: 35,
+    image: asset("/images/recette-barres-cereales.jpg"),
+    badge: "Nouveau",
+    sell: "La collation d'avant-séance sans la liste d'additifs : une fournée le dimanche, une semaine de barres prêtes.",
+    benefits: [
+      "Glucides complexes de l'avoine pour une énergie stable avant l'entraînement",
+      "Zéro additif : six ingrédients que vous connaissez tous",
+      "Une fournée = 8 barres, soit la semaine de collations réglée",
+    ],
+    ingredients: [
+      "200 g de flocons d'avoine",
+      "60 g de cranberries séchées",
+      "40 g de graines (tournesol, sésame)",
+      "80 g de miel",
+      "50 g de beurre de cacahuète",
+      "1 pincée de sel",
+    ],
+    steps: [
+      "Faites fondre le miel et le beurre de cacahuète à feu doux.",
+      "Mélangez avec l'avoine, les cranberries, les graines et le sel.",
+      "Tassez fermement dans un moule et enfournez 20 minutes à 170 °C.",
+      "Laissez refroidir complètement avant de découper en 8 barres.",
+    ],
+  },
+  {
+    id: "bowl-vert-kiwi-spiruline",
+    title: "Smoothie bowl vert kiwi, spiruline & granola",
+    category: "petit-dejeuner",
+    tags: ["vegetarien", "faible-calories", "seche"],
+    kcal: 310,
+    protein: 14,
+    carbs: 46,
+    fat: 8,
+    time: 10,
+    image: asset("/images/recette-bowl-vert.jpg"),
+    badge: "Nouveau",
+    sell: "Le plein de micronutriments dans le bowl le plus vert de votre semaine — sans sacrifier les protéines.",
+    benefits: [
+      "Spiruline et kiwi : fer, vitamine C et antioxydants dès le matin",
+      "Le skyr apporte 14 g de protéines sous la couleur verte",
+      "Granola et graines de courge pour le croquant qui rassasie",
+    ],
+    ingredients: [
+      "150 g de skyr nature",
+      "1 banane congelée",
+      "2 kiwis",
+      "1 c. à café de spiruline en poudre",
+      "30 g de granola",
+      "1 c. à soupe de graines de courge et chia",
+      "1/2 poire en morceaux",
+    ],
+    steps: [
+      "Mixez le skyr, la banane congelée, 1 kiwi et la spiruline jusqu'à une texture épaisse.",
+      "Versez dans un bol froid.",
+      "Garnissez de granola, du second kiwi en rondelles, de la poire et des graines.",
+    ],
+  },
+  {
+    id: "galette-oeuf-courgette",
+    title: "Galette rustique à l'œuf, courgette & parmesan",
+    category: "dejeuner",
+    tags: ["vegetarien", "proteine"],
+    kcal: 480,
+    protein: 22,
+    carbs: 42,
+    fat: 24,
+    time: 35,
+    image: asset("/images/recette-galette-oeuf.jpg"),
+    badge: "Nouveau",
+    sell: "Le brunch du week-end qui tient ses macros : pâte dorée, œuf coulant et parmesan — sans passer par la boulangerie.",
+    benefits: [
+      "22 g de protéines entre l'œuf, la ricotta et le parmesan",
+      "La courgette glisse une portion de légumes dans un plat plaisir",
+      "Une seule plaque au four, un dressage qui impressionne",
+    ],
+    ingredients: [
+      "1 pâte à galette rustique (ou pâte brisée complète)",
+      "100 g de ricotta",
+      "1/2 courgette en fines rondelles",
+      "1 œuf extra-frais",
+      "20 g de parmesan en copeaux",
+      "Jeunes pousses, poivre du moulin",
+    ],
+    steps: [
+      "Étalez la ricotta sur la pâte en laissant un bord de 3 cm, disposez la courgette.",
+      "Repliez les bords, dorez-les et enfournez 20 minutes à 200 °C.",
+      "Cassez l'œuf au centre et poursuivez la cuisson 8 minutes, jaune encore coulant.",
+      "Parsemez de parmesan et de jeunes pousses au moment de servir.",
     ],
   },
 ];

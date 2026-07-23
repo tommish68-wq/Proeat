@@ -48,10 +48,10 @@ function ProductCard({ product, onBuy }: { product: Product; onBuy: () => void }
         </div>
         {product.bestseller && (
           <span className="absolute left-3 top-3">
-            <Badge tone="gold" className="bg-gold/90 text-white">
+            <span className="inline-flex items-center gap-1 rounded-full bg-gold px-2.5 py-1 text-xs font-semibold text-[#241a10]">
               <Sparkles className="h-3 w-3" />
               Recommandé
-            </Badge>
+            </span>
           </span>
         )}
       </div>

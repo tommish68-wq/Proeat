@@ -47,7 +47,7 @@ export function ButtonLink({
 const badgeStyles = {
   leaf: "bg-leaf-soft text-leaf-deep",
   sand: "bg-sand text-ink",
-  gold: "bg-gold/15 text-gold",
+  gold: "bg-gold/15 text-[#7c5a33]",
   outline: "border border-line text-muted",
 } as const;
 

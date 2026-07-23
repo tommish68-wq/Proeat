@@ -13,11 +13,15 @@ import {
   TrendingUp,
 } from "lucide-react";
 import {
-  activityLevels,
   computeMetabolism,
-  type ActivityId,
+  dailyActivities,
+  sessionKcal,
+  sportGroups,
+  sports,
+  type DailyActivityId,
   type Goal,
   type Sex,
+  type SportId,
 } from "@/lib/metabolism";
 import { Badge, Button, Field, SectionHeading } from "@/components/ui";
 import { Reveal } from "@/components/motion";
@@ -33,11 +37,19 @@ export function CalculatorContent() {
   const [age, setAge] = useState(28);
   const [height, setHeight] = useState(178);
   const [weight, setWeight] = useState(75);
-  const [activity, setActivity] = useState<ActivityId>("modere");
+  const [daily, setDaily] = useState<DailyActivityId>("bureau");
+  const [sport, setSport] = useState<SportId>("musculation");
+  const [sessionsPerWeek, setSessionsPerWeek] = useState(3);
+  const [sessionMinutes, setSessionMinutes] = useState(60);
   const [goal, setGoal] = useState<Goal>("maintien");
   const [result, setResult] = useState<ReturnType<typeof computeMetabolism> | null>(null);
 
-  const valid = age >= 14 && age <= 99 && height >= 120 && height <= 230 && weight >= 35 && weight <= 250;
+  const noSport = sport === "aucun";
+  const valid =
+    age >= 14 && age <= 99 && height >= 120 && height <= 230 && weight >= 35 && weight <= 250 &&
+    (noSport || (sessionsPerWeek >= 1 && sessionsPerWeek <= 14 && sessionMinutes >= 15 && sessionMinutes <= 240));
+
+  const perSession = noSport ? 0 : sessionKcal(sport, weight, sessionMinutes);
 
   const goalKcal = useMemo(() => {
     if (!result) return null;
@@ -62,7 +74,19 @@ export function CalculatorContent() {
               className="card space-y-6 p-7"
               onSubmit={(e) => {
                 e.preventDefault();
-                if (valid) setResult(computeMetabolism({ sex, age, height, weight, activity }));
+                if (valid)
+                  setResult(
+                    computeMetabolism({
+                      sex,
+                      age,
+                      height,
+                      weight,
+                      daily,
+                      sport,
+                      sessionsPerWeek: noSport ? 0 : sessionsPerWeek,
+                      sessionMinutes: noSport ? 0 : sessionMinutes,
+                    })
+                  );
               }}
             >
               <Field label="Sexe">
@@ -118,15 +142,15 @@ export function CalculatorContent() {
                 </Field>
               </div>
 
-              <Field label="Activité physique">
+              <Field label="Activité quotidienne (hors sport)">
                 <div className="space-y-2">
-                  {activityLevels.map((a) => (
+                  {dailyActivities.map((a) => (
                     <button
                       key={a.id}
                       type="button"
-                      onClick={() => setActivity(a.id)}
+                      onClick={() => setDaily(a.id)}
                       className={`flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left transition-all duration-200 ${
-                        activity === a.id
+                        daily === a.id
                           ? "border-leaf bg-leaf-faint shadow-sm"
                           : "border-line bg-surface hover:border-leaf/40"
                       }`}
@@ -136,12 +160,70 @@ export function CalculatorContent() {
                         <span className="block text-xs text-muted">{a.description}</span>
                       </span>
                       <Activity
-                        className={`h-4 w-4 shrink-0 ${activity === a.id ? "text-leaf" : "text-muted/40"}`}
+                        className={`h-4 w-4 shrink-0 ${daily === a.id ? "text-leaf" : "text-muted/40"}`}
                       />
                     </button>
                   ))}
                 </div>
               </Field>
+
+              <Field label="Votre sport principal" htmlFor="sport">
+                <select
+                  id="sport"
+                  value={sport}
+                  onChange={(e) => setSport(e.target.value as SportId)}
+                  className="field"
+                >
+                  {sportGroups.map((group) => {
+                    const items = sports.filter((s) => s.group === group);
+                    if (items.length === 0) return null;
+                    return (
+                      <optgroup key={group} label={group}>
+                        {items.map((s) => (
+                          <option key={s.id} value={s.id}>
+                            {s.label}
+                          </option>
+                        ))}
+                      </optgroup>
+                    );
+                  })}
+                </select>
+              </Field>
+
+              {!noSport && (
+                <div className="grid grid-cols-2 gap-4">
+                  <Field label="Séances / semaine" htmlFor="sessions">
+                    <input
+                      id="sessions"
+                      type="number"
+                      min={1}
+                      max={14}
+                      value={sessionsPerWeek}
+                      onChange={(e) => setSessionsPerWeek(Number(e.target.value))}
+                      className="field"
+                    />
+                  </Field>
+                  <Field label="Durée moyenne (min)" htmlFor="minutes">
+                    <input
+                      id="minutes"
+                      type="number"
+                      min={15}
+                      max={240}
+                      step={5}
+                      value={sessionMinutes}
+                      onChange={(e) => setSessionMinutes(Number(e.target.value))}
+                      className="field"
+                    />
+                  </Field>
+                  {perSession > 0 && (
+                    <p className="col-span-2 -mt-1 text-xs text-muted">
+                      ≈ {perSession} kcal brûlées par séance de{" "}
+                      {sports.find((s) => s.id === sport)?.label.toLowerCase()}, selon
+                      votre poids actuel.
+                    </p>
+                  )}
+                </div>
+              )}
 
               <Field label="Objectif">
                 <div className="grid grid-cols-3 gap-2">
@@ -197,7 +279,11 @@ export function CalculatorContent() {
                       <p className="mt-2 font-display text-3xl font-semibold text-ink">
                         {result.tdee}
                       </p>
-                      <p className="text-xs text-muted">kcal / jour (TDEE)</p>
+                      <p className="text-xs text-muted">
+                        kcal / jour (TDEE)
+                        {result.sportKcalPerDay > 0 &&
+                          ` — dont ~${result.sportKcalPerDay} liées au sport`}
+                      </p>
                     </div>
                   </div>
 

@@ -13,7 +13,7 @@ import {
   Sparkles,
   X,
 } from "lucide-react";
-import { Badge, Button, SectionHeading } from "@/components/ui";
+import { Button, SectionHeading } from "@/components/ui";
 import { Reveal } from "@/components/motion";
 import { Orb, TiltCard } from "@/components/fx";
 
@@ -197,10 +197,10 @@ export function PremiumContent() {
                 <div className="relative flex h-full flex-col">
                   <div className="flex items-center justify-between">
                     <h2 className="font-display text-xl font-semibold text-white">Premium</h2>
-                    <Badge tone="gold" className="bg-gold text-[#1a140a]">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-gold px-2.5 py-1 text-xs font-medium text-[#241a10]">
                       <Sparkles className="h-3 w-3" />
                       Tarif de lancement
-                    </Badge>
+                    </span>
                   </div>
                   <p className="mt-1 text-sm text-white/60">
                     Pour transformer l&apos;habitude en résultats.

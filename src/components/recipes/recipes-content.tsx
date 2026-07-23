@@ -144,9 +144,9 @@ function RecipeCard({ recipe, onOpen }: { recipe: Recipe; onOpen: () => void }) 
             {categoryLabels[recipe.category]}
           </Badge>
           {recipe.badge && (
-            <Badge tone="gold" className="bg-gold/90 text-[#1a140a]">
+            <span className="inline-flex items-center rounded-full bg-gold px-2.5 py-1 text-xs font-semibold text-[#241a10]">
               {recipe.badge}
-            </Badge>
+            </span>
           )}
         </div>
         <div className="absolute bottom-3 right-3">
@@ -273,9 +273,7 @@ function RecipeModal({
           <div className="flex flex-wrap gap-2">
             <Badge tone="leaf">{categoryLabels[recipe.category]}</Badge>
             {recipe.badge && (
-              <Badge tone="gold" className="bg-gold/15">
-                {recipe.badge}
-              </Badge>
+              <Badge tone="gold">{recipe.badge}</Badge>
             )}
             {recipe.tags.map((t) => (
               <Badge key={t} tone="outline">{tagLabels[t]}</Badge>
