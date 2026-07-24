@@ -1,6 +1,24 @@
 import Link from "next/link";
-import { Instagram } from "lucide-react";
 import { Logo } from "@/components/logo";
+
+function InstagramIcon({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      <rect x="2" y="2" width="20" height="20" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" />
+    </svg>
+  );
+}
 
 const columns = [
   {
@@ -41,7 +59,7 @@ export function Footer() {
               rel="noopener noreferrer"
               className="mt-5 inline-flex items-center gap-2 rounded-full border border-line bg-background px-4 py-2 text-sm font-medium text-ink transition-all hover:border-leaf/40 hover:text-leaf"
             >
-              <Instagram className="h-4 w-4" />
+              <InstagramIcon />
               @proeat.t
             </a>
           </div>
