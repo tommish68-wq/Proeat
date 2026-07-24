@@ -168,6 +168,7 @@ function SeanceFeature() {
     "Le chrono de repos démarre tout seul et annonce votre prochaine série",
     "Vous notez le réalisé en un geste : plus ou moins que prévu",
     "L'algorithme ajuste la prochaine séance : +2,5 kg quand vous êtes prêt",
+    "Pressé ? La séance express se calibre sur votre temps : 15, 25, 40 ou 60 min",
   ];
   return (
     <section className="noise relative overflow-hidden bg-[#22383F] py-24">

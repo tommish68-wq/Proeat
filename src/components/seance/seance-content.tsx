@@ -31,6 +31,15 @@ import {
   useWorkoutHistory,
   type ActiveSeance,
 } from "@/lib/workout";
+import {
+  buildExpressSeance,
+  expressMinutes,
+  focusLabels,
+  planExpress,
+  type ExpressFocus,
+  type ExpressMinutes,
+} from "@/lib/express";
+import type { Equipment } from "@/lib/program";
 import { Badge, Button, SectionHeading } from "@/components/ui";
 import { LineChart } from "@/components/charts";
 import { Reveal } from "@/components/motion";
@@ -438,6 +447,115 @@ function SummaryScreen({
 }
 
 /* ------------------------------------------------------------------ */
+/* Séance express — « j'ai X minutes aujourd'hui »                     */
+/* ------------------------------------------------------------------ */
+
+const equipmentOptions: { id: Equipment; label: string }[] = [
+  { id: "salle", label: "Salle" },
+  { id: "halteres", label: "Haltères" },
+  { id: "poids-du-corps", label: "Poids du corps" },
+];
+
+function ExpressStart({
+  onLaunch,
+}: {
+  onLaunch: (s: ActiveSeance) => void;
+}) {
+  const [history] = useWorkoutHistory();
+  const [minutes, setMinutes] = useState<ExpressMinutes>(25);
+  const [equipment, setEquipment] = useState<Equipment>("salle");
+  const [focus, setFocus] = useState<ExpressFocus>("complet");
+
+  const preview = useMemo(
+    () => planExpress(minutes, equipment, focus, history),
+    [minutes, equipment, focus, history]
+  );
+
+  return (
+    <section className="card mt-10 overflow-hidden">
+      <div className="border-b border-line bg-leaf-faint px-6 py-5">
+        <h2 className="flex items-center gap-2 font-display text-xl font-semibold text-ink">
+          <Timer className="h-5 w-5 text-leaf" />
+          Séance express — combien de temps avez-vous ?
+        </h2>
+        <p className="mt-1 text-sm text-muted">
+          ProEat construit une séance qui tient vraiment dans votre créneau :
+          repos, séries et exercices calibrés à la minute.
+        </p>
+      </div>
+      <div className="space-y-5 p-6">
+        <div>
+          <p className="mb-2 text-sm font-medium text-ink">Temps disponible</p>
+          <div className="grid grid-cols-4 gap-2">
+            {expressMinutes.map((m) => (
+              <button
+                key={m}
+                data-active={minutes === m}
+                onClick={() => setMinutes(m)}
+                className="chip py-3 text-center"
+              >
+                {m} min
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div>
+            <p className="mb-2 text-sm font-medium text-ink">Matériel</p>
+            <div className="flex flex-wrap gap-2">
+              {equipmentOptions.map((e) => (
+                <button
+                  key={e.id}
+                  data-active={equipment === e.id}
+                  onClick={() => setEquipment(e.id)}
+                  className="chip"
+                >
+                  {e.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <p className="mb-2 text-sm font-medium text-ink">Zone travaillée</p>
+            <div className="flex flex-wrap gap-2">
+              {(Object.keys(focusLabels) as ExpressFocus[]).map((f) => (
+                <button
+                  key={f}
+                  data-active={focus === f}
+                  onClick={() => setFocus(f)}
+                  className="chip"
+                >
+                  {focusLabels[f]}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <p className="rounded-xl bg-sand/60 px-4 py-3 text-center text-sm text-muted">
+          <span className="font-semibold text-ink">
+            {preview.exercises.length} exercices · {preview.totalSets} séries ·
+            repos {preview.restSec} s
+          </span>
+          {" "}— durée réelle estimée ≈ {preview.estimatedMinutes} min,
+          échauffement compris
+        </p>
+
+        <Button
+          onClick={() =>
+            onLaunch(buildExpressSeance(minutes, equipment, focus, history))
+          }
+          className="w-full py-4 text-base"
+        >
+          <Play className="h-5 w-5" />
+          Lancer ma séance express
+        </Button>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Métriques d'évolution par exercice                                  */
 /* ------------------------------------------------------------------ */
 
@@ -715,25 +833,20 @@ export function SeanceContent() {
               />
             </Reveal>
             <Reveal delay={0.1}>
-              <div className="card mt-10 p-8 text-center">
-                <div className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-leaf-soft">
-                  <Timer className="h-8 w-8 text-leaf" />
-                </div>
-                <h2 className="mt-5 font-display text-xl font-semibold text-ink">
-                  Aucune séance en cours
-                </h2>
-                <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-muted">
-                  Générez votre programme, puis appuyez sur « Lancer la séance »
-                  sur le jour de votre choix. Tout le reste est automatique.
-                </p>
+              <ExpressStart onLaunch={(s) => setSeance(s)} />
+            </Reveal>
+
+            <Reveal delay={0.15}>
+              <p className="mt-6 text-center text-sm text-muted">
+                Vous suivez un programme complet ?{" "}
                 <Link
                   href="/programme"
-                  className="mt-6 inline-flex items-center gap-2 rounded-full bg-leaf-deep px-7 py-3.5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-leaf"
+                  className="font-semibold text-leaf underline-offset-2 hover:underline"
                 >
-                  <Play className="h-4 w-4" />
-                  Ouvrir mon programme
+                  Lancez la séance du jour depuis votre programme
                 </Link>
-              </div>
+                .
+              </p>
             </Reveal>
 
             <ExerciseMetrics />

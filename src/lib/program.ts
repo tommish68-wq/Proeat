@@ -32,7 +32,7 @@ export interface Program {
   tips: string[];
 }
 
-type MovementPattern =
+export type MovementPattern =
   | "squat"
   | "hinge"
   | "pousse-h"
@@ -44,7 +44,7 @@ type MovementPattern =
   | "isolation-jambes"
   | "core";
 
-const catalogue: Record<Equipment, Record<MovementPattern, { name: string; muscle: string }[]>> = {
+export const catalogue: Record<Equipment, Record<MovementPattern, { name: string; muscle: string }[]>> = {
   salle: {
     squat: [
       { name: "Squat barre", muscle: "Quadriceps, fessiers" },
