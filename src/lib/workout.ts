@@ -35,7 +35,8 @@ export interface ActiveSeance {
   exIndex: number;
   setIndex: number;
   logs: SetLog[][]; // logs[exercice] = séries validées
-  phase: "set" | "rest" | "done";
+  /* review = aperçu modifiable avant de commencer (séries, exercices) */
+  phase: "review" | "set" | "rest" | "done";
   restEndsAt: number | null;
   endedAt?: number;
 }
@@ -175,9 +176,17 @@ export function buildSeance(
     exIndex: 0,
     setIndex: 0,
     logs: exercises.map(() => []),
-    phase: "set",
+    phase: "review",
     restEndsAt: null,
   };
+}
+
+/* Catalogue plat de tous les exercices (tous équipements confondus),
+   pour le remplacement et l'ajout libre dans l'aperçu de séance. */
+export interface CatalogExercise {
+  name: string;
+  muscle: string;
+  equipment: string;
 }
 
 /* ------------------------------------------------------------------ */

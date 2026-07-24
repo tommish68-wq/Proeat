@@ -27,10 +27,12 @@ import {
   finishSeance,
   formatDuration,
   formatRest,
+  planExercise,
   useActiveSeance,
   useWorkoutHistory,
   type ActiveSeance,
 } from "@/lib/workout";
+import { catalogue } from "@/lib/program";
 import {
   buildExpressSeance,
   expressMinutes,
@@ -64,6 +66,238 @@ function useCountdown(endsAt: number | null, onEnd: () => void) {
     return () => clearInterval(t);
   }, [endsAt, onEnd]);
   return remaining;
+}
+
+/* ------------------------------------------------------------------ */
+/* Catalogue plat pour remplacer / ajouter des exercices librement     */
+/* ------------------------------------------------------------------ */
+
+const equipmentGroupLabels: Record<string, string> = {
+  salle: "Salle",
+  halteres: "Haltères",
+  "poids-du-corps": "Poids du corps",
+};
+
+const allExercises = (() => {
+  const seen = new Set<string>();
+  const out: { name: string; muscle: string; group: string }[] = [];
+  for (const [equip, patterns] of Object.entries(catalogue)) {
+    for (const opts of Object.values(patterns)) {
+      for (const o of opts) {
+        if (seen.has(o.name)) continue;
+        seen.add(o.name);
+        out.push({
+          name: o.name,
+          muscle: o.muscle,
+          group: equipmentGroupLabels[equip] ?? equip,
+        });
+      }
+    }
+  }
+  return out;
+})();
+
+const exerciseGroups = ["Salle", "Haltères", "Poids du corps"];
+
+/* ------------------------------------------------------------------ */
+/* Aperçu modifiable : le client garde la main sur SA séance           */
+/* ------------------------------------------------------------------ */
+
+function ReviewScreen({
+  seance,
+  update,
+}: {
+  seance: ActiveSeance;
+  update: (fn: (s: ActiveSeance) => ActiveSeance) => void;
+}) {
+  const [history] = useWorkoutHistory();
+
+  const setSets = (i: number, delta: number) =>
+    update((s) => ({
+      ...s,
+      exercises: s.exercises.map((e, j) =>
+        j === i ? { ...e, sets: Math.min(6, Math.max(1, e.sets + delta)) } : e
+      ),
+    }));
+
+  const replaceExercise = (i: number, name: string) => {
+    const pick = allExercises.find((e) => e.name === name);
+    if (!pick) return;
+    update((s) => ({
+      ...s,
+      exercises: s.exercises.map((e, j) => {
+        if (j !== i) return e;
+        const plan = planExercise(pick.name, e.repsMin, e.repsMax, history);
+        return {
+          ...e,
+          name: pick.name,
+          muscle: pick.muscle,
+          targetReps: plan.targetReps,
+          weight: plan.weight,
+          hint: plan.hint,
+        };
+      }),
+    }));
+  };
+
+  const removeExercise = (i: number) =>
+    update((s) =>
+      s.exercises.length <= 1
+        ? s
+        : {
+            ...s,
+            exercises: s.exercises.filter((_, j) => j !== i),
+            logs: s.logs.filter((_, j) => j !== i),
+          }
+    );
+
+  const addExercise = (name: string) => {
+    const pick = allExercises.find((e) => e.name === name);
+    if (!pick) return;
+    update((s) => {
+      const restSec = s.exercises[0]?.restSec ?? 75;
+      const plan = planExercise(pick.name, 8, 12, history);
+      return {
+        ...s,
+        exercises: [
+          ...s.exercises,
+          {
+            name: pick.name,
+            muscle: pick.muscle,
+            sets: 3,
+            repsMin: 8,
+            repsMax: 12,
+            restSec,
+            targetReps: plan.targetReps,
+            weight: plan.weight,
+            hint: plan.hint,
+          },
+        ],
+        logs: [...s.logs, []],
+      };
+    });
+  };
+
+  const start = () =>
+    update((s) => ({
+      ...s,
+      logs: s.exercises.map(() => []),
+      startedAt: Date.now(),
+      phase: "set",
+    }));
+
+  const totalSets = seance.exercises.reduce((n, e) => n + e.sets, 0);
+
+  return (
+    <motion.div
+      key="review"
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0 }}
+      className="card overflow-hidden"
+    >
+      <div className="border-b border-line bg-leaf-faint px-6 py-4">
+        <h2 className="font-display text-lg font-semibold text-ink">
+          Votre séance, vos règles
+        </h2>
+        <p className="mt-1 text-sm text-muted">
+          Ajustez les séries, remplacez ou ajoutez des exercices — puis lancez.
+        </p>
+      </div>
+
+      <ul className="divide-y divide-line">
+        {seance.exercises.map((ex, i) => (
+          <li key={`${ex.name}-${i}`} className="space-y-2.5 px-5 py-4">
+            <div className="flex items-center justify-between gap-3">
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-semibold text-ink">
+                  {ex.name}
+                </p>
+                <p className="text-xs text-muted">
+                  {ex.muscle} · {ex.repsMin}–{ex.repsMax} reps · repos{" "}
+                  {formatRest(ex.restSec)}
+                </p>
+              </div>
+              <button
+                onClick={() => removeExercise(i)}
+                disabled={seance.exercises.length <= 1}
+                aria-label={`Retirer ${ex.name}`}
+                className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-muted transition-colors hover:bg-red-500/10 hover:text-red-500 disabled:opacity-30"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setSets(i, -1)}
+                  aria-label={`Une série de moins pour ${ex.name}`}
+                  className="grid h-8 w-8 place-items-center rounded-full border border-line bg-surface text-ink active:scale-95"
+                >
+                  <Minus className="h-3.5 w-3.5" />
+                </button>
+                <span className="w-16 text-center text-sm font-bold text-ink">
+                  {ex.sets} série{ex.sets > 1 ? "s" : ""}
+                </span>
+                <button
+                  onClick={() => setSets(i, 1)}
+                  aria-label={`Une série de plus pour ${ex.name}`}
+                  className="grid h-8 w-8 place-items-center rounded-full border border-line bg-surface text-ink active:scale-95"
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                </button>
+              </div>
+              <select
+                value=""
+                onChange={(e) => replaceExercise(i, e.target.value)}
+                aria-label={`Remplacer ${ex.name}`}
+                className="field w-auto max-w-[180px] px-3 py-2 text-xs"
+              >
+                <option value="">Remplacer par…</option>
+                {exerciseGroups.map((g) => (
+                  <optgroup key={g} label={g}>
+                    {allExercises
+                      .filter((e) => e.group === g && e.name !== ex.name)
+                      .map((e) => (
+                        <option key={e.name} value={e.name}>
+                          {e.name}
+                        </option>
+                      ))}
+                  </optgroup>
+                ))}
+              </select>
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <div className="space-y-4 border-t border-line p-5">
+        <select
+          value=""
+          onChange={(e) => addExercise(e.target.value)}
+          aria-label="Ajouter un exercice"
+          className="field text-sm"
+        >
+          <option value="">+ Ajouter un exercice…</option>
+          {exerciseGroups.map((g) => (
+            <optgroup key={g} label={g}>
+              {allExercises
+                .filter((e) => e.group === g)
+                .map((e) => (
+                  <option key={e.name} value={e.name}>
+                    {e.name} — {e.muscle}
+                  </option>
+                ))}
+            </optgroup>
+          ))}
+        </select>
+        <Button onClick={start} className="w-full py-4 text-base">
+          <Play className="h-5 w-5" />
+          C’est parti · {totalSets} séries
+        </Button>
+      </div>
+    </motion.div>
+  );
 }
 
 /* ------------------------------------------------------------------ */
@@ -754,8 +988,9 @@ export function SeanceContent() {
                     {seance.sessionTitle}
                   </p>
                   <p className="truncate text-sm font-medium text-ink">
-                    Exercice {Math.min(seance.exIndex + 1, seance.exercises.length)} /{" "}
-                    {seance.exercises.length} — {doneSets} / {totalSets} séries
+                    {seance.phase === "review"
+                      ? "Aperçu — ajustez avant de commencer"
+                      : `Exercice ${Math.min(seance.exIndex + 1, seance.exercises.length)} / ${seance.exercises.length} — ${doneSets} / ${totalSets} séries`}
                   </p>
                 </div>
                 {seance.phase !== "done" && (
@@ -783,7 +1018,9 @@ export function SeanceContent() {
             </div>
 
             <AnimatePresence mode="wait">
-              {seance.phase === "rest" ? (
+              {seance.phase === "review" ? (
+                <ReviewScreen seance={seance} update={update} />
+              ) : seance.phase === "rest" ? (
                 <RestScreen seance={seance} update={update} />
               ) : seance.phase === "done" ? (
                 <SummaryScreen

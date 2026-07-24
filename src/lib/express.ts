@@ -126,7 +126,7 @@ export function buildExpressSeance(
     exIndex: 0,
     setIndex: 0,
     logs: plan.exercises.map(() => []),
-    phase: "set",
+    phase: "review",
     restEndsAt: null,
   };
 }
