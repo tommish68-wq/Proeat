@@ -11,6 +11,14 @@ export type RecipeTag =
   | "masse"
   | "seche";
 
+/* Composant échangeable : relie la recette à la base d'aliments pour
+   générer des variantes (protéine ou féculent) avec macros recalculées. */
+export interface RecipeComponent {
+  role: "proteine" | "feculent";
+  foodId: string; // id dans src/lib/foods.ts
+  grams: number; // quantité par portion
+}
+
 export interface Recipe {
   id: string;
   title: string;
@@ -26,6 +34,8 @@ export interface Recipe {
   steps: string[];
   /* Les astuces du chef — techniques, variantes, conservation */
   chefTips?: string[];
+  /* Bases échangeables — active le sélecteur de variantes en fiche */
+  components?: RecipeComponent[];
   /* Merchandising — présentation « produit » de la recette */
   badge?: "Coup de cœur" | "Nouveau" | "Sélection ProEat";
   sell?: string; // accroche commerciale affichée en fiche
@@ -126,6 +136,10 @@ export const recipes: Recipe[] = [
   },
   {
     id: "poulet-riz-brocoli",
+    components: [
+      { role: "proteine", foodId: "poulet", grams: 180 },
+      { role: "feculent", foodId: "riz", grams: 230 },
+    ],
     badge: "Sélection ProEat",
     sell: "Le classique absolu de la prise de masse propre : 52 g de protéines dans une assiette qui cale vraiment.",
     benefits: [
@@ -165,6 +179,10 @@ export const recipes: Recipe[] = [
   },
   {
     id: "buddha-bowl",
+    components: [
+      { role: "proteine", foodId: "pois-chiches", grams: 120 },
+      { role: "feculent", foodId: "quinoa", grams: 200 },
+    ],
     title: "Buddha bowl quinoa, pois chiches & avocat",
     category: "dejeuner",
     tags: ["vegetarien", "proteine"],
@@ -198,6 +216,9 @@ export const recipes: Recipe[] = [
   },
   {
     id: "curry-lentilles",
+    components: [
+      { role: "proteine", foodId: "lentilles", grams: 300 },
+    ],
     title: "Curry de lentilles corail au lait de coco",
     category: "diner",
     tags: ["vegetarien", "proteine"],
@@ -231,6 +252,10 @@ export const recipes: Recipe[] = [
   },
   {
     id: "brochettes-poulet",
+    components: [
+      { role: "proteine", foodId: "poulet", grams: 160 },
+      { role: "feculent", foodId: "quinoa", grams: 180 },
+    ],
     title: "Brochettes de poulet marinées & quinoa citronné",
     category: "diner",
     tags: ["proteine", "seche"],
@@ -369,6 +394,9 @@ export const recipes: Recipe[] = [
   },
   {
     id: "sandwich-poulet-oeufs",
+    components: [
+      { role: "proteine", foodId: "poulet", grams: 100 },
+    ],
     title: "Sandwich complet poulet & œufs brouillés",
     category: "dejeuner",
     tags: ["proteine", "masse"],
@@ -409,6 +437,10 @@ export const recipes: Recipe[] = [
   },
   {
     id: "patate-douce-farcie",
+    components: [
+      { role: "proteine", foodId: "pois-chiches", grams: 100 },
+      { role: "feculent", foodId: "patate-douce", grams: 300 },
+    ],
     title: "Patate douce farcie végé, quinoa & haricots noirs",
     category: "diner",
     tags: ["vegetarien", "proteine", "masse"],
@@ -651,6 +683,10 @@ export const recipes: Recipe[] = [
   },
   {
     id: "pad-thai-tempeh",
+    components: [
+      { role: "proteine", foodId: "tempeh", grams: 100 },
+      { role: "feculent", foodId: "pates", grams: 150 },
+    ],
     title: "Pad thaï de tempeh, sauce cacahuète & citron vert",
     category: "dejeuner",
     tags: ["vegetarien", "proteine", "masse"],
@@ -695,6 +731,10 @@ export const recipes: Recipe[] = [
   },
   {
     id: "crevettes-sautees-brocoli",
+    components: [
+      { role: "proteine", foodId: "crevettes", grams: 150 },
+      { role: "feculent", foodId: "riz", grams: 180 },
+    ],
     title: "Crevettes sautées ail-citron, riz jasmin & brocoli",
     category: "diner",
     tags: ["proteine", "seche"],

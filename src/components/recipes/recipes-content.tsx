@@ -30,6 +30,14 @@ import {
   type RecipeTag,
 } from "@/lib/recipes";
 import { todayKey, useFoodLog } from "@/lib/store";
+import {
+  computeVariant,
+  roleLabels,
+  swapOptions,
+  variantCount,
+  variantName,
+  type VariantSelection,
+} from "@/lib/variants";
 import { Badge, SectionHeading, Skeleton } from "@/components/ui";
 import { Reveal } from "@/components/motion";
 
@@ -332,6 +340,12 @@ function RecipeModal({
   const [, setLog] = useFoodLog();
   const [added, setAdded] = useState(false);
   const [addedPairings, setAddedPairings] = useState<string[]>([]);
+  /* Variantes : la fiche est remontée à chaque recette (clé), l'état repart à zéro */
+  const [selection, setSelection] = useState<VariantSelection>({});
+  const variant = useMemo(
+    () => computeVariant(recipe, selection),
+    [recipe, selection]
+  );
 
   /* L'équivalent du « panier » : la recette part dans le journal du jour */
   const logRecipe = (r: Recipe) => {
@@ -351,7 +365,19 @@ function RecipeModal({
   };
 
   const addToJournal = () => {
-    logRecipe(recipe);
+    setLog((prev) => [
+      ...prev,
+      {
+        id: `${Date.now()}-${prev.length}`,
+        date: todayKey(),
+        meal: recipe.category,
+        name: variantName(recipe, variant),
+        kcal: variant.kcal,
+        protein: variant.protein,
+        carbs: variant.carbs,
+        fat: variant.fat,
+      },
+    ]);
     setAdded(true);
   };
 
@@ -442,14 +468,14 @@ function RecipeModal({
             </span>
           </div>
 
-          {/* Macros */}
+          {/* Macros — recalculées en direct selon la variante choisie */}
           <div className="mt-6 grid grid-cols-4 gap-3">
             {(
               [
-                ["Calories", `${recipe.kcal}`, "kcal", "var(--leaf)"],
-                ["Protéines", `${recipe.protein}`, "g", "var(--viz-protein)"],
-                ["Glucides", `${recipe.carbs}`, "g", "var(--viz-carbs)"],
-                ["Lipides", `${recipe.fat}`, "g", "var(--viz-fat)"],
+                ["Calories", `${variant.kcal}`, "kcal", "var(--leaf)"],
+                ["Protéines", `${variant.protein}`, "g", "var(--viz-protein)"],
+                ["Glucides", `${variant.carbs}`, "g", "var(--viz-carbs)"],
+                ["Lipides", `${variant.fat}`, "g", "var(--viz-fat)"],
               ] as const
             ).map(([label, value, unit, color]) => (
               <div key={label} className="rounded-xl bg-sand/60 p-3 text-center">
@@ -462,6 +488,62 @@ function RecipeModal({
               </div>
             ))}
           </div>
+
+          {/* Déclinez la recette : échange des bases, macros recalculées */}
+          {recipe.components && recipe.components.length > 0 && (
+            <div className="mt-6 rounded-2xl border border-leaf/25 bg-leaf-faint p-5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h3 className="text-sm font-semibold uppercase tracking-wide text-leaf">
+                  Déclinez la recette
+                </h3>
+                <span className="text-xs font-medium text-muted">
+                  {variantCount(recipe)} combinaisons possibles
+                </span>
+              </div>
+              <div className="mt-4 space-y-4">
+                {recipe.components.map((c) => {
+                  const original = c.foodId;
+                  const active = selection[c.role] ?? original;
+                  return (
+                    <div key={c.role}>
+                      <p className="mb-2 text-xs font-medium text-muted">
+                        {roleLabels[c.role]} — {c.grams} g
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {swapOptions(c.role).map((f) => (
+                          <button
+                            key={f.id}
+                            data-active={active === f.id}
+                            onClick={() =>
+                              setSelection((prev) => ({
+                                ...prev,
+                                [c.role]: f.id === original ? undefined : f.id,
+                              }))
+                            }
+                            className="chip text-xs"
+                          >
+                            {f.name.split(" (")[0]}
+                            {f.id === original ? " · d'origine" : ""}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              {variant.swaps.length > 0 && (
+                <p className="mt-4 rounded-xl bg-white/70 px-3 py-2 text-xs leading-relaxed text-ink">
+                  {variant.swaps
+                    .map(
+                      (s) =>
+                        `${s.grams} g de ${s.to.name.toLowerCase().split(" (")[0]} à la place de ${s.from.name.toLowerCase().split(" (")[0]}`
+                    )
+                    .join(" · ")}{" "}
+                  — macros recalculées, mêmes étapes de préparation.
+                </p>
+              )}
+            </div>
+          )}
 
           {/* CTA « produit » : la recette part dans le journal du jour */}
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
@@ -482,7 +564,7 @@ function RecipeModal({
               ) : (
                 <>
                   <NotebookPen className="h-4 w-4" />
-                  Ajouter à mon journal · {recipe.kcal} kcal
+                  Ajouter à mon journal · {variant.kcal} kcal
                 </>
               )}
             </button>
