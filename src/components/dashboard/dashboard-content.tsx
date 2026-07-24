@@ -7,22 +7,26 @@ import {
   ArrowRight,
   BookOpen,
   Calculator,
+  CopyPlus,
   Crown,
   Dumbbell,
   Flame,
+  Play,
   Salad,
   Scale,
   Target,
-  User,
+  Timer,
 } from "lucide-react";
 import {
   dayTotals,
   shortLabel,
   todayKey,
+  toKey,
   useFoodLog,
   useProfile,
   useWeights,
 } from "@/lib/store";
+import { formatDuration, useActiveSeance, useWorkoutHistory } from "@/lib/workout";
 import { recipes } from "@/lib/recipes";
 import { LineChart, MacroRing } from "@/components/charts";
 import { Badge, ButtonLink, ProgressBar, Skeleton } from "@/components/ui";
@@ -45,21 +49,49 @@ const goalLabels = { seche: "Sèche", maintien: "Maintien", masse: "Prise de mas
    ou à venir) est accessible depuis cette grille. */
 const hub = [
   { icon: Calculator, label: "Calculateur", detail: "BMR, TDEE & calories cibles", href: "/calculateur" },
-  { icon: Dumbbell, label: "Programme", detail: "Séances sur mesure", href: "/programme" },
+  { icon: Dumbbell, label: "Programme", detail: "Plan sur mesure", href: "/programme" },
+  { icon: Timer, label: "Séance", detail: "Chrono & progression", href: "/seance" },
   { icon: Salad, label: "Recettes", detail: "Idées repas & macros", href: "/recettes" },
   { icon: Flame, label: "Tracker", detail: "Repas, macros & poids", href: "/tracker" },
-  { icon: User, label: "Profil", detail: "Objectifs & badges", href: "/profil" },
   { icon: BookOpen, label: "Boutique", detail: "Guides d'experts", href: "/boutique" },
 ];
 
 export function DashboardContent() {
   const [profile, , profileReady] = useProfile();
-  const [log, , logReady] = useFoodLog();
+  const [log, setLog, logReady] = useFoodLog();
   const [weights, , weightsReady] = useWeights();
+  const [activeSeance] = useActiveSeance();
+  const [workoutHistory] = useWorkoutHistory();
   const today = todayKey();
 
   const totals = useMemo(() => dayTotals(log, today), [log, today]);
   const kcalLeft = Math.max(0, Math.round(profile.targetKcal - totals.kcal));
+
+  /* Duplication d'hier en un tap, comme dans le tracker */
+  const yesterdayEntries = useMemo(() => {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    const key = toKey(d);
+    return log.filter((e) => e.date === key);
+  }, [log]);
+  const todayCount = useMemo(
+    () => log.filter((e) => e.date === today).length,
+    [log, today]
+  );
+  const duplicateYesterday = () => {
+    if (!yesterdayEntries.length) return;
+    setLog((prev) => [
+      ...prev,
+      ...yesterdayEntries.map((e, i) => ({
+        ...e,
+        id: `${Date.now()}-dup-${i}`,
+        date: today,
+      })),
+    ]);
+  };
+
+  const lastWorkout = workoutHistory[workoutHistory.length - 1];
+  const seanceEnCours = activeSeance && activeSeance.phase !== "done";
 
   const weightSeries = useMemo(
     () =>
@@ -76,7 +108,11 @@ export function DashboardContent() {
     : null;
 
   const workout = weeklyPlan[new Date().getDay()];
-  const suggestions = useMemo(() => recipes.slice(0, 3), []);
+  /* On met en avant les recettes avec photo locale : toujours affichées */
+  const suggestions = useMemo(
+    () => recipes.filter((r) => r.image.includes("/images/")).slice(0, 3),
+    []
+  );
   const ready = profileReady && logReady && weightsReady;
 
   const hour = new Date().getHours();
@@ -175,12 +211,23 @@ export function DashboardContent() {
                   <Flame className="h-5 w-5 text-leaf" />
                   Calories du jour
                 </h2>
-                <Link
-                  href="/tracker"
-                  className="flex items-center gap-1 text-sm font-medium text-leaf hover:underline"
-                >
-                  Ouvrir le tracker <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
+                <div className="flex items-center gap-3">
+                  {yesterdayEntries.length > 0 && todayCount === 0 && (
+                    <button
+                      onClick={duplicateYesterday}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs font-semibold text-ink transition-all hover:border-leaf/40 hover:text-leaf"
+                    >
+                      <CopyPlus className="h-3.5 w-3.5" />
+                      Dupliquer hier
+                    </button>
+                  )}
+                  <Link
+                    href="/tracker"
+                    className="flex items-center gap-1 text-sm font-medium text-leaf hover:underline"
+                  >
+                    Ouvrir le tracker <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                </div>
               </div>
               <div className="mt-5 flex flex-wrap items-center gap-8">
                 <div>
@@ -230,15 +277,47 @@ export function DashboardContent() {
                 Entraînement du jour
               </h2>
               <div className="mt-5 flex-1 rounded-2xl bg-gradient-to-br from-leaf-dark to-leaf-deep p-6 text-white">
-                <p className="text-xs uppercase tracking-wider opacity-70">
-                  {new Date().toLocaleDateString("fr-FR", { weekday: "long" })}
-                </p>
-                <p className="mt-2 font-display text-2xl font-semibold">
-                  {workout.title}
-                </p>
-                <p className="mt-1 text-sm opacity-80">{workout.detail}</p>
+                {seanceEnCours ? (
+                  <>
+                    <p className="flex items-center gap-2 text-xs uppercase tracking-wider opacity-80">
+                      <span className="relative flex h-2.5 w-2.5">
+                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#9db4ae] opacity-70" />
+                        <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#9db4ae]" />
+                      </span>
+                      Séance en cours
+                    </p>
+                    <p className="mt-2 font-display text-2xl font-semibold">
+                      {activeSeance.sessionTitle}
+                    </p>
+                    <p className="mt-1 text-sm opacity-80">
+                      {activeSeance.logs.reduce((n, l) => n + l.length, 0)} série
+                      {activeSeance.logs.reduce((n, l) => n + l.length, 0) > 1 ? "s" : ""}{" "}
+                      validée{activeSeance.logs.reduce((n, l) => n + l.length, 0) > 1 ? "s" : ""}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-xs uppercase tracking-wider opacity-70">
+                      {new Date().toLocaleDateString("fr-FR", { weekday: "long" })}
+                    </p>
+                    <p className="mt-2 font-display text-2xl font-semibold">
+                      {workout.title}
+                    </p>
+                    <p className="mt-1 text-sm opacity-80">{workout.detail}</p>
+                    {lastWorkout && (
+                      <p className="mt-3 border-t border-white/15 pt-3 text-xs opacity-70">
+                        Dernière séance : {lastWorkout.sessionTitle} ·{" "}
+                        {formatDuration(lastWorkout.durationSec)}
+                      </p>
+                    )}
+                  </>
+                )}
               </div>
-              <ButtonLink href="/programme" variant="secondary" className="mt-4 w-full">
+              <ButtonLink href="/seance" className="mt-4 w-full">
+                <Play className="h-4 w-4" />
+                {seanceEnCours ? "Reprendre ma séance" : "Lancer une séance"}
+              </ButtonLink>
+              <ButtonLink href="/programme" variant="ghost" className="mt-2 w-full">
                 Voir mon programme
               </ButtonLink>
             </div>
@@ -291,7 +370,7 @@ export function DashboardContent() {
                     ["Calories", `${profile.targetKcal} kcal / jour`],
                     ["Protéines", `${profile.targetProtein} g / jour`],
                     ["Poids cible", `${profile.targetWeight} kg`],
-                    ["Programme", "4 séances / semaine"],
+                    ["Séances suivies", `${workoutHistory.length}`],
                   ] as const
                 ).map(([label, value]) => (
                   <li
