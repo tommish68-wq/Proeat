@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Anton, Fraunces, IBM_Plex_Mono, Inter } from "next/font/google";
+import { Anton, Archivo, IBM_Plex_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { asset } from "@/lib/asset";
 import { Navbar } from "@/components/navbar";
@@ -12,10 +12,10 @@ const inter = Inter({
   display: "swap",
 });
 
-const fraunces = Fraunces({
+const archivo = Archivo({
   variable: "--font-display-face",
   subsets: ["latin"],
-  style: ["normal", "italic"],
+  weight: ["500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -75,7 +75,7 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body
-        className={`${inter.variable} ${fraunces.variable} ${anton.variable} ${plexMono.variable} min-h-screen flex flex-col antialiased`}
+        className={`${inter.variable} ${archivo.variable} ${anton.variable} ${plexMono.variable} min-h-screen flex flex-col antialiased`}
       >
         <Navbar />
         <main className="flex-1">{children}</main>
