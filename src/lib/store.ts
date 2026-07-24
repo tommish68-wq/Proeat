@@ -92,40 +92,31 @@ export function useLocalState<T>(
 }
 
 /* ------------------------------------------------------------------ */
-/* Données de démonstration (premier chargement uniquement)            */
+/* Valeurs par défaut — aucun chiffre fictif : tout part de zéro et    */
+/* se remplit avec les vraies données de l'utilisateur.                */
 /* ------------------------------------------------------------------ */
 
-export function seedWeights(): WeightEntry[] {
-  const out: WeightEntry[] = [];
-  const start = 82.4;
-  for (let i = 8; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i * 7);
-    // légère tendance descendante avec un peu de bruit déterministe
-    const w = start - (8 - i) * 0.45 + ((i * 7) % 3) * 0.1;
-    out.push({ date: toKey(d), weight: Math.round(w * 10) / 10 });
-  }
-  return out;
-}
-
 export const defaultProfile: Profile = {
-  name: "Athlète ProEat",
-  goal: "seche",
+  name: "Athlète",
+  goal: "maintien",
   targetKcal: 2300,
-  targetProtein: 170,
-  targetCarbs: 240,
-  targetFat: 70,
-  targetWeight: 76,
-  height: 178,
-  memberSince: "2026-01-12",
+  targetProtein: 150,
+  targetCarbs: 260,
+  targetFat: 45,
+  targetWeight: 75,
+  height: 175,
+  memberSince: "",
 };
 
 export function useProfile() {
-  return useLocalState<Profile>("proeat-profile", defaultProfile);
+  return useLocalState<Profile>("proeat-profile", () => ({
+    ...defaultProfile,
+    memberSince: todayKey(),
+  }));
 }
 
 export function useWeights() {
-  return useLocalState<WeightEntry[]>("proeat-weights", seedWeights);
+  return useLocalState<WeightEntry[]>("proeat-weights", []);
 }
 
 export function useFoodLog() {

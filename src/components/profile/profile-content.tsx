@@ -5,14 +5,17 @@ import { motion } from "framer-motion";
 import {
   Award,
   Calendar,
+  Crown,
+  Dumbbell,
   Edit3,
   Flame,
   Medal,
-  Ruler,
   Scale,
   Target,
+  Timer,
   TrendingDown,
   Trophy,
+  UtensilsCrossed,
   Zap,
 } from "lucide-react";
 import {
@@ -21,6 +24,7 @@ import {
   useWeights,
   type Profile,
 } from "@/lib/store";
+import { useWorkoutHistory } from "@/lib/workout";
 import { Badge, Button, Field, ProgressBar, SectionHeading, Skeleton } from "@/components/ui";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 
@@ -145,7 +149,9 @@ export function ProfileContent() {
   const [profile, setProfile, profileReady] = useProfile();
   const [weights, , weightsReady] = useWeights();
   const [log, , logReady] = useFoodLog();
+  const [workoutHistory] = useWorkoutHistory();
   const [editing, setEditing] = useState(false);
+  const seancesCount = workoutHistory.length;
 
   const sorted = useMemo(
     () => weights.slice().sort((a, b) => a.date.localeCompare(b.date)),
@@ -213,17 +219,37 @@ export function ProfileContent() {
         description: "Atteindre son poids cible",
         earned: toGoal !== null && toGoal <= 0.5,
       },
+      {
+        icon: Dumbbell,
+        title: "Première séance",
+        description: "Terminer une séance guidée",
+        earned: seancesCount >= 1,
+      },
+      {
+        icon: Timer,
+        title: "Discipliné",
+        description: "Suivre 10 séances guidées",
+        earned: seancesCount >= 10,
+      },
+      {
+        icon: Crown,
+        title: "Machine",
+        description: "Suivre 25 séances guidées",
+        earned: seancesCount >= 25,
+      },
     ],
-    [trackedDays, weights.length, goalProgress, toGoal]
+    [trackedDays, weights.length, goalProgress, toGoal, seancesCount]
   );
 
   const earnedCount = badges.filter((b) => b.earned).length;
   const ready = profileReady && weightsReady && logReady;
 
-  const memberSince = new Date(profile.memberSince).toLocaleDateString("fr-FR", {
-    month: "long",
-    year: "numeric",
-  });
+  const memberSince = profile.memberSince
+    ? new Date(profile.memberSince + "T12:00:00").toLocaleDateString("fr-FR", {
+        month: "long",
+        year: "numeric",
+      })
+    : null;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
@@ -257,10 +283,12 @@ export function ProfileContent() {
               <h2 className="mt-4 font-display text-xl font-semibold text-ink">
                 {profile.name}
               </h2>
-              <p className="mt-1 flex items-center justify-center gap-1.5 text-xs text-muted">
-                <Calendar className="h-3.5 w-3.5" />
-                Membre depuis {memberSince}
-              </p>
+              {memberSince && (
+                <p className="mt-1 flex items-center justify-center gap-1.5 text-xs text-muted">
+                  <Calendar className="h-3.5 w-3.5" />
+                  Membre depuis {memberSince}
+                </p>
+              )}
               <div className="mt-3 flex justify-center">
                 <Badge tone="leaf">
                   <Target className="h-3 w-3" />
@@ -342,9 +370,9 @@ export function ProfileContent() {
                   {(
                     [
                       [Flame, `${trackedDays}`, "jours trackés"],
-                      [Ruler, `${totalMeals}`, "repas enregistrés"],
+                      [UtensilsCrossed, `${totalMeals}`, "repas enregistrés"],
+                      [Dumbbell, `${seancesCount}`, "séances suivies"],
                       [Scale, `${weights.length}`, "pesées"],
-                      [Award, `${earnedCount}/${badges.length}`, "badges obtenus"],
                     ] as const
                   ).map(([Icon, value, label]) => (
                     <StaggerItem key={label}>

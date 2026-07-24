@@ -1,10 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Activity,
   ArrowRight,
+  Check,
   Flame,
   Info,
   Scale,
@@ -12,6 +14,7 @@ import {
   TrendingDown,
   TrendingUp,
 } from "lucide-react";
+import { useProfile } from "@/lib/store";
 import {
   computeMetabolism,
   dailyActivities,
@@ -43,6 +46,24 @@ export function CalculatorContent() {
   const [sessionMinutes, setSessionMinutes] = useState(60);
   const [goal, setGoal] = useState<Goal>("maintien");
   const [result, setResult] = useState<ReturnType<typeof computeMetabolism> | null>(null);
+  const [, setProfile] = useProfile();
+  const [applied, setApplied] = useState(false);
+
+  /* Envoie les résultats vers le profil : tracker et tableau de bord
+     utilisent alors CES chiffres comme objectifs quotidiens. */
+  const applyToProfile = () => {
+    if (!result) return;
+    const m = result.macros[goal];
+    setProfile((prev) => ({
+      ...prev,
+      goal,
+      targetKcal: m.kcal,
+      targetProtein: m.protein,
+      targetCarbs: m.carbs,
+      targetFat: m.fat,
+    }));
+    setApplied(true);
+  };
 
   const noSport = sport === "aucun";
   const valid =
@@ -74,6 +95,7 @@ export function CalculatorContent() {
               className="card space-y-6 p-7"
               onSubmit={(e) => {
                 e.preventDefault();
+                setApplied(false);
                 if (valid)
                   setResult(
                     computeMetabolism({
@@ -298,7 +320,10 @@ export function CalculatorContent() {
                         return (
                           <button
                             key={g.id}
-                            onClick={() => setGoal(g.id)}
+                            onClick={() => {
+                              setGoal(g.id);
+                              setApplied(false);
+                            }}
                             className={`flex w-full items-center justify-between rounded-xl border px-4 py-3.5 transition-all ${
                               active
                                 ? "border-leaf bg-leaf-faint"
@@ -356,6 +381,29 @@ export function CalculatorContent() {
                         ajustez de ±100 kcal toutes les 2 semaines selon
                         l’évolution réelle de votre poids.
                       </p>
+
+                      {/* Le chaînon : ces chiffres deviennent les objectifs du tracker */}
+                      {applied ? (
+                        <div className="mt-5 space-y-2 text-center">
+                          <p className="flex items-center justify-center gap-2 text-sm font-semibold text-leaf">
+                            <Check className="h-4 w-4" />
+                            Objectifs enregistrés — le tracker et le tableau de
+                            bord utilisent maintenant ces chiffres.
+                          </p>
+                          <Link
+                            href="/tracker"
+                            className="inline-flex items-center gap-1.5 text-sm font-medium text-leaf underline-offset-2 hover:underline"
+                          >
+                            Ouvrir le tracker
+                            <ArrowRight className="h-3.5 w-3.5" />
+                          </Link>
+                        </div>
+                      ) : (
+                        <Button onClick={applyToProfile} className="mt-5 w-full py-3">
+                          <Target className="h-4 w-4" />
+                          Définir comme mes objectifs quotidiens
+                        </Button>
+                      )}
                     </div>
                   )}
                 </motion.div>
