@@ -9,6 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: base, priority: 1 },
     { url: `${base}/calculateur`, priority: 0.9 },
     { url: `${base}/programme`, priority: 0.9 },
+    { url: `${base}/seance`, priority: 0.8 },
     { url: `${base}/recettes`, priority: 0.9 },
     { url: `${base}/tracker`, priority: 0.8 },
     { url: `${base}/premium`, priority: 0.8 },

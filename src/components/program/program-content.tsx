@@ -1,12 +1,16 @@
 "use client";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
+  ArrowRight,
   CheckCircle2,
   Clock,
   Dumbbell,
   Lightbulb,
+  Play,
   RefreshCw,
   Sparkles,
   Timer,
@@ -19,6 +23,7 @@ import {
   type ProgramGoal,
   type ProgramInput,
 } from "@/lib/program";
+import { buildSeance, useActiveSeance, useWorkoutHistory } from "@/lib/workout";
 import { Badge, Button, Field, SectionHeading, Skeleton } from "@/components/ui";
 import { Reveal } from "@/components/motion";
 import { Training } from "@/components/home/training";
@@ -46,6 +51,7 @@ const dayOptions: ProgramInput["daysPerWeek"][] = [2, 3, 4, 5];
 const durationOptions: ProgramInput["duration"][] = [30, 45, 60, 75];
 
 export function ProgramContent() {
+  const router = useRouter();
   const [level, setLevel] = useState<Level>("debutant");
   const [goal, setGoal] = useState<ProgramGoal>("hypertrophie");
   const [days, setDays] = useState<ProgramInput["daysPerWeek"]>(3);
@@ -54,6 +60,24 @@ export function ProgramContent() {
   const [program, setProgram] = useState<Program | null>(null);
   const [loading, setLoading] = useState(false);
   const [activeSession, setActiveSession] = useState(0);
+  const [activeSeance, setActiveSeance, seanceReady] = useActiveSeance();
+  const [history] = useWorkoutHistory();
+
+  const launchSeance = () => {
+    if (!program) return;
+    if (
+      activeSeance &&
+      activeSeance.logs.some((l) => l.length > 0) &&
+      !window.confirm(
+        "Une séance est déjà en cours. La remplacer par celle-ci ?"
+      )
+    ) {
+      router.push("/seance");
+      return;
+    }
+    setActiveSeance(buildSeance(program, activeSession, history));
+    router.push("/seance");
+  };
 
   const generate = () => {
     setLoading(true);
@@ -82,6 +106,30 @@ export function ProgramContent() {
       <Training ctaHref="#configurateur" />
 
       <div className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
+        {/* -------- Séance en cours -------- */}
+        {seanceReady && activeSeance && activeSeance.phase !== "done" && (
+          <Reveal>
+            <Link
+              href="/seance"
+              className="mb-6 flex items-center justify-between gap-4 rounded-2xl bg-[#2a454f] px-6 py-4 text-white shadow-deep transition-transform hover:-translate-y-0.5"
+            >
+              <span className="flex min-w-0 items-center gap-3">
+                <span className="relative flex h-3 w-3 shrink-0">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#9db4ae] opacity-60" />
+                  <span className="relative inline-flex h-3 w-3 rounded-full bg-[#9db4ae]" />
+                </span>
+                <span className="truncate text-sm font-medium">
+                  Séance en cours : {activeSeance.sessionTitle}
+                </span>
+              </span>
+              <span className="flex shrink-0 items-center gap-1.5 text-sm font-semibold text-[#d9c5a5]">
+                Reprendre
+                <ArrowRight className="h-4 w-4" />
+              </span>
+            </Link>
+          </Reveal>
+        )}
+
         {/* -------- Configuration -------- */}
         <Reveal delay={0.1}>
           <div id="configurateur" className="card scroll-mt-24 p-7">
@@ -240,13 +288,22 @@ export function ProgramContent() {
                   transition={{ duration: 0.25 }}
                   className="card mt-4 overflow-hidden"
                 >
-                  <div className="border-b border-line bg-leaf-faint px-6 py-4">
-                    <h3 className="font-semibold text-ink">
-                      {program.sessions[activeSession].title}
-                    </h3>
-                    <p className="text-sm text-muted">
-                      {program.sessions[activeSession].focus}
-                    </p>
+                  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line bg-leaf-faint px-6 py-4">
+                    <div>
+                      <h3 className="font-semibold text-ink">
+                        {program.sessions[activeSession].title}
+                      </h3>
+                      <p className="text-sm text-muted">
+                        {program.sessions[activeSession].focus}
+                      </p>
+                    </div>
+                    <button
+                      onClick={launchSeance}
+                      className="inline-flex shrink-0 items-center gap-2 rounded-full bg-leaf-deep px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-px hover:bg-leaf"
+                    >
+                      <Play className="h-4 w-4" />
+                      Lancer la séance
+                    </button>
                   </div>
                   <ul className="divide-y divide-line">
                     {program.sessions[activeSession].exercises.map((ex, i) => (

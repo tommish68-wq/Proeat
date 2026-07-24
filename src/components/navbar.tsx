@@ -12,6 +12,7 @@ const links = [
   { href: "/dashboard", label: "Tableau de bord" },
   { href: "/calculateur", label: "Calculateur" },
   { href: "/programme", label: "Programme" },
+  { href: "/seance", label: "Séance" },
   { href: "/recettes", label: "Recettes" },
   { href: "/tracker", label: "Tracker" },
   { href: "/boutique", label: "Boutique" },
