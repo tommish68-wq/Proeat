@@ -4,6 +4,7 @@ import "./globals.css";
 import { asset } from "@/lib/asset";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { BetaFeedback } from "@/components/beta-feedback";
 
 const inter = Inter({
   variable: "--font-body",
@@ -79,6 +80,7 @@ export default function RootLayout({
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
+        <BetaFeedback />
       </body>
     </html>
   );

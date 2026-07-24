@@ -17,20 +17,25 @@ export function Logo({
         alt="ProEat"
         width={32}
         height={32}
-        className={`h-8 w-8 ${onDark ? "brightness-0 invert" : ""}`}
+        className="h-8 w-8"
       />
     );
   }
+  /* Sur bandeau sombre : pastille blanche, le logo garde sa couleur exacte */
   return (
-    <Image
-      src={asset("/images/logo-proeat.png")}
-      alt="ProEat"
-      width={327}
-      height={96}
-      priority
-      className={`h-8 w-auto transition-[filter] duration-300 ${
-        onDark ? "brightness-0 invert" : ""
+    <span
+      className={`inline-flex items-center transition-colors duration-300 ${
+        onDark ? "rounded-full bg-white px-3.5 py-1.5" : ""
       }`}
-    />
+    >
+      <Image
+        src={asset("/images/logo-proeat.png")}
+        alt="ProEat"
+        width={327}
+        height={96}
+        priority
+        className={onDark ? "h-6 w-auto" : "h-8 w-auto"}
+      />
+    </span>
   );
 }
