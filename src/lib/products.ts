@@ -52,7 +52,7 @@ export const products: Product[] = [
         points: [
           "Estimez votre dépense totale (TDEE) avec le calculateur ProEat, puis retirez 15 à 20 % — jamais plus au début",
           "Protéines : 2 à 2,2 g par kilo de poids de corps pour protéger le muscle pendant le déficit",
-          "Lipides : jamais sous 0,8 g/kg — ils régulent vos hormones",
+          "Lipides : 0,6 g/kg minimum — c'est le plancher, en dessous vos hormones trinquent",
           "Le reste en glucides : ils alimentent vos séances et votre moral",
         ],
       },

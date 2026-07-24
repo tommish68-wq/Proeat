@@ -123,9 +123,12 @@ export function computeMetabolism(input: MetabolismInput): MetabolismResult {
   const seche = Math.round(tdee * 0.82); // déficit ~18 %
   const masse = Math.round(tdee * 1.12); // surplus ~12 %
 
+  /* Protéines 2 à 2,2 g/kg selon l'objectif ; lipides fixés à 0,6 g/kg
+     (plancher assumé — mention affichée côté interface) ; le reste en
+     glucides pour l'énergie. */
   const macrosFor = (kcal: number, proteinPerKg: number) => {
     const protein = Math.round(weight * proteinPerKg);
-    const fat = Math.round((kcal * 0.27) / 9);
+    const fat = Math.round(weight * 0.6);
     const carbs = Math.max(0, Math.round((kcal - protein * 4 - fat * 9) / 4));
     return { protein, carbs, fat, kcal };
   };
@@ -139,8 +142,8 @@ export function computeMetabolism(input: MetabolismInput): MetabolismResult {
     masse,
     macros: {
       seche: macrosFor(seche, 2.2),
-      maintien: macrosFor(maintien, 1.8),
-      masse: macrosFor(masse, 2.0),
+      maintien: macrosFor(maintien, 2.0),
+      masse: macrosFor(masse, 2.2),
     },
   };
 }

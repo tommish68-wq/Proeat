@@ -350,8 +350,11 @@ export function CalculatorContent() {
                       </div>
                       <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-muted">
                         <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-                        Estimation indicative. Ajustez de ±100 kcal toutes les 2 semaines
-                        selon l’évolution réelle de votre poids.
+                        Estimation indicative — protéines à 2–2,2 g/kg, lipides au
+                        plancher de 0,6 g/kg pour maximiser glucides et énergie.
+                        Remontez les lipides en cas de fatigue persistante, et
+                        ajustez de ±100 kcal toutes les 2 semaines selon
+                        l’évolution réelle de votre poids.
                       </p>
                     </div>
                   )}
