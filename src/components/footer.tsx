@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Instagram } from "lucide-react";
 import { Logo } from "@/components/logo";
 
 const columns = [
@@ -34,6 +35,15 @@ export function Footer() {
               La plateforme tout-en-un pour la nutrition, la musculation et la
               remise en forme. La performance, naturellement.
             </p>
+            <a
+              href="https://www.instagram.com/proeat.t"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex items-center gap-2 rounded-full border border-line bg-background px-4 py-2 text-sm font-medium text-ink transition-all hover:border-leaf/40 hover:text-leaf"
+            >
+              <Instagram className="h-4 w-4" />
+              @proeat.t
+            </a>
           </div>
           {columns.map((col) => (
             <div key={col.title}>
