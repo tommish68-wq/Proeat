@@ -20,8 +20,7 @@ const slides = [
     subtitle: "Nos petits-déjeuners protéinés pour démarrer la journée du bon pied",
     cta: "Découvrir",
     href: "/recettes",
-    image:
-      "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1600&q=75",
+    image: asset("/images/recette-bowl-acai.jpg"),
     tint: "from-[#2a454f]/90 via-[#2a454f]/60",
   },
   {
@@ -41,8 +40,7 @@ const slides = [
     subtitle: "Calculez votre déficit idéal, puis suivez-le jour après jour",
     cta: "Calculer mes calories",
     href: "/calculateur",
-    image:
-      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=75",
+    image: asset("/images/recette-crevettes-brocoli.webp"),
     tint: "from-[#30505c]/90 via-[#30505c]/60",
   },
 ];
@@ -183,8 +181,8 @@ export function Promo() {
           <div className="relative aspect-[16/10] sm:aspect-auto sm:self-stretch">
             <div className="absolute inset-0 bg-[#30505c]">
               <Image
-                src="https://images.unsplash.com/photo-1571115177098-24ec42ed204d?auto=format&fit=crop&w=1200&q=75"
-                alt="Porridge protéiné aux fruits rouges"
+                src={asset("/images/recette-pad-thai-tempeh.webp")}
+                alt="Pad thaï de tempeh, sauce cacahuète et citron vert"
                 fill
                 sizes="(max-width: 640px) 100vw, 45vw"
                 className="object-cover"
@@ -201,11 +199,11 @@ export function Promo() {
               Recette du moment
             </p>
             <h3 className="mt-3 font-sans text-3xl font-black uppercase leading-none tracking-tight text-white sm:text-4xl">
-              Porridge Protéiné
+              Pad Thaï Protéiné
             </h3>
             <p className="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-white/70 sm:mx-0 sm:text-base">
-              Votre <b className="text-white">petit-déjeuner gagnant</b> commence
-              par la bonne base : 38 g de protéines, prêt en 10 minutes.
+              Le <b className="text-white">repas de masse 100 % végétal</b> :
+              40 g de protéines, sauce cacahuète maison, prêt en 25 minutes.
             </p>
             <Link
               href="/recettes"

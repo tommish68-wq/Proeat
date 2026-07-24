@@ -27,6 +27,7 @@ const columns = [
       { href: "/dashboard", label: "Tableau de bord" },
       { href: "/calculateur", label: "Calculateur de métabolisme" },
       { href: "/programme", label: "Générateur de programme" },
+      { href: "/seance", label: "Séance guidée" },
       { href: "/tracker", label: "Tracker de calories" },
     ],
   },

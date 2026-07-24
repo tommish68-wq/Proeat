@@ -54,11 +54,19 @@ export const metadata: Metadata = {
   openGraph: {
     title: "ProEat — Nutrition, musculation & bien-être",
     description:
-      "Calculateur de métabolisme, programmes sur mesure, recettes healthy et tracker de calories. La performance, naturellement.",
+      "Calculateur de métabolisme, programmes sur mesure, recettes healthy, séances guidées et tracker de calories. 100 % gratuit.",
     url: "https://proeat.app",
     siteName: "ProEat",
     locale: "fr_FR",
     type: "website",
+    images: [{ url: asset("/og.png"), width: 1200, height: 630, alt: "ProEat — Mangez juste. Entraînez-vous mieux. Progressez." }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ProEat — Nutrition, musculation & bien-être",
+    description:
+      "Calculateur, recettes détaillées, séances guidées : la plateforme 100 % gratuite.",
+    images: [asset("/og.png")],
   },
   robots: { index: true, follow: true },
   icons: {
@@ -77,8 +85,14 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${archivo.variable} ${anton.variable} ${plexMono.variable} min-h-screen flex flex-col antialiased`}
       >
+        <a
+          href="#contenu"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-leaf-deep focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-white"
+        >
+          Aller au contenu
+        </a>
         <Navbar />
-        <main className="flex-1">{children}</main>
+        <main id="contenu" className="flex-1">{children}</main>
         <Footer />
         <BetaFeedback />
       </body>
