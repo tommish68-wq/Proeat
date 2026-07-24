@@ -4,7 +4,7 @@ import { MessageSquareHeart, X } from "lucide-react";
 import { useState } from "react";
 
 const MAILTO =
-  "mailto:tommish68@gmail.com" +
+  "mailto:proeat.nutrition@gmail.com" +
   "?subject=" +
   encodeURIComponent("Mon avis sur ProEat (bêta)") +
   "&body=" +
