@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Anton, Fraunces, IBM_Plex_Mono, Inter } from "next/font/google";
 import "./globals.css";
+import { asset } from "@/lib/asset";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 
@@ -59,6 +60,10 @@ export const metadata: Metadata = {
     type: "website",
   },
   robots: { index: true, follow: true },
+  icons: {
+    icon: asset("/icon.png"),
+    apple: asset("/apple-icon.png"),
+  },
 };
 
 export default function RootLayout({
