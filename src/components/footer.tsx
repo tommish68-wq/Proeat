@@ -54,13 +54,13 @@ export function Footer() {
               remise en forme. La performance, naturellement.
             </p>
             <a
-              href="https://www.instagram.com/proeat.t"
+              href="https://www.instagram.com/proea.t"
               target="_blank"
               rel="noopener noreferrer"
               className="mt-5 inline-flex items-center gap-2 rounded-full border border-line bg-background px-4 py-2 text-sm font-medium text-ink transition-all hover:border-leaf/40 hover:text-leaf"
             >
               <InstagramIcon />
-              @proeat.t
+              @proea.t
             </a>
           </div>
           {columns.map((col) => (
