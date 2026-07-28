@@ -1,0 +1,259 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------------------------------------------------------------------ */
+/* Nordic Botanical — palette scandinave désaturée.                    */
+/* --bg #FAFBF8 · --surface #D7DAD3 · --primary #34555E                */
+/* --secondary #5E7C74 · --accent #A37B4D                              */
+/* ------------------------------------------------------------------ */
+:root {
+  --background: #fafbf8;
+  --surface: #ffffff;
+  --card: #ffffff;
+  --sand: #e8eae4;
+  --sand-deep: #d7dad3;
+  --ink: #34555e;
+  --muted: #4f6a62;
+  --leaf: #587570;
+  --leaf-deep: #34555e;
+  --leaf-dark: #263f47;
+  --leaf-mid: #9db4ae;
+  --leaf-soft: #e2e9e6;
+  --leaf-faint: #f1f4f2;
+  --gold: #a37b4d;
+  --line: #e0e3dc;
+  --shadow: 42 58 63;
+  /* Palette dataviz (protéines, glucides, lipides) — libellés directs */
+  --viz-protein: #34555e;
+  --viz-carbs: #a37b4d;
+  --viz-fat: #4a7d62;
+  --viz-grid: #e7eae3;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-sand: var(--sand);
+  --color-sand-deep: var(--sand-deep);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-leaf: var(--leaf);
+  --color-leaf-deep: var(--leaf-deep);
+  --color-leaf-dark: var(--leaf-dark);
+  --color-leaf-mid: var(--leaf-mid);
+  --color-leaf-soft: var(--leaf-soft);
+  --color-leaf-faint: var(--leaf-faint);
+  --color-gold: var(--gold);
+  --color-line: var(--line);
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-face), ui-sans-serif, system-ui, sans-serif;
+  --font-poster: var(--font-anton), "Arial Narrow", Impact, sans-serif;
+  --font-tech: var(--font-plex-mono), ui-monospace, monospace;
+}
+
+/* ---------- Hero éditorial athlétique ---------- */
+.text-outline-leaf {
+  color: transparent;
+  -webkit-text-stroke: 2.5px var(--leaf);
+  paint-order: stroke fill;
+}
+
+@supports not (-webkit-text-stroke: 1px black) {
+  .text-outline-leaf {
+    color: var(--leaf);
+  }
+}
+
+
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--ink);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+::selection {
+  background: var(--leaf);
+  color: #fff;
+}
+
+/* ---------- Cartes & surfaces ---------- */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  box-shadow: 0 1px 2px rgb(var(--shadow) / 0.04), 0 8px 24px rgb(var(--shadow) / 0.05);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease,
+    border-color 0.3s ease, background-color 0.35s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 2px 4px rgb(var(--shadow) / 0.05), 0 20px 48px rgb(var(--shadow) / 0.1);
+  border-color: color-mix(in srgb, var(--leaf) 30%, var(--line));
+}
+
+/* ---------- Skeleton loading ---------- */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--sand) 70%, var(--surface));
+  border-radius: 0.75rem;
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--surface) 60%, transparent),
+    transparent
+  );
+  animation: shimmer 1.6s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ---------- Halo tropical en fond de hero ---------- */
+.hero-glow {
+  background:
+    radial-gradient(60rem 32rem at 85% -10%, color-mix(in srgb, var(--leaf) 14%, transparent), transparent 60%),
+    radial-gradient(50rem 30rem at -10% 20%, color-mix(in srgb, var(--sand-deep) 55%, transparent), transparent 65%);
+}
+
+/* ---------- Scrollbar discrète ---------- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+/* ---------- Focus accessible ---------- */
+:focus-visible {
+  outline: 2px solid var(--leaf);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ---------- Champs de formulaire ---------- */
+.field {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 0.875rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.9375rem;
+  color: var(--ink);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.field:hover {
+  border-color: color-mix(in srgb, var(--leaf) 35%, var(--line));
+}
+
+.field:focus {
+  outline: none;
+  border-color: var(--leaf);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--leaf) 18%, transparent);
+}
+
+/* ---------- Glassmorphism ---------- */
+.glass {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-card {
+  background: color-mix(in srgb, var(--surface) 62%, transparent);
+  border: 1px solid color-mix(in srgb, var(--line) 85%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* ---------- Ombres réalistes multicouches ---------- */
+.shadow-deep {
+  box-shadow:
+    0 1px 2px rgb(10 20 15 / 0.05),
+    0 8px 20px rgb(10 20 15 / 0.07),
+    0 28px 64px rgb(10 20 15 / 0.12);
+}
+
+.shadow-glow {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 12px 40px rgb(12 24 28 / 0.5),
+    0 0 80px rgb(94 124 116 / 0.22);
+}
+
+/* ---------- Texte en dégradé nordique (bandeaux pétrole) ---------- */
+.text-gradient-tropical {
+  background: linear-gradient(100deg, #c6d6d3 0%, #9db4ae 45%, #d9c5a5 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- Grain subtil pour les fonds dynamiques ---------- */
+.noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+}
+
+/* ---------- Accessibilité mouvement ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- Puce segmentée ---------- */
+.chip {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.chip:hover {
+  border-color: color-mix(in srgb, var(--leaf) 40%, var(--line));
+  color: var(--ink);
+}
+
+.chip[data-active="true"] {
+  background: var(--leaf-deep);
+  border-color: var(--leaf-deep);
+  color: #fff;
+}
