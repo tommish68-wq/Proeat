@@ -197,6 +197,25 @@ export function useActiveSeance() {
   return useLocalState<ActiveSeance | null>("proeat-active-seance", null);
 }
 
+/* ------------------------------------------------------------------ */
+/* « Ton exo à toi » — exercices personnalisés de l'utilisateur.       */
+/* Persistés en localStorage, ils suivent l'utilisateur d'un programme */
+/* à l'autre et s'intègrent aux séances lancées.                       */
+/* ------------------------------------------------------------------ */
+
+export interface CustomExercise {
+  id: string;
+  name: string;
+  sets: number;
+  reps: string; // libre : "8-12", "10", "max"…
+  rest: string; // libre : "90 s", "2 min"…
+  notes?: string;
+}
+
+export function useCustomExercises() {
+  return useLocalState<CustomExercise[]>("proeat-custom-exercises", []);
+}
+
 export function useWorkoutHistory() {
   return useLocalState<HistorySeance[]>("proeat-workout-history", []);
 }

@@ -6,14 +6,20 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowRight,
+  BookOpen,
   CheckCircle2,
+  ChevronDown,
   Clock,
   Dumbbell,
   Lightbulb,
+  Pencil,
   Play,
+  Plus,
   RefreshCw,
   Sparkles,
   Timer,
+  Trash2,
+  UserRound,
 } from "lucide-react";
 import {
   generateProgram,
@@ -23,10 +29,125 @@ import {
   type ProgramGoal,
   type ProgramInput,
 } from "@/lib/program";
-import { buildSeance, useActiveSeance, useWorkoutHistory } from "@/lib/workout";
+import {
+  buildSeance,
+  parseReps,
+  parseRest,
+  planExercise,
+  useActiveSeance,
+  useCustomExercises,
+  useWorkoutHistory,
+  type CustomExercise,
+} from "@/lib/workout";
+import { ExerciseDemo } from "@/components/exercise-demo";
 import { Badge, Button, Field, SectionHeading, Skeleton } from "@/components/ui";
 import { Reveal } from "@/components/motion";
 import { Training } from "@/components/home/training";
+
+/* ------------------------------------------------------------------ */
+/* Formulaire « Ton exo à toi » — création et édition                  */
+/* ------------------------------------------------------------------ */
+
+function CustomExerciseForm({
+  initial,
+  onSave,
+  onCancel,
+}: {
+  initial?: CustomExercise;
+  onSave: (e: Omit<CustomExercise, "id">) => void;
+  onCancel?: () => void;
+}) {
+  const [name, setName] = useState(initial?.name ?? "");
+  const [sets, setSets] = useState(initial?.sets ?? 3);
+  const [reps, setReps] = useState(initial?.reps ?? "8-12");
+  const [rest, setRest] = useState(initial?.rest ?? "90 s");
+  const [notes, setNotes] = useState(initial?.notes ?? "");
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim()) return;
+    onSave({
+      name: name.trim(),
+      sets: Math.min(10, Math.max(1, sets)),
+      reps: reps.trim() || "8-12",
+      rest: rest.trim() || "90 s",
+      notes: notes.trim() || undefined,
+    });
+    if (!initial) {
+      setName("");
+      setSets(3);
+      setReps("8-12");
+      setRest("90 s");
+      setNotes("");
+    }
+  };
+
+  return (
+    <form onSubmit={submit} className="space-y-3">
+      <Field label="Nom de l'exercice" htmlFor="cx-name">
+        <input
+          id="cx-name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Ex : Curl marteau, Farmer walk, Mon combo à moi…"
+          className="field"
+          required
+        />
+      </Field>
+      <div className="grid grid-cols-3 gap-3">
+        <Field label="Séries" htmlFor="cx-sets">
+          <input
+            id="cx-sets"
+            type="number"
+            min={1}
+            max={10}
+            value={sets}
+            onChange={(e) => setSets(Number(e.target.value))}
+            className="field px-2 text-center"
+          />
+        </Field>
+        <Field label="Reps" htmlFor="cx-reps">
+          <input
+            id="cx-reps"
+            value={reps}
+            onChange={(e) => setReps(e.target.value)}
+            placeholder="8-12"
+            className="field px-2 text-center"
+          />
+        </Field>
+        <Field label="Repos" htmlFor="cx-rest">
+          <input
+            id="cx-rest"
+            value={rest}
+            onChange={(e) => setRest(e.target.value)}
+            placeholder="90 s"
+            className="field px-2 text-center"
+          />
+        </Field>
+      </div>
+      <Field label="Notes (optionnel)" htmlFor="cx-notes">
+        <input
+          id="cx-notes"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          placeholder="Ex : prise neutre, tempo lent, dernière série au max…"
+          className="field"
+        />
+      </Field>
+      <div className="flex gap-2">
+        <Button type="submit" className="flex-1 py-2.5">
+          <Plus className="h-4 w-4" />
+          {initial ? "Enregistrer" : "Ajouter à mes séances"}
+        </Button>
+        {onCancel && (
+          <Button type="button" variant="secondary" onClick={onCancel} className="py-2.5">
+            Annuler
+          </Button>
+        )}
+      </div>
+    </form>
+  );
+}
 
 const levels: { id: Level; label: string }[] = [
   { id: "debutant", label: "Débutant" },
@@ -62,6 +183,20 @@ export function ProgramContent() {
   const [activeSession, setActiveSession] = useState(0);
   const [activeSeance, setActiveSeance, seanceReady] = useActiveSeance();
   const [history] = useWorkoutHistory();
+  const [customs, setCustoms] = useCustomExercises();
+  const [openDemo, setOpenDemo] = useState<string | null>(null);
+  const [editingCustom, setEditingCustom] = useState<string | null>(null);
+
+  const addCustom = (e: Omit<CustomExercise, "id">) =>
+    setCustoms((prev) => [...prev, { ...e, id: `${Date.now()}` }]);
+
+  const updateCustom = (id: string, e: Omit<CustomExercise, "id">) => {
+    setCustoms((prev) => prev.map((c) => (c.id === id ? { ...c, ...e } : c)));
+    setEditingCustom(null);
+  };
+
+  const removeCustom = (id: string) =>
+    setCustoms((prev) => prev.filter((c) => c.id !== id));
 
   const launchSeance = () => {
     if (!program) return;
@@ -75,7 +210,25 @@ export function ProgramContent() {
       router.push("/seance");
       return;
     }
-    setActiveSeance(buildSeance(program, activeSession, history));
+    const seance = buildSeance(program, activeSession, history);
+    /* Les exos custom rejoignent la séance — retirables dans l'aperçu */
+    for (const c of customs) {
+      const [repsMin, repsMax] = parseReps(c.reps);
+      const plan = planExercise(c.name, repsMin, repsMax, history);
+      seance.exercises.push({
+        name: c.name,
+        muscle: c.notes || "Ton exo à toi",
+        sets: c.sets,
+        repsMin,
+        repsMax,
+        restSec: parseRest(c.rest),
+        targetReps: plan.targetReps,
+        weight: plan.weight,
+        hint: plan.hint,
+      });
+      seance.logs.push([]);
+    }
+    setActiveSeance(seance);
     router.push("/seance");
   };
 
@@ -312,30 +465,142 @@ export function ProgramContent() {
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.05 }}
-                        className="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-leaf-faint/60"
                       >
-                        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-leaf-soft text-sm font-bold text-leaf">
-                          {i + 1}
+                        <div className="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-leaf-faint/60">
+                          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-leaf-soft text-sm font-bold text-leaf">
+                            {i + 1}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate font-medium text-ink">{ex.name}</p>
+                            <p className="text-xs text-muted">{ex.muscle}</p>
+                          </div>
+                          <div className="flex shrink-0 items-center gap-3 text-sm">
+                            <span className="flex items-center gap-1.5 text-ink">
+                              <Dumbbell className="h-3.5 w-3.5 text-leaf" />
+                              {ex.sets} × {ex.reps}
+                            </span>
+                            <span className="hidden items-center gap-1.5 text-muted sm:flex">
+                              <Timer className="h-3.5 w-3.5" />
+                              {ex.rest}
+                            </span>
+                            <button
+                              onClick={() =>
+                                setOpenDemo(openDemo === ex.name ? null : ex.name)
+                              }
+                              aria-expanded={openDemo === ex.name}
+                              className={`flex items-center gap-1 rounded-full border px-3 py-1.5 text-xs font-semibold transition-all ${
+                                openDemo === ex.name
+                                  ? "border-leaf bg-leaf-soft text-leaf-deep"
+                                  : "border-line bg-surface text-muted hover:border-leaf/40 hover:text-ink"
+                              }`}
+                            >
+                              <BookOpen className="h-3.5 w-3.5" />
+                              Technique
+                              <ChevronDown
+                                className={`h-3 w-3 transition-transform ${
+                                  openDemo === ex.name ? "rotate-180" : ""
+                                }`}
+                              />
+                            </button>
+                          </div>
                         </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate font-medium text-ink">{ex.name}</p>
-                          <p className="text-xs text-muted">{ex.muscle}</p>
-                        </div>
-                        <div className="flex shrink-0 items-center gap-4 text-sm">
-                          <span className="flex items-center gap-1.5 text-ink">
-                            <Dumbbell className="h-3.5 w-3.5 text-leaf" />
-                            {ex.sets} × {ex.reps}
-                          </span>
-                          <span className="hidden items-center gap-1.5 text-muted sm:flex">
-                            <Timer className="h-3.5 w-3.5" />
-                            {ex.rest}
-                          </span>
-                        </div>
+                        <AnimatePresence initial={false}>
+                          {openDemo === ex.name && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: "auto", opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.3, ease: "easeInOut" }}
+                              className="overflow-hidden"
+                            >
+                              <div className="px-6 pb-5">
+                                <ExerciseDemo name={ex.name} />
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </motion.li>
                     ))}
+
+                    {/* Exos custom : même format visuel, numérotation qui continue */}
+                    {customs.map((c, j) => {
+                      const i = program.sessions[activeSession].exercises.length + j;
+                      return (
+                        <li key={c.id}>
+                          {editingCustom === c.id ? (
+                            <div className="bg-leaf-faint/50 px-6 py-5">
+                              <CustomExerciseForm
+                                initial={c}
+                                onSave={(e) => updateCustom(c.id, e)}
+                                onCancel={() => setEditingCustom(null)}
+                              />
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-leaf-faint/60">
+                              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gold/15 text-sm font-bold text-[#7c5a33]">
+                                {i + 1}
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <p className="flex items-center gap-2 truncate font-medium text-ink">
+                                  {c.name}
+                                  <span className="shrink-0 rounded-full bg-gold/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#7c5a33]">
+                                    Ton exo
+                                  </span>
+                                </p>
+                                <p className="truncate text-xs text-muted">
+                                  {c.notes || "Exercice personnalisé"}
+                                </p>
+                              </div>
+                              <div className="flex shrink-0 items-center gap-3 text-sm">
+                                <span className="flex items-center gap-1.5 text-ink">
+                                  <Dumbbell className="h-3.5 w-3.5 text-gold" />
+                                  {c.sets} × {c.reps}
+                                </span>
+                                <span className="hidden items-center gap-1.5 text-muted sm:flex">
+                                  <Timer className="h-3.5 w-3.5" />
+                                  {c.rest}
+                                </span>
+                                <button
+                                  onClick={() => setEditingCustom(c.id)}
+                                  aria-label={`Modifier ${c.name}`}
+                                  className="grid h-8 w-8 place-items-center rounded-full text-muted transition-colors hover:bg-leaf-soft hover:text-leaf-deep"
+                                >
+                                  <Pencil className="h-3.5 w-3.5" />
+                                </button>
+                                <button
+                                  onClick={() => removeCustom(c.id)}
+                                  aria-label={`Supprimer ${c.name}`}
+                                  className="grid h-8 w-8 place-items-center rounded-full text-muted transition-colors hover:bg-red-500/10 hover:text-red-500"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </li>
+                      );
+                    })}
                   </ul>
                 </motion.div>
               </AnimatePresence>
+
+              {/* Ton exo à toi */}
+              <div className="card mt-6 overflow-hidden">
+                <div className="border-b border-line bg-gold/10 px-6 py-4">
+                  <h3 className="flex items-center gap-2 font-semibold text-ink">
+                    <UserRound className="h-4 w-4 text-[#7c5a33]" />
+                    Ton exo à toi
+                  </h3>
+                  <p className="mt-1 text-sm text-muted">
+                    Ajoute tes propres exercices : ils apparaissent dans chaque
+                    séance au même titre que les autres, et sont sauvegardés sur
+                    ton appareil.
+                  </p>
+                </div>
+                <div className="p-6">
+                  <CustomExerciseForm onSave={addCustom} />
+                </div>
+              </div>
 
               {/* Conseils */}
               <div className="card mt-6 p-6">

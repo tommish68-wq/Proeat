@@ -33,6 +33,7 @@ import {
   type ActiveSeance,
 } from "@/lib/workout";
 import { catalogue } from "@/lib/program";
+import { ExerciseDemo } from "@/components/exercise-demo";
 import {
   buildExpressSeance,
   expressMinutes,
@@ -413,6 +414,7 @@ function SetScreen({
   const ex = seance.exercises[seance.exIndex];
   const [reps, setReps] = useState(ex.targetReps);
   const [weight, setWeight] = useState<number | "">(ex.weight ?? "");
+  const [showTech, setShowTech] = useState(false);
 
   const validate = () => {
     update((s) => {
@@ -488,6 +490,31 @@ function SetScreen({
             {ex.hint}
           </p>
         )}
+        <button
+          onClick={() => setShowTech(!showTech)}
+          aria-expanded={showTech}
+          className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-leaf underline-offset-2 hover:underline"
+        >
+          <ChevronDown
+            className={`h-3.5 w-3.5 transition-transform ${showTech ? "rotate-180" : ""}`}
+          />
+          {showTech ? "Masquer la technique" : "Revoir la technique"}
+        </button>
+        <AnimatePresence initial={false}>
+          {showTech && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="overflow-hidden"
+            >
+              <div className="pt-3">
+                <ExerciseDemo name={ex.name} compact />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       <div className="space-y-6 p-6">
